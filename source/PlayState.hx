@@ -1672,6 +1672,7 @@ class PlayState extends MusicBeatState
 					if (daNote.tooLate || !daNote.wasGoodHit)
 					{
 						health -= 0.0475;
+						noteMiss(daNote.noteData % 4,true);
 						vocals.volume = 0;
 					}
 
@@ -1970,85 +1971,61 @@ class PlayState extends MusicBeatState
 				}
 			});
 
-			if (possibleNotes.length > 0)
+			if (possibleNotes.length > 0) //left down up right
 			{
-				var daNote = possibleNotes[0];
-
-				if (perfectMode)
-					noteCheck(true, daNote);
-
-				// Jump notes
-				if (possibleNotes.length >= 2)
-				{
-					if (possibleNotes[0].strumTime == possibleNotes[1].strumTime)
+				for (note in possibleNotes) {
+					switch (note.noteData % 4)
 					{
-						for (coolNote in possibleNotes)
-						{
-							if (controlArray[coolNote.noteData])
-								goodNoteHit(coolNote);
-							else
+						case 0:
+							if (leftP)
 							{
-								var inIgnoreList:Bool = false;
-								for (shit in 0...ignoreList.length)
-								{
-									if (controlArray[ignoreList[shit]])
-										inIgnoreList = true;
-								}
-								if (!inIgnoreList)
-									badNoteCheck();
+								goodNoteHit(note);
 							}
-						}
-					}
-					else if (possibleNotes[0].noteData == possibleNotes[1].noteData)
-					{
-						noteCheck(controlArray[daNote.noteData], daNote);
-					}
-					else
-					{
-						for (coolNote in possibleNotes)
-						{
-							noteCheck(controlArray[coolNote.noteData], coolNote);
-						}
+							break;
+						case 1:
+							if (downP)
+							{
+								goodNoteHit(note);
+							}
+							break;
+						case 2:
+							if (upP)
+							{
+								goodNoteHit(note);
+							}
+							break;
+						case 3:
+							if (rightP)
+							{
+								goodNoteHit(note);
+							}
+							break;
+						default:
+							trace("what the fuck");
 					}
 				}
-				else // regular notes?
-				{
-					noteCheck(controlArray[daNote.noteData], daNote);
-				}
-				/* 
-					if (controlArray[daNote.noteData])
-						goodNoteHit(daNote);
-				 */
-				// trace(daNote.noteData);
-				/* 
-						switch (daNote.noteData)
-						{
-							case 2: // NOTES YOU JUST PRESSED
-								if (upP || rightP || downP || leftP)
-									noteCheck(upP, daNote);
-							case 3:
-								if (upP || rightP || downP || leftP)
-									noteCheck(rightP, daNote);
-							case 1:
-								if (upP || rightP || downP || leftP)
-									noteCheck(downP, daNote);
-							case 0:
-								if (upP || rightP || downP || leftP)
-									noteCheck(leftP, daNote);
-						}
-
-					//this is already done in noteCheck / goodNoteHit
-					if (daNote.wasGoodHit)
-					{
-						daNote.kill();
-						notes.remove(daNote, true);
-						daNote.destroy();
-					}
-				 */
 			}
 			else
 			{
-				badNoteCheck();
+
+				// im sorry i was trying to make this better but its equally as bad
+				if (leftP)
+				{
+					noteMiss(0);
+				}
+				else if (downP)
+				{
+					noteMiss(1);
+				}
+				else if (upP)
+				{
+					noteMiss(2);
+				}
+				else if (rightP)
+				{
+					noteMiss(3);
+				}
+
 			}
 		}
 
@@ -2123,18 +2100,20 @@ class PlayState extends MusicBeatState
 		});
 	}
 
-	function noteMiss(direction:Int = 1):Void
+	function noteMiss(direction:Int = 1, nohealthdrain:Bool = false):Void
 	{
 		if (!boyfriend.stunned)
 		{
-			health -= 0.04;
+			if (!nohealthdrain)
+			{
+				health -= 0.04;
+				songScore -= 10;
+			}
 			if (combo > 5 && gf.animOffsets.exists('sad'))
 			{
 				gf.playAnim('sad');
 			}
 			combo = 0;
-
-			songScore -= 10;
 
 			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 			// FlxG.sound.play(Paths.sound('missnote1'), 1, false);
@@ -2150,35 +2129,6 @@ class PlayState extends MusicBeatState
 
 
 			boyfriend.playAnim('sing' + NoteAnims[Math.round(Math.abs(direction)) % 4] + "miss", true);
-		}
-	}
-
-	function badNoteCheck()
-	{
-		// just double pasting this shit cuz fuk u
-		// REDO THIS SYSTEM!
-		var upP = controls.UP_P;
-		var rightP = controls.RIGHT_P;
-		var downP = controls.DOWN_P;
-		var leftP = controls.LEFT_P;
-
-		if (leftP)
-			noteMiss(0);
-		if (downP)
-			noteMiss(1);
-		if (upP)
-			noteMiss(2);
-		if (rightP)
-			noteMiss(3);
-	}
-
-	function noteCheck(keyP:Bool, note:Note):Void
-	{
-		if (keyP)
-			goodNoteHit(note);
-		else
-		{
-			badNoteCheck();
 		}
 	}
 

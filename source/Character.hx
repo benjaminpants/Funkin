@@ -1,5 +1,8 @@
 package;
 
+import haxe.Log;
+import lime.system.System;
+import flixel.system.debug.log.Log;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.animation.FlxBaseAnimation;
@@ -621,6 +624,11 @@ class Character extends FlxSprite
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
+		if (animation.getByName(AnimName) == null)
+		{
+			trace(curCharacter + " is missing animation: \"" + AnimName + "\"");
+			return; //if the animation doesn't exist dont try to play it dumby
+		}
 		animation.play(AnimName, Force, Reversed, Frame);
 
 		var daOffset = animOffsets.get(AnimName);

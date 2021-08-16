@@ -101,6 +101,8 @@ class TitleState extends MusicBeatState
 			DiscordClient.shutdown();
 		 });
 		#end
+
+		openfl.Lib.current.stage.frameRate = FlxG.save.data.fpscap;
 	}
 
 	var logoBl:FlxSprite;

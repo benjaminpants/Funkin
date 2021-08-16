@@ -80,6 +80,7 @@ class PlayState extends MusicBeatState
 	private var gfSpeed:Int = 1;
 	private var health:Float = 1;
 	private var combo:Int = 0;
+	private var misses:Int = 0;
 
 	private var healthBarBG:FlxSprite;
 	private var healthBar:FlxBar;
@@ -117,6 +118,7 @@ class PlayState extends MusicBeatState
 	var talking:Bool = true;
 	var songScore:Int = 0;
 	var scoreTxt:FlxText;
+	var verTxt:FlxText;
 
 	public static var campaignScore:Int = 0;
 
@@ -714,7 +716,7 @@ class PlayState extends MusicBeatState
 
 		add(camFollow);
 
-		FlxG.camera.follow(camFollow, LOCKON, 0.04);
+		FlxG.camera.follow(camFollow, LOCKON, 0.04 * (60 / FlxG.save.data.fpscap));
 		// FlxG.camera.setScrollBounds(0, FlxG.width, 0, FlxG.height);
 		FlxG.camera.zoom = defaultCamZoom;
 		FlxG.camera.focusOn(camFollow.getPosition());
@@ -735,11 +737,6 @@ class PlayState extends MusicBeatState
 		// healthBar
 		add(healthBar);
 
-		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width - 190, healthBarBG.y + 30, 0, "", 20);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT);
-		scoreTxt.scrollFactor.set();
-		add(scoreTxt);
-
 		iconP1 = new HealthIcon(SONG.player1, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 		add(iconP1);
@@ -748,6 +745,21 @@ class PlayState extends MusicBeatState
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
 
+
+		scoreTxt = new FlxText(healthBarBG.x, healthBarBG.y + 30, 0, "", 20);
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+		scoreTxt.scrollFactor.set();
+		add(scoreTxt);
+
+		verTxt = new FlxText(0, healthBarBG.y + 30, 0, "", 20);
+		verTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+		verTxt.scrollFactor.set();
+		verTxt.text = SONG.song + "\nStrawberry Engine v0.0(Not ready for use)";
+		add(verTxt);
+
+
+
+
 		strumLineNotes.cameras = [camHUD];
 		notes.cameras = [camHUD];
 		healthBar.cameras = [camHUD];
@@ -755,6 +767,7 @@ class PlayState extends MusicBeatState
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
+		verTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 
 		// if (SONG.song == 'South')
@@ -1366,7 +1379,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Score:" + songScore;
+		scoreTxt.text = "Score:" + songScore + " | Combo:" + combo + " | Misses:" + misses;
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
@@ -1524,8 +1537,8 @@ class PlayState extends MusicBeatState
 
 		if (camZooming)
 		{
-			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95);
-			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
+			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95 * (60 / FlxG.save.data.fpscap));
+			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95 * (60 / FlxG.save.data.fpscap));
 		}
 
 		FlxG.watch.addQuick("beatShit", curBeat);
@@ -1672,7 +1685,11 @@ class PlayState extends MusicBeatState
 					if (daNote.tooLate || !daNote.wasGoodHit)
 					{
 						health -= 0.0475;
-						noteMiss(daNote.noteData % 4,true);
+						noteMiss(daNote.noteData % 4,true,!daNote.isSustainNote);
+						if (!daNote.isSustainNote)
+						{
+							misses += 1;
+						}
 						vocals.volume = 0;
 					}
 
@@ -2007,25 +2024,27 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-
-				// im sorry i was trying to make this better but its equally as bad
-				if (leftP)
+				if (!FlxG.save.data.ghostnotes)
 				{
-					noteMiss(0);
+					// im sorry i was trying to make this better but its equally as bad
+					if (leftP)
+					{
+						noteMiss(0);
+					}
+					else if (downP)
+					{
+						noteMiss(1);
+					}
+					else if (upP)
+					{
+						noteMiss(2);
+					}
+					else if (rightP)
+					{
+						noteMiss(3);
+					}
+					misses += 1;
 				}
-				else if (downP)
-				{
-					noteMiss(1);
-				}
-				else if (upP)
-				{
-					noteMiss(2);
-				}
-				else if (rightP)
-				{
-					noteMiss(3);
-				}
-
 			}
 		}
 
@@ -2100,7 +2119,7 @@ class PlayState extends MusicBeatState
 		});
 	}
 
-	function noteMiss(direction:Int = 1, nohealthdrain:Bool = false):Void
+	function noteMiss(direction:Int = 1, nohealthdrain:Bool = false, playsound:Bool = true):Void
 	{
 		if (!boyfriend.stunned)
 		{
@@ -2115,17 +2134,14 @@ class PlayState extends MusicBeatState
 			}
 			combo = 0;
 
-			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+			if (playsound)
+			{
+				FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
+			}
 			// FlxG.sound.play(Paths.sound('missnote1'), 1, false);
 			// FlxG.log.add('played imss note');
 
-			boyfriend.stunned = true;
-
-			// get stunned for 5 seconds
-			new FlxTimer().start(5 / 60, function(tmr:FlxTimer)
-			{
-				boyfriend.stunned = false;
-			});
+			//no more stupid stun mechanic!!!
 
 
 			boyfriend.playAnim('sing' + NoteAnims[Math.round(Math.abs(direction)) % 4] + "miss", true);

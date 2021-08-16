@@ -148,6 +148,18 @@ class PlayerSettings
 			player2.controls.addDefaultGamepad(1);
 		}
 
+		if (FlxG.save.data.ghostnotes == null)
+		{
+			FlxG.save.data.ghostnotes = false;
+		}
+
+		if (FlxG.save.data.fpscap == null)
+		{
+			FlxG.save.data.fpscap = 60;
+		}
+
+
+
 		// DeviceManager.init();
 	}
 

@@ -690,7 +690,7 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = -5000;
 
-		strumLine = new FlxSprite(0, 50).makeGraphic(FlxG.width, 10);
+		strumLine = new FlxSprite(0, (FlxG.save.data.downscroll ? FlxG.height - 125 : 50)).makeGraphic(FlxG.width, 10);
 		strumLine.scrollFactor.set();
 
 		strumLineNotes = new FlxTypedGroup<FlxSprite>();
@@ -1637,15 +1637,16 @@ class PlayState extends MusicBeatState
 					daNote.active = true;
 				}
 
-				daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2)));
+				daNote.y = (strumLine.y + (((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2))) * (FlxG.save.data.downscroll ? 1 : -1)) );
 
 				// i am so fucking sorry for this if condition
 				// no worries my man i forgive you
+				//SOMEONE FIX THIS PLEASE
 				if (daNote.isSustainNote
 					&& daNote.y + daNote.offset.y <= strumLine.y + Note.swagWidth / 2
 					&& (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))))
 				{
-					var swagRect = new FlxRect(0, strumLine.y + Note.swagWidth / 2 - daNote.y, daNote.width * 2, daNote.height * 2);
+					var swagRect = new FlxRect(0, strumLine.y + ((Note.swagWidth / 2 - daNote.y) * (FlxG.save.data.downscroll ? -1 : 1)), daNote.width * 2, daNote.height * 2);
 					swagRect.y /= daNote.scale.y;
 					swagRect.height -= swagRect.y;
 
@@ -1680,7 +1681,7 @@ class PlayState extends MusicBeatState
 				// WIP interpolation shit? Need to fix the pause issue
 				// daNote.y = (strumLine.y - (songTime - daNote.strumTime) * (0.45 * PlayState.SONG.speed));
 
-				if (daNote.y < -daNote.height)
+				if ((!FlxG.save.data.downscroll) ? (daNote.y < -daNote.height) : (daNote.y > FlxG.height + daNote.height))
 				{
 					if (daNote.tooLate || !daNote.wasGoodHit)
 					{

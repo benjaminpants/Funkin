@@ -158,6 +158,10 @@ class PlayerSettings
 			FlxG.save.data.fpscap = 60;
 		}
 
+		if (FlxG.save.data.downscroll == null)
+		{
+			FlxG.save.data.downscroll = false;
+		}
 
 
 		// DeviceManager.init();

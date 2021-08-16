@@ -12,7 +12,7 @@ class GameplayOptionsSubState extends OptionsMenuParent
 	public function new()
 	{
 		super();
-		textMenuItems = ["Ghost Notes: " + (FlxG.save.data.ghostnotes ? "On" : "Off"),"FPS Cap: " + FlxG.save.data.fpscap];
+		textMenuItems = ["Ghost Notes: " + (FlxG.save.data.ghostnotes ? "On" : "Off"),"FPS Cap: " + FlxG.save.data.fpscap,(FlxG.save.data.downscroll ? "Downscroll" : "Upscroll")];
 		CreateText();
 	}
 
@@ -31,6 +31,9 @@ class GameplayOptionsSubState extends OptionsMenuParent
 			case 0:
 				FlxG.save.data.ghostnotes = !FlxG.save.data.ghostnotes;
 				text.text = "Ghost Notes: " + (FlxG.save.data.ghostnotes ? "On" : "Off");
+			case 2:
+				FlxG.save.data.downscroll = !FlxG.save.data.downscroll;
+				text.text = (FlxG.save.data.downscroll ? "Downscroll" : "Upscroll");
 		}
 	}
 

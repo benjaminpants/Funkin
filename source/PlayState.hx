@@ -1973,17 +1973,12 @@ class PlayState extends MusicBeatState
 
 			var possibleNotes:Array<Note> = [];
 
-			var ignoreList:Array<Int> = [];
-
-
 			//tried it out with the test song and apparently the input system is still shit fuck
 			notes.forEachAlive(function(daNote:Note)
 			{
 				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
 				{
 					possibleNotes.push(daNote);
-
-					ignoreList.push(daNote.noteData);
 				}
 			});
 

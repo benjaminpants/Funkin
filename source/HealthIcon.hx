@@ -9,12 +9,14 @@ class HealthIcon extends FlxSprite
 	 */
 	public var sprTracker:FlxSprite;
 
+	private static var PixelCharacters:Array<String> = [ "bf-pixel", "senpai", "senpai-angry", "spirit" ];
+
 	public function new(char:String = 'bf', isPlayer:Bool = false)
 	{
 		super();
 		loadGraphic(Paths.image('iconGrid'), true, 150, 150);
 
-		antialiasing = true;
+		antialiasing = !PixelCharacters.contains(char);
 		animation.add('bf', [0, 1], 0, false, isPlayer);
 		animation.add('bf-car', [0, 1], 0, false, isPlayer);
 		animation.add('bf-christmas', [0, 1], 0, false, isPlayer);

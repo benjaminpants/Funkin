@@ -510,16 +510,23 @@ class Character extends FlxSprite
 			if (!curCharacter.startsWith('bf'))
 			{
 				// var animArray
+				var oldrightsets = animOffsets['singRIGHT'];
+
 				var oldRight = animation.getByName('singRIGHT').frames;
 				animation.getByName('singRIGHT').frames = animation.getByName('singLEFT').frames;
+				animOffsets['singRIGHT'] = animOffsets['singLEFT'];
 				animation.getByName('singLEFT').frames = oldRight;
+				animOffsets['singLEFT'] = oldrightsets;
 
 				// IF THEY HAVE MISS ANIMATIONS??
 				if (animation.getByName('singRIGHTmiss') != null)
 				{
+					var oldmisssets = animOffsets['singRIGHTmiss'];
 					var oldMiss = animation.getByName('singRIGHTmiss').frames;
 					animation.getByName('singRIGHTmiss').frames = animation.getByName('singLEFTmiss').frames;
+					animOffsets['singRIGHTmiss'] = animOffsets['singLEFTmiss'];
 					animation.getByName('singLEFTmiss').frames = oldMiss;
+					animOffsets['singLEFTmiss'] = oldmisssets;
 				}
 			}
 		}

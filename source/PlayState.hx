@@ -725,7 +725,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.fixedTimestep = false;
 
-		healthBarBG = new FlxSprite(0, FlxG.height * 0.9).loadGraphic(Paths.image('healthBar'));
+		healthBarBG = new FlxSprite(0, (!FlxG.save.data.downscroll ? FlxG.height : 80) * 0.9).loadGraphic(Paths.image('healthBar'));
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
 		add(healthBarBG);
@@ -751,7 +751,7 @@ class PlayState extends MusicBeatState
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
-		verTxt = new FlxText(0, healthBarBG.y + 30, 0, "", 20);
+		verTxt = new FlxText(0, healthBarBG.y + (FlxG.save.data.downscroll ? -50 : 30), 0, "", 20);
 		verTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		verTxt.scrollFactor.set();
 		verTxt.text = SONG.song + "\nStrawberry Engine v0.0(Not ready for use)";
@@ -1639,18 +1639,16 @@ class PlayState extends MusicBeatState
 
 				daNote.y = (strumLine.y + (((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2))) * (FlxG.save.data.downscroll ? 1 : -1)) );
 
-				// i am so fucking sorry for this if condition
-				// no worries my man i forgive you
-				//SOMEONE FIX THIS PLEASE
-				if (daNote.isSustainNote
-					&& daNote.y + daNote.offset.y <= strumLine.y + Note.swagWidth / 2
-					&& (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit))))
+				if (daNote.isSustainNote)
 				{
-					var swagRect = new FlxRect(0, strumLine.y + ((Note.swagWidth / 2 - daNote.y) * (FlxG.save.data.downscroll ? -1 : 1)), daNote.width * 2, daNote.height * 2);
-					swagRect.y /= daNote.scale.y;
-					swagRect.height -= swagRect.y;
-
-					daNote.clipRect = swagRect;
+					if (!FlxG.save.data.downscroll)
+					{
+						daNote.clipRect = new FlxRect(0,strumLine.y + (Note.swagWidth / 2 - daNote.y),daNote.width * 2,FlxG.height);
+					}
+					else
+					{
+						daNote.clipRect = new FlxRect(0,(-strumLine.y) + (daNote.y + (Note.swagWidth / 2)),FlxG.height,FlxG.height);
+					}
 				}
 
 				if (!daNote.mustPress && daNote.wasGoodHit)
@@ -1977,13 +1975,13 @@ class PlayState extends MusicBeatState
 
 			var ignoreList:Array<Int> = [];
 
+
+			//tried it out with the test song and apparently the input system is still shit fuck
 			notes.forEachAlive(function(daNote:Note)
 			{
 				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
 				{
-					// the sorting probably doesn't need to be in here? who cares lol
 					possibleNotes.push(daNote);
-					possibleNotes.sort((a, b) -> Std.int(a.strumTime - b.strumTime));
 
 					ignoreList.push(daNote.noteData);
 				}

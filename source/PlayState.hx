@@ -1,7 +1,10 @@
 package;
 
+
 #if desktop
 import Discord.DiscordClient;
+import sys.FileSystem;
+import polymod.fs.SysFileSystem;
 #end
 import Section.SwagSection;
 import Song.SwagSong;
@@ -151,7 +154,7 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD);
 
-		FlxCamera.defaultCameras = [camGame];
+		FlxCamera.defaultCameras = [camGame]; //i tried fixing this and it didn't work
 
 		persistentUpdate = true;
 		persistentDraw = true;
@@ -162,32 +165,41 @@ class PlayState extends MusicBeatState
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
 
-		switch (SONG.song.toLowerCase())
+		#if desktop
+		if (FileSystem.exists(Paths.txt(SONG.song.toLowerCase() + '/' + SONG.song.toLowerCase() + 'Dialogue')))
 		{
-			case 'tutorial':
-				dialogue = ["Hey you're pretty cute.", 'Use the arrow keys to keep up \nwith me singing.'];
-			case 'bopeebo':
-				dialogue = [
-					'HEY!',
-					"You think you can just sing\nwith my daughter like that?",
-					"If you want to date her...",
-					"You're going to have to go \nthrough ME first!"
-				];
-			case 'fresh':
-				dialogue = ["Not too shabby boy.", ""];
-			case 'dadbattle':
-				dialogue = [
-					"gah you think you're hot stuff?",
-					"If you can beat me here...",
-					"Only then I will even CONSIDER letting you\ndate my daughter!"
-				];
-			case 'senpai':
-				dialogue = CoolUtil.coolTextFile(Paths.txt('senpai/senpaiDialogue'));
-			case 'roses':
-				dialogue = CoolUtil.coolTextFile(Paths.txt('roses/rosesDialogue'));
-			case 'thorns':
-				dialogue = CoolUtil.coolTextFile(Paths.txt('thorns/thornsDialogue'));
+			dialogue = CoolUtil.coolTextFile(Paths.txt(SONG.song.toLowerCase() + '/' + SONG.song.toLowerCase() + 'Dialogue'));
 		}
+		#end
+		
+
+
+		// switch (SONG.song.toLowerCase())
+		// {
+		// 	case 'tutorial':
+		// 		dialogue = ["Hey you're pretty cute.", 'Use the arrow keys to keep up \nwith me singing.'];
+		// 	case 'bopeebo':
+		// 		dialogue = [
+		// 			'HEY!',
+		// 			"You think you can just sing\nwith my daughter like that?",
+		// 			"If you want to date her...",
+		// 			"You're going to have to go \nthrough ME first!"
+		// 		];
+		// 	case 'fresh':
+		// 		dialogue = ["Not too shabby boy.", ""];
+		// 	case 'dadbattle':
+		// 		dialogue = [
+		// 			"gah you think you're hot stuff?",
+		// 			"If you can beat me here...",
+		// 			"Only then I will even CONSIDER letting you\ndate my daughter!"
+		// 		];
+		// 	case 'senpai':
+		// 		dialogue = CoolUtil.coolTextFile(Paths.txt('senpai/senpaiDialogue'));
+		// 	case 'roses':
+		// 		dialogue = CoolUtil.coolTextFile(Paths.txt('roses/rosesDialogue'));
+		// 	case 'thorns':
+		// 		dialogue = CoolUtil.coolTextFile(Paths.txt('thorns/thornsDialogue'));
+		// }
 
 		#if desktop
 		// Making difficulty text for Discord Rich Presence.
@@ -817,7 +829,14 @@ class PlayState extends MusicBeatState
 				case 'thorns':
 					schoolIntro(doof);
 				default:
-					startCountdown();
+					if (dialogue[0] != "blah blah blah")
+					{
+						schoolIntro(doof);
+					}
+					else
+					{
+						startCountdown();
+					}
 			}
 		}
 		else
@@ -842,12 +861,15 @@ class PlayState extends MusicBeatState
 		red.scrollFactor.set();
 
 		var senpaiEvil:FlxSprite = new FlxSprite();
-		senpaiEvil.frames = Paths.getSparrowAtlas('weeb/senpaiCrazy');
-		senpaiEvil.animation.addByPrefix('idle', 'Senpai Pre Explosion', 24, false);
-		senpaiEvil.setGraphicSize(Std.int(senpaiEvil.width * 6));
-		senpaiEvil.scrollFactor.set();
-		senpaiEvil.updateHitbox();
-		senpaiEvil.screenCenter();
+		if (Config.PixelStages.contains(PlayState.SONG.song.toLowerCase()))
+		{
+			senpaiEvil.frames = Paths.getSparrowAtlas('weeb/senpaiCrazy');
+			senpaiEvil.animation.addByPrefix('idle', 'Senpai Pre Explosion', 24, false);
+			senpaiEvil.setGraphicSize(Std.int(senpaiEvil.width * 6));
+			senpaiEvil.scrollFactor.set();
+			senpaiEvil.updateHitbox();
+			senpaiEvil.screenCenter();
+		}
 
 		if (SONG.song.toLowerCase() == 'roses' || SONG.song.toLowerCase() == 'thorns')
 		{
@@ -968,7 +990,8 @@ class PlayState extends MusicBeatState
 
 					if (curStage.startsWith('school'))
 						ready.setGraphicSize(Std.int(ready.width * daPixelZoom));
-
+					else
+						ready.antialiasing = true;
 					ready.screenCenter();
 					add(ready);
 					FlxTween.tween(ready, {y: ready.y += 100, alpha: 0}, Conductor.crochet / 1000, {
@@ -985,6 +1008,8 @@ class PlayState extends MusicBeatState
 
 					if (curStage.startsWith('school'))
 						set.setGraphicSize(Std.int(set.width * daPixelZoom));
+					else
+						set.antialiasing = true;
 
 					set.screenCenter();
 					add(set);
@@ -1002,6 +1027,8 @@ class PlayState extends MusicBeatState
 
 					if (curStage.startsWith('school'))
 						go.setGraphicSize(Std.int(go.width * daPixelZoom));
+					else
+						go.antialiasing = true;
 
 					go.updateHitbox();
 

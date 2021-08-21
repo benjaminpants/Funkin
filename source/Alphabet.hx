@@ -30,6 +30,8 @@ class Alphabet extends FlxSpriteGroup
 
 	var yMulti:Float = 1;
 
+	public var typeTimer:FlxTimer;
+
 	// custom shit
 	// amp, backslash, question mark, apostrophy, comma, angry faic, period
 	var lastSprite:AlphaCharacter;
@@ -129,10 +131,11 @@ class Alphabet extends FlxSpriteGroup
 		var xPos:Float = 0;
 		var curRow:Int = 0;
 
-		new FlxTimer().start(0.05, function(tmr:FlxTimer)
+		typeTimer = new FlxTimer();
+		typeTimer.start(0.05, function(tmr:FlxTimer)
 		{
 			// trace(_finalText.fastCodeAt(loopNum) + " " + _finalText.charAt(loopNum));
-			if (_finalText.fastCodeAt(loopNum) == "\n".code)
+			if (_finalText.fastCodeAt(loopNum) == "\\".code)
 			{
 				yMulti += 1;
 				xPosResetted = true;

@@ -14,9 +14,9 @@ class Config
 
 
     public static var DialogueCharacters:Map<String,DialogueCharacter> = [
-        "bf-pixel" => new DialogueCharacter("weeb/bfPortrait",'Boyfriend portrait enter',false,"pixel",1,true),
-        "senpai" => new DialogueCharacter("weeb/senpaiPortrait",'Senpai Portrait Enter',true,"pixel",1,true),
-        "invisible" => new DialogueCharacter("nonePortrait",'Senpai Portrait Enter instance 1',true,"pixel",1,true),
+        "bf-pixel" => new DialogueCharacter("weeb/bfPortrait",'Boyfriend portrait enter',false,"pixel_",1,true),
+        "senpai" => new DialogueCharacter("weeb/senpaiPortrait",'Senpai Portrait Enter',true,"pixel_",1,true),
+        "invisible" => new DialogueCharacter("nonePortrait",'Senpai Portrait Enter instance 1',true,"pixel_",1,true),
     ];
 
 }

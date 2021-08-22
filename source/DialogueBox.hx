@@ -95,10 +95,20 @@ class DialogueBox extends FlxSpriteGroup
 				add(face);
 
 			default:
-				hasDialog = dialogueList[0] != "blah blah blah";
-				box.frames = Paths.getSparrowAtlas('speech_bubble_talking');
-				box.animation.addByPrefix('normalOpen', 'Speech Bubble Normal Open', 24, false);
-				box.animation.addByIndices('normal', 'speech bubble normal', [4], "", 24);
+				if (Config.PixelStages.contains(PlayState.SONG.song.toLowerCase()))
+				{
+					hasDialog = dialogueList[0] != "blah blah blah";
+					box.frames = Paths.getSparrowAtlas('weeb/pixelUI/dialogueBox-pixel');
+					box.animation.addByPrefix('normalOpen', 'Text Box Appear', 24, false);
+					box.animation.addByIndices('normal', 'Text Box Appear', [4], "", 24);
+				}
+				else
+				{
+					hasDialog = dialogueList[0] != "blah blah blah";
+					box.frames = Paths.getSparrowAtlas('speech_bubble_talking');
+					box.animation.addByPrefix('normalOpen', 'Speech Bubble Normal Open', 24, false);
+					box.animation.addByIndices('normal', 'speech bubble normal', [4], "", 24);
+				}
 			
 		}
 
@@ -133,7 +143,7 @@ class DialogueBox extends FlxSpriteGroup
 		}
 		else
 		{
-			box.y = FlxG.height - (box.height / 1.32);
+			box.y = FlxG.height - (box.height / 1.325);
 			box.antialiasing = true;
 		}
 		add(box);
@@ -283,8 +293,13 @@ class DialogueBox extends FlxSpriteGroup
 				dialogue.typeTimer.cancel();
 			}
 			dialogue.destroy();
-			var theDialog:Alphabet = new Alphabet(0, FlxG.height - 260, dialogueList[0], false, true);
+			var theDialog:Alphabet = new Alphabet(0, FlxG.height - 265, dialogueList[0], false, true);
 			dialogue = theDialog;
+			if (Config.DialogueCharacters[curCharacter] != null)
+			{
+				theDialog.personTalking = Config.DialogueCharacters[curCharacter].SoundToPlay;
+				theDialog.maxTalkSFX = Config.DialogueCharacters[curCharacter].MaxSounds;
+			}
 			add(theDialog);
 		}
 
@@ -303,10 +318,12 @@ class DialogueBox extends FlxSpriteGroup
 					if (dc.IsPixel)
 					{
 						portraitRight.setGraphicSize(Std.int(portraitRight.width * PlayState.daPixelZoom * 0.9));
+						portraitRight.antialiasing = false;
 					}
 					else
 					{
 						portraitRight.setGraphicSize(Std.int(portraitRight.width),Std.int(portraitRight.height));
+						portraitRight.antialiasing = true;
 					}
 					portraitRight.updateHitbox();
 					portraitRight.scrollFactor.set();
@@ -325,10 +342,12 @@ class DialogueBox extends FlxSpriteGroup
 					if (dc.IsPixel)
 					{
 						portraitLeft.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+						portraitLeft.antialiasing = false;
 					}
 					else
 					{
 						portraitLeft.setGraphicSize(Std.int(portraitLeft.width),Std.int(portraitLeft.height));
+						portraitLeft.antialiasing = true;
 					}
 					portraitLeft.updateHitbox();
 					portraitLeft.scrollFactor.set();

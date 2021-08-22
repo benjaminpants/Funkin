@@ -119,6 +119,8 @@ class Alphabet extends FlxSpriteGroup
 
 	public var personTalking:String = 'gf';
 
+	public var maxTalkSFX:Int = 4;
+
 	public function startTypedText():Void
 	{
 		_finalText = text;
@@ -206,8 +208,8 @@ class Alphabet extends FlxSpriteGroup
 
 				if (FlxG.random.bool(40))
 				{
-					var daSound:String = "GF_";
-					FlxG.sound.play(Paths.soundRandom(daSound, 1, 4));
+					var daSound:String = personTalking;
+					FlxG.sound.play(Paths.soundRandom(daSound, 1, maxTalkSFX));
 				}
 
 				add(letter);

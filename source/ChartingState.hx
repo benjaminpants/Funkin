@@ -173,7 +173,7 @@ class ChartingState extends MusicBeatState
 		add(curRenderedNotes);
 		add(curRenderedSustains);
 
-		typeText = new FlxText(660,430,0,"Note Type: default\n(X to decrease, C to increase)", 14);
+		typeText = new FlxText(660,500,0,"Note Type: default\n(C to decrease, V to increase)", 14);
 		typeText.scrollFactor.set();
 		add(typeText);
 
@@ -487,7 +487,7 @@ class ChartingState extends MusicBeatState
 			curnoteType -= 1;
 		}
 
-		typeText.text = "Note Type: " + Config.NoteTypes[curnoteType].name + "\n(X to decrease, V to increase)";
+		typeText.text = "Note Type: " + Config.NoteTypes[curnoteType].name + "\n(C to decrease, V to increase)";
 
 		Conductor.songPosition = FlxG.sound.music.time;
 		_song.song = typingShit.text;

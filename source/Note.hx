@@ -28,15 +28,50 @@ class Note extends FlxSprite
 
 	public var noteScore:Float = 1;
 
+	public var MyStrum:FlxSprite;
+
+	private var InPlayState:Bool = false;
+
+
 	public static var swagWidth:Float = 160 * 0.7;
 	public static var PURP_NOTE:Int = 0;
 	public static var GREEN_NOTE:Int = 2;
 	public static var BLUE_NOTE:Int = 1;
 	public static var RED_NOTE:Int = 3;
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?notetype:Int = 0)
+	public function ScanForViableStrum(musthit:Bool)
+	{
+		var state:PlayState = cast(FlxG.state,PlayState);
+			InPlayState = true;
+			if (musthit)
+			{
+				state.playerStrums.forEach(function(spr:FlxSprite)
+				{
+					if (spr.ID == (noteData % 4))
+					{
+						x = spr.x;
+						MyStrum = spr;
+					}
+				});
+			}
+			else
+			{
+				state.dadStrums.forEach(function(spr:FlxSprite)
+					{
+						if (spr.ID == (noteData % 4))
+						{
+							x = spr.x;
+							MyStrum = spr;
+						}
+					});
+			}
+	}
+
+
+	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?notetype:Int = 0, ?musthit:Bool = false)
 	{
 		super();
+		visible = false;
 
 		if (prevNote == null)
 			prevNote = this;
@@ -55,13 +90,31 @@ class Note extends FlxSprite
 
 		noteType = notetype;
 
-		Config.NoteTypes[noteType].InitializeVisuals(this,noteData,isSustainNote,0,daStage,prevNote,false);
+		if (Type.getClassName(Type.getClass(FlxG.state)).contains("PlayState"))
+		{
+			InPlayState = true;
+			ScanForViableStrum(musthit);
+		}
+
+		Config.NoteTypes[noteType].InitializeVisuals(this,noteData,isSustainNote,0,daStage,prevNote,!InPlayState);
+		visible = true;
 	}
 
 	override function update(elapsed:Float)
 	{
 		super.update(elapsed);
 
+		if (MyStrum != null)
+		{
+			x = MyStrum.x + (isSustainNote ? width + (width / 10) : 0);
+		}
+		else
+		{
+			if (InPlayState)
+			{
+				ScanForViableStrum(mustPress);
+			}
+		}
 		if (mustPress)
 		{
 			// The * 0.5 is so that it's easier to hit them too late, instead of too early

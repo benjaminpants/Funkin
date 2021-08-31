@@ -74,8 +74,9 @@ class PlayState extends MusicBeatState
 
 	private static var prevCamFollow:FlxObject;
 
-	private var strumLineNotes:FlxTypedGroup<FlxSprite>;
-	private var playerStrums:FlxTypedGroup<FlxSprite>;
+	public var strumLineNotes:FlxTypedGroup<FlxSprite>;
+	public var playerStrums:FlxTypedGroup<FlxSprite>;
+	public var dadStrums:FlxTypedGroup<FlxSprite>;
 
 	private var camZooming:Bool = false;
 	private var curSong:String = "";
@@ -710,6 +711,7 @@ class PlayState extends MusicBeatState
 		add(strumLineNotes);
 
 		playerStrums = new FlxTypedGroup<FlxSprite>();
+		dadStrums = new FlxTypedGroup<FlxSprite>();
 
 		// startCountdown();
 
@@ -1127,7 +1129,7 @@ class PlayState extends MusicBeatState
 				else
 					oldNote = null;
 
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote,false,songNotes[3]);
+				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote,false,songNotes[3],gottaHitNote);
 				swagNote.sustainLength = songNotes[2];
 				swagNote.scrollFactor.set(0, 0);
 
@@ -1140,7 +1142,7 @@ class PlayState extends MusicBeatState
 				{
 					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true, songNotes[3]);
+					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true, songNotes[3],gottaHitNote);
 					sustainNote.scrollFactor.set();
 					unspawnNotes.push(sustainNote);
 
@@ -1270,6 +1272,10 @@ class PlayState extends MusicBeatState
 			if (player == 1)
 			{
 				playerStrums.add(babyArrow);
+			}
+			else
+			{
+				dadStrums.add(babyArrow);
 			}
 
 			babyArrow.animation.play('static');
@@ -1665,17 +1671,23 @@ class PlayState extends MusicBeatState
 					daNote.active = true;
 				}
 
-				daNote.y = (strumLine.y + (((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2))) * (FlxG.save.data.downscroll ? 1 : -1)) );
+				var strumy:Float = strumLine.y;
+				if (daNote.MyStrum != null)
+				{
+					strumy = daNote.MyStrum.y;
+				}
+
+				daNote.y = (strumy + (((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2))) * (FlxG.save.data.downscroll ? 1 : -1)) );
 
 				if (daNote.isSustainNote)
 				{
 					if (!FlxG.save.data.downscroll)
 					{
-						daNote.clipRect = new FlxRect(0,strumLine.y + (Note.swagWidth / 2 - daNote.y),daNote.width * 2,FlxG.height);
+						daNote.clipRect = new FlxRect(0,strumy + (Note.swagWidth / 2 - daNote.y),daNote.width * 2,FlxG.height);
 					}
 					else
 					{
-						daNote.clipRect = new FlxRect(0,(-strumLine.y) + (daNote.y + (Note.swagWidth / 2)),FlxG.height,FlxG.height);
+						daNote.clipRect = new FlxRect(0,(-strumy) + (daNote.y + (Note.swagWidth / 2)),FlxG.height,FlxG.height);
 					}
 				}
 

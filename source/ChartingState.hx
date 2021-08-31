@@ -81,6 +81,10 @@ class ChartingState extends MusicBeatState
 	var leftIcon:HealthIcon;
 	var rightIcon:HealthIcon;
 
+	var curnoteType:Int = 0;
+
+	var typeText:FlxText;
+
 	override function create()
 	{
 		curSection = lastSection;
@@ -168,6 +172,10 @@ class ChartingState extends MusicBeatState
 
 		add(curRenderedNotes);
 		add(curRenderedSustains);
+
+		typeText = new FlxText(660,430,0,"Note Type: default\n(X to decrease, C to increase)", 14);
+		typeText.scrollFactor.set();
+		add(typeText);
 
 		super.create();
 	}
@@ -471,6 +479,16 @@ class ChartingState extends MusicBeatState
 	{
 		curStep = recalculateSteps();
 
+		
+		if (FlxG.keys.justPressed.V && curnoteType != Config.NoteTypes.length - 1) {
+			curnoteType += 1;
+		}
+		if (FlxG.keys.justPressed.C && curnoteType != 0) {
+			curnoteType -= 1;
+		}
+
+		typeText.text = "Note Type: " + Config.NoteTypes[curnoteType].name + "\n(X to decrease, V to increase)";
+
 		Conductor.songPosition = FlxG.sound.music.time;
 		_song.song = typingShit.text;
 
@@ -767,7 +785,7 @@ class ChartingState extends MusicBeatState
 		{
 			var strum = note[0] + Conductor.stepCrochet * (_song.notes[daSec].lengthInSteps * sectionNum);
 
-			var copiedNote:Array<Dynamic> = [strum, note[1], note[2]];
+			var copiedNote:Array<Dynamic> = [strum, note[1], note[2], note[3]];
 			_song.notes[daSec].sectionNotes.push(copiedNote);
 		}
 
@@ -856,7 +874,7 @@ class ChartingState extends MusicBeatState
 			var daStrumTime = i[0];
 			var daSus = i[2];
 
-			var note:Note = new Note(daStrumTime, daNoteInfo % 4);
+			var note:Note = new Note(daStrumTime, daNoteInfo % 4,null,false,i[3]);
 			note.sustainLength = daSus;
 			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
 			note.updateHitbox();
@@ -943,14 +961,15 @@ class ChartingState extends MusicBeatState
 		var noteStrum = getStrumTime(dummyArrow.y) + sectionStartTime();
 		var noteData = Math.floor(FlxG.mouse.x / GRID_SIZE);
 		var noteSus = 0;
+		var noteType = curnoteType;
 
-		_song.notes[curSection].sectionNotes.push([noteStrum, noteData, noteSus]);
+		_song.notes[curSection].sectionNotes.push([noteStrum, noteData, noteSus, noteType]);
 
 		curSelectedNote = _song.notes[curSection].sectionNotes[_song.notes[curSection].sectionNotes.length - 1];
 
 		if (FlxG.keys.pressed.CONTROL)
 		{
-			_song.notes[curSection].sectionNotes.push([noteStrum, (noteData + 4) % 8, noteSus]);
+			_song.notes[curSection].sectionNotes.push([noteStrum, (noteData + 4) % 8, noteSus,noteType]);
 		}
 
 		trace(noteStrum);

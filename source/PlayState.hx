@@ -60,9 +60,9 @@ class PlayState extends MusicBeatState
 
 	private var vocals:FlxSound;
 
-	private var dad:Character;
-	private var gf:Character;
-	private var boyfriend:Boyfriend;
+	public var dad:Character;
+	public var gf:Character;
+	public var boyfriend:Boyfriend;
 
 	private var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
@@ -81,8 +81,9 @@ class PlayState extends MusicBeatState
 	private var curSong:String = "";
 
 	private var gfSpeed:Int = 1;
-	private var health:Float = 1;
+	public var health:Float = 1;
 	private var combo:Int = 0;
+	private var maxcombo:Int = 0;
 	private var misses:Int = 0;
 
 	private var healthBarBG:FlxSprite;
@@ -1126,7 +1127,7 @@ class PlayState extends MusicBeatState
 				else
 					oldNote = null;
 
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote);
+				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote,false,songNotes[3]);
 				swagNote.sustainLength = songNotes[2];
 				swagNote.scrollFactor.set(0, 0);
 
@@ -1139,7 +1140,7 @@ class PlayState extends MusicBeatState
 				{
 					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
-					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true);
+					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true, songNotes[3]);
 					sustainNote.scrollFactor.set();
 					unspawnNotes.push(sustainNote);
 
@@ -1406,7 +1407,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Score:" + songScore + " | Combo:" + combo + " | Misses:" + misses;
+		scoreTxt.text = "Score:" + songScore + " | Combo:" + combo + (combo == maxcombo ? "" : "(" + maxcombo + ")") + " | Misses:" + misses;
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
@@ -1710,13 +1711,7 @@ class PlayState extends MusicBeatState
 				{
 					if (daNote.tooLate || !daNote.wasGoodHit)
 					{
-						health -= 0.0475;
-						noteMiss(daNote.noteData % 4,true,!daNote.isSustainNote);
-						if (!daNote.isSustainNote)
-						{
-							misses += 1;
-						}
-						vocals.volume = 0;
+						Config.NoteTypes[daNote.noteType].OnMiss(daNote,this);
 					}
 
 					daNote.active = false;
@@ -2011,35 +2006,14 @@ class PlayState extends MusicBeatState
 
 			if (possibleNotes.length > 0) //left down up right
 			{
-				for (note in possibleNotes) {
-					switch (note.noteData % 4)
+
+				var note:Note = possibleNotes[0];
+
+				for (note in possibleNotes) 
+				{
+					if (controlArray[note.noteData % 4])
 					{
-						case 0:
-							if (leftP)
-							{
-								goodNoteHit(note);
-							}
-							break;
-						case 1:
-							if (downP)
-							{
-								goodNoteHit(note);
-							}
-							break;
-						case 2:
-							if (upP)
-							{
-								goodNoteHit(note);
-							}
-							break;
-						case 3:
-							if (rightP)
-							{
-								goodNoteHit(note);
-							}
-							break;
-						default:
-							trace("what the fuck");
+						Config.NoteTypes[note.noteType].OnHit(note,this);
 					}
 				}
 			}
@@ -2064,7 +2038,6 @@ class PlayState extends MusicBeatState
 					{
 						noteMiss(3);
 					}
-					misses += 1;
 				}
 			}
 		}
@@ -2080,16 +2053,16 @@ class PlayState extends MusicBeatState
 						// NOTES YOU ARE HOLDING
 						case 0:
 							if (left)
-								goodNoteHit(daNote);
+								Config.NoteTypes[daNote.noteType].OnHit(daNote,this);
 						case 1:
 							if (down)
-								goodNoteHit(daNote);
+								Config.NoteTypes[daNote.noteType].OnHit(daNote,this);
 						case 2:
 							if (up)
-								goodNoteHit(daNote);
+								Config.NoteTypes[daNote.noteType].OnHit(daNote,this);
 						case 3:
 							if (right)
-								goodNoteHit(daNote);
+								Config.NoteTypes[daNote.noteType].OnHit(daNote,this);
 					}
 				}
 			});
@@ -2140,15 +2113,21 @@ class PlayState extends MusicBeatState
 		});
 	}
 
-	function noteMiss(direction:Int = 1, nohealthdrain:Bool = false, playsound:Bool = true):Void
+	public function noteMiss(direction:Int = 1, playsound:Bool = true, isSustain:Bool = false):Void
 	{
 		if (!boyfriend.stunned)
 		{
-			if (!nohealthdrain)
+			if (isSustain)
 			{
 				health -= 0.04;
-				songScore -= 10;
 			}
+			else
+			{
+				songScore -= 10;
+				health -= 0.0475;
+				misses += 1;
+			}
+			vocals.volume = 0;
 			if (combo > 5 && gf.animOffsets.exists('sad'))
 			{
 				gf.playAnim('sad');
@@ -2169,7 +2148,7 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	function goodNoteHit(note:Note):Void
+	public function goodNoteHit(note:Note):Void
 	{
 		if (!note.wasGoodHit)
 		{
@@ -2177,6 +2156,10 @@ class PlayState extends MusicBeatState
 			{
 				popUpScore(note.strumTime);
 				combo += 1;
+				if (combo > maxcombo)
+				{
+					maxcombo += 1;
+				}
 			}
 
 			if (note.noteData >= 0)

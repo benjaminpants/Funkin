@@ -32,12 +32,14 @@ class Note extends FlxSprite
 
 	private var InPlayState:Bool = false;
 
+	private var InPixelStage:Bool = false;
 
 	public static var swagWidth:Float = 160 * 0.7;
 	public static var PURP_NOTE:Int = 0;
 	public static var GREEN_NOTE:Int = 2;
 	public static var BLUE_NOTE:Int = 1;
 	public static var RED_NOTE:Int = 3;
+
 
 	public function ScanForViableStrum(musthit:Bool)
 	{
@@ -70,8 +72,8 @@ class Note extends FlxSprite
 
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?notetype:Int = 0, ?musthit:Bool = false)
 	{
-		super();
 		visible = false;
+		super();
 
 		if (prevNote == null)
 			prevNote = this;
@@ -97,6 +99,8 @@ class Note extends FlxSprite
 		}
 
 		Config.NoteTypes[noteType].InitializeVisuals(this,noteData,isSustainNote,0,daStage,prevNote,!InPlayState);
+
+		InPixelStage = Config.PixelStages.contains(PlayState.SONG.song.toLowerCase());
 		visible = true;
 	}
 
@@ -106,7 +110,7 @@ class Note extends FlxSprite
 
 		if (MyStrum != null)
 		{
-			x = MyStrum.x + (isSustainNote ? width + (width / 10) : 0);
+			x = MyStrum.x + (isSustainNote ? (InPixelStage ? width - (width / 3) : width + (width / 9)) : 0);
 		}
 		else
 		{

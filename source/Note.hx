@@ -137,6 +137,7 @@ class Note extends FlxSprite
 
 			if (strumTime <= Conductor.songPosition)
 				wasGoodHit = true;
+
 		}
 
 		if (tooLate)

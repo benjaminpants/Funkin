@@ -2033,22 +2033,12 @@ class PlayState extends MusicBeatState
 			{
 				if (!FlxG.save.data.ghostnotes)
 				{
-					// im sorry i was trying to make this better but its equally as bad
-					if (leftP)
+					for (i in 0...controlArray.length)
 					{
-						noteMiss(0);
-					}
-					else if (downP)
-					{
-						noteMiss(1);
-					}
-					else if (upP)
-					{
-						noteMiss(2);
-					}
-					else if (rightP)
-					{
-						noteMiss(3);
+						if (controlArray[i])
+						{
+							noteMiss(i % 4);
+						}
 					}
 				}
 			}

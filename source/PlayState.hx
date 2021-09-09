@@ -2045,7 +2045,7 @@ class PlayState extends MusicBeatState
 					{
 						if (controlArray[i])
 						{
-							noteMiss(i % 4);
+							noteMiss(i % KeyAmount);
 						}
 					}
 				}

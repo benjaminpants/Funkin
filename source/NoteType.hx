@@ -21,7 +21,7 @@ class NoteTypeBase
     public var name:String = "default";
     public var shouldbehit:Bool = true;
     public var opponentshouldhit:Bool = true;
-
+	public var scrollspeedoverride:Float = -1;
 
 
     public function new()
@@ -161,7 +161,7 @@ class NoteTypeBase
 
     public function OnMiss(note:Note,state:PlayState)
     {
-        state.noteMiss(note.noteData % 4,!note.isSustainNote,note.isSustainNote);
+        state.noteMiss(note.noteData % state.KeyAmount,!note.isSustainNote,note.isSustainNote);
     }
 
 }
@@ -172,6 +172,8 @@ class TIKYNOTE extends NoteTypeBase //example note type you probably shouldn't u
     {
         super();
         name = "tiky";
+		scrollspeedoverride = 3;
+		opponentshouldhit = false;
     }
 
     override function InitializeVisuals(sprite:FlxSprite,notedata:Int,issustain:Bool,noteskin:Int,daStage:String,prevNote:Note,ineditor:Bool)

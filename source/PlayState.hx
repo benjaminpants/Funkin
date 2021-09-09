@@ -1,6 +1,7 @@
 package;
 
 
+import NoteType.NoteTypeBase;
 #if desktop
 import Discord.DiscordClient;
 import sys.FileSystem;
@@ -98,6 +99,8 @@ class PlayState extends MusicBeatState
 	private var camHUD:FlxCamera;
 	private var camGame:FlxCamera;
 
+	public var KeyAmount:Int = 4;
+
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 
 	var NoteAnims:Array<String> = ['LEFT', 'DOWN', 'UP', 'RIGHT'];
@@ -166,6 +169,10 @@ class PlayState extends MusicBeatState
 
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
+
+
+		KeyAmount = (SONG.keys > 0 ? SONG.keys : 4); //just incase
+
 
 		#if desktop
 		if (FileSystem.exists(Paths.txt(SONG.song.toLowerCase() + '/' + SONG.song.toLowerCase() + 'Dialogue')))
@@ -1114,7 +1121,7 @@ class PlayState extends MusicBeatState
 			for (songNotes in section.sectionNotes)
 			{
 				var daStrumTime:Float = songNotes[0];
-				var daNoteData:Int = Std.int(songNotes[1] % 4);
+				var daNoteData:Int = Std.int(songNotes[1] % KeyAmount);
 
 				var gottaHitNote:Bool = section.mustHitSection;
 
@@ -1180,7 +1187,7 @@ class PlayState extends MusicBeatState
 
 	private function generateStaticArrows(player:Int):Void
 	{
-		for (i in 0...4)
+		for (i in 0...KeyAmount)
 		{
 			// FlxG.log.add(i);
 			var babyArrow:FlxSprite = new FlxSprite(0, strumLine.y);
@@ -1413,7 +1420,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Score:" + songScore + " | Combo:" + combo + (combo == maxcombo ? "" : "(" + maxcombo + ")") + " | Misses:" + misses;
+		scoreTxt.text = "Score:" + songScore + " | Combo:" + (combo > 0 ? combo - 1 : 0) + (combo == maxcombo ? "" : "(" + (maxcombo - 1) + ")") + " | Misses:" + misses;
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
@@ -1660,6 +1667,7 @@ class PlayState extends MusicBeatState
 		{
 			notes.forEachAlive(function(daNote:Note)
 			{
+				var curnotetype:NoteTypeBase = Config.NoteTypes[daNote.noteType];
 				if (daNote.y > FlxG.height)
 				{
 					daNote.active = false;
@@ -1677,7 +1685,7 @@ class PlayState extends MusicBeatState
 					strumy = daNote.MyStrum.y;
 				}
 
-				daNote.y = (strumy + (((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2))) * (FlxG.save.data.downscroll ? 1 : -1)) );
+				daNote.y = (strumy + (((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal((curnotetype.scrollspeedoverride == -1 ? SONG.speed : curnotetype.scrollspeedoverride), 2))) * (FlxG.save.data.downscroll ? 1 : -1)) );
 
 				if (daNote.isSustainNote)
 				{
@@ -1691,7 +1699,7 @@ class PlayState extends MusicBeatState
 					}
 				}
 
-				if (!daNote.mustPress && daNote.wasGoodHit)
+				if (!daNote.mustPress && daNote.wasGoodHit && curnotetype.opponentshouldhit)
 				{
 					if (SONG.song != 'Tutorial')
 						camZooming = true;
@@ -1704,7 +1712,7 @@ class PlayState extends MusicBeatState
 							altAnim = '-alt';
 					}
 
-					dad.playAnim('sing' + NoteAnims[Math.round(Math.abs(daNote.noteData)) % 4] + altAnim, true); //this is faster i think and allows for more then 4 notes
+					dad.playAnim('sing' + NoteAnims[Math.round(Math.abs(daNote.noteData)) % KeyAmount] + altAnim, true); //this is faster i think and allows for more then 4 notes
 
 					dad.holdTimer = 0;
 
@@ -1721,7 +1729,7 @@ class PlayState extends MusicBeatState
 
 				if ((!FlxG.save.data.downscroll) ? (daNote.y < -daNote.height) : (daNote.y > FlxG.height + daNote.height))
 				{
-					if (daNote.tooLate || !daNote.wasGoodHit)
+					if (daNote.tooLate || !daNote.wasGoodHit && daNote.mustPress)
 					{
 						Config.NoteTypes[daNote.noteType].OnMiss(daNote,this);
 					}
@@ -2023,7 +2031,7 @@ class PlayState extends MusicBeatState
 
 				for (note in possibleNotes) 
 				{
-					if (controlArray[note.noteData % 4])
+					if (controlArray[note.noteData % KeyAmount])
 					{
 						Config.NoteTypes[note.noteType].OnHit(note,this);
 					}
@@ -2156,7 +2164,7 @@ class PlayState extends MusicBeatState
 			//no more stupid stun mechanic!!!
 
 
-			boyfriend.playAnim('sing' + NoteAnims[Math.round(Math.abs(direction)) % 4] + "miss", true);
+			boyfriend.playAnim('sing' + NoteAnims[Math.round(Math.abs(direction)) % KeyAmount] + "miss", true);
 		}
 	}
 
@@ -2180,7 +2188,7 @@ class PlayState extends MusicBeatState
 				health += 0.004;
 
 
-			boyfriend.playAnim('sing' + NoteAnims[Math.round(Math.abs(note.noteData)) % 4], true);
+			boyfriend.playAnim('sing' + NoteAnims[Math.round(Math.abs(note.noteData)) % KeyAmount], true);
 
 			playerStrums.forEach(function(spr:FlxSprite)
 			{

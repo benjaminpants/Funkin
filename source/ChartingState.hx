@@ -85,6 +85,8 @@ class ChartingState extends MusicBeatState
 
 	var typeText:FlxText;
 
+	private var KeyAmount:Int = 4;
+
 	override function create()
 	{
 		curSection = lastSection;
@@ -124,9 +126,11 @@ class ChartingState extends MusicBeatState
 				player1: 'bf',
 				player2: 'dad',
 				speed: 1,
-				validScore: false
+				validScore: false,
+				keys: 4
 			};
 		}
+
 
 		FlxG.mouse.visible = true;
 		FlxG.save.bind(Config.Game, Config.Company);
@@ -142,6 +146,13 @@ class ChartingState extends MusicBeatState
 		loadSong(_song.song);
 		Conductor.changeBPM(_song.bpm);
 		Conductor.mapBPMChanges(_song);
+
+
+
+		KeyAmount = (_song.keys > 0 ? _song.keys : 4);
+
+		leftIcon.animation.play(_song.player1);
+		rightIcon.animation.play(_song.player2);
 
 		bpmTxt = new FlxText(1000, 50, 0, "", 16);
 		bpmTxt.scrollFactor.set();
@@ -435,6 +446,10 @@ class ChartingState extends MusicBeatState
 				Conductor.mapBPMChanges(_song);
 				Conductor.changeBPM(Std.int(nums.value));
 			}
+			else if (wname == 'key_amount')
+			{
+				_song.keys = cast(nums.value,Int);
+			}
 			else if (wname == 'note_susLength')
 			{
 				curSelectedNote[2] = nums.value;
@@ -478,6 +493,8 @@ class ChartingState extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		curStep = recalculateSteps();
+
+		
 
 		
 		if (FlxG.keys.justPressed.V && curnoteType != Config.NoteTypes.length - 1) {
@@ -809,13 +826,13 @@ class ChartingState extends MusicBeatState
 	{
 		if (check_mustHitSection.checked)
 		{
-			leftIcon.animation.play('bf');
-			rightIcon.animation.play('dad');
+			leftIcon.animation.play(_song.player1);
+			rightIcon.animation.play(_song.player2);
 		}
 		else
 		{
-			leftIcon.animation.play('dad');
-			rightIcon.animation.play('bf');
+			leftIcon.animation.play(_song.player2);
+			rightIcon.animation.play(_song.player1);
 		}
 	}
 
@@ -874,7 +891,7 @@ class ChartingState extends MusicBeatState
 			var daStrumTime = i[0];
 			var daSus = i[2];
 
-			var note:Note = new Note(daStrumTime, daNoteInfo % 4,null,false,i[3]);
+			var note:Note = new Note(daStrumTime, daNoteInfo % KeyAmount,null,false,i[3]);
 			note.sustainLength = daSus;
 			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
 			note.updateHitbox();
@@ -913,7 +930,7 @@ class ChartingState extends MusicBeatState
 
 		for (i in _song.notes[curSection].sectionNotes)
 		{
-			if (i.strumTime == note.strumTime && i.noteData % 4 == note.noteData)
+			if (i.strumTime == note.strumTime && i.noteData % KeyAmount == note.noteData)
 			{
 				curSelectedNote = _song.notes[curSection].sectionNotes[swagNum];
 			}
@@ -929,7 +946,7 @@ class ChartingState extends MusicBeatState
 	{
 		for (i in _song.notes[curSection].sectionNotes)
 		{
-			if (i[0] == note.strumTime && i[1] % 4 == note.noteData)
+			if (i[0] == note.strumTime && i[1] % KeyAmount == note.noteData)
 			{
 				FlxG.log.add('FOUND EVIL NUMBER');
 				_song.notes[curSection].sectionNotes.remove(i);

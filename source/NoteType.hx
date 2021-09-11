@@ -172,7 +172,6 @@ class TIKYNOTE extends NoteTypeBase //example note type you probably shouldn't u
     {
         super();
         name = "tiky";
-		scrollspeedoverride = 3;
 		opponentshouldhit = false;
     }
 

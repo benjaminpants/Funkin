@@ -776,7 +776,7 @@ class PlayState extends MusicBeatState
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
-		verTxt = new FlxText(0, healthBarBG.y + (FlxG.save.data.downscroll ? -56 : 30), 0, "", 20);
+		verTxt = new FlxText(0, healthBarBG.y + (FlxG.save.data.downscroll ? -48 : 30), 0, "", 20);
 		verTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		verTxt.scrollFactor.set();
 		verTxt.text = SONG.song + " - " + CoolUtil.difficultyString() + "\nStrawberry Engine v0.0(Not ready for use)";
@@ -2052,7 +2052,7 @@ class PlayState extends MusicBeatState
 			//tried it out with the test song and apparently the input system is still shit fuck
 			notes.forEachAlive(function(daNote:Note)
 			{
-				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit)
+				if (daNote.canBeHit && daNote.mustPress && !daNote.tooLate && !daNote.wasGoodHit && !daNote.isSustainNote)
 				{
 					possibleNotes.push(daNote);
 				}

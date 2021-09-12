@@ -1690,7 +1690,7 @@ class PlayState extends MusicBeatState
 
 				daNote.y = (strumy + (((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal((curnotetype.scrollspeedoverride == -1 ? SONG.speed : curnotetype.scrollspeedoverride), 2))) * (FlxG.save.data.downscroll ? 1 : -1)) );
 
-				if (daNote.isSustainNote && daNote.wasGoodHit)
+				if (daNote.isSustainNote)
 				{
 					if (!FlxG.save.data.downscroll)
 					{
@@ -1706,7 +1706,6 @@ class PlayState extends MusicBeatState
 				{
 					if (SONG.song != 'Tutorial')
 						camZooming = true;
-					daNote.wasGoodHit = true;
 
 					var altAnim:String = "";
 
@@ -1716,7 +1715,7 @@ class PlayState extends MusicBeatState
 							altAnim = '-alt';
 					}
 
-					dad.playAnim('sing' + NoteAnims[Math.round(Math.abs(daNote.noteData)) % KeyAmount] + altAnim, true); //this is faster i think and allows for more then 4 notes
+					dad.playAnim('sing' + NoteAnims[Math.round(Math.abs(daNote.noteData)) % NoteAnims.length] + altAnim, true); //this is faster i think and allows for more then 4 notes
 
 					dadStrums.forEach(function(sprite:FlxSprite)
 					{
@@ -2206,7 +2205,7 @@ class PlayState extends MusicBeatState
 			//no more stupid stun mechanic!!!
 
 
-			boyfriend.playAnim('sing' + NoteAnims[Math.round(Math.abs(direction)) % KeyAmount] + "miss", true);
+			boyfriend.playAnim('sing' + NoteAnims[Math.round(Math.abs(direction)) % NoteAnims.length] + "miss", true);
 		}
 	}
 
@@ -2230,7 +2229,7 @@ class PlayState extends MusicBeatState
 				health += 0.004;
 
 
-			boyfriend.playAnim('sing' + NoteAnims[Math.round(Math.abs(note.noteData)) % KeyAmount], true);
+			boyfriend.playAnim('sing' + NoteAnims[Math.round(Math.abs(note.noteData)) % NoteAnims.length], true);
 
 			playerStrums.forEach(function(spr:FlxSprite)
 			{

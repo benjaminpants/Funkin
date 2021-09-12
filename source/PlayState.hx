@@ -173,7 +173,7 @@ class PlayState extends MusicBeatState
 
 		KeyAmount = (SONG.keys > 0 ? SONG.keys : 4); //just incase
 
-
+		//no more dialogue for html builds someone fix this please
 		#if desktop
 		if (FileSystem.exists(Paths.txt(SONG.song.toLowerCase() + '/' + SONG.song.toLowerCase() + 'Dialogue')))
 		{
@@ -312,6 +312,9 @@ class PlayState extends MusicBeatState
 
 		                  var street:FlxSprite = new FlxSprite(-40, streetBehind.y).loadGraphic(Paths.image('philly/street'));
 	                          add(street);
+							street.antialiasing = true;
+							streetBehind.antialiasing = true;
+							phillyTrain.antialiasing = true;
 		          }
 		          case 'milf' | 'satin-panties' | 'high':
 		          {
@@ -773,10 +776,10 @@ class PlayState extends MusicBeatState
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
-		verTxt = new FlxText(0, healthBarBG.y + (FlxG.save.data.downscroll ? -50 : 30), 0, "", 20);
+		verTxt = new FlxText(0, healthBarBG.y + (FlxG.save.data.downscroll ? -52 : 30), 0, "", 20);
 		verTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		verTxt.scrollFactor.set();
-		verTxt.text = SONG.song + "\nStrawberry Engine v0.0(Not ready for use)";
+		verTxt.text = SONG.song + " - " + CoolUtil.difficultyString() + "\nStrawberry Engine v0.0(Not ready for use)";
 		add(verTxt);
 
 
@@ -992,7 +995,7 @@ class PlayState extends MusicBeatState
 
 			{
 				case 0:
-					FlxG.sound.play(Paths.sound('intro3'), 0.6);
+					FlxG.sound.play(Paths.sound('intro3' + altSuffix), 0.6);
 				case 1:
 					var ready:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[0]));
 					ready.scrollFactor.set();
@@ -1011,7 +1014,7 @@ class PlayState extends MusicBeatState
 							ready.destroy();
 						}
 					});
-					FlxG.sound.play(Paths.sound('intro2'), 0.6);
+					FlxG.sound.play(Paths.sound('intro2' + altSuffix), 0.6);
 				case 2:
 					var set:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[1]));
 					set.scrollFactor.set();
@@ -1030,7 +1033,7 @@ class PlayState extends MusicBeatState
 							set.destroy();
 						}
 					});
-					FlxG.sound.play(Paths.sound('intro1'), 0.6);
+					FlxG.sound.play(Paths.sound('intro1' + altSuffix), 0.6);
 				case 3:
 					var go:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[2]));
 					go.scrollFactor.set();
@@ -1051,7 +1054,7 @@ class PlayState extends MusicBeatState
 							go.destroy();
 						}
 					});
-					FlxG.sound.play(Paths.sound('introGo'), 0.6);
+					FlxG.sound.play(Paths.sound('introGo' + altSuffix), 0.6);
 				case 4:
 			}
 
@@ -1687,7 +1690,7 @@ class PlayState extends MusicBeatState
 
 				daNote.y = (strumy + (((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal((curnotetype.scrollspeedoverride == -1 ? SONG.speed : curnotetype.scrollspeedoverride), 2))) * (FlxG.save.data.downscroll ? 1 : -1)) );
 
-				if (daNote.isSustainNote)
+				if (daNote.isSustainNote && daNote.wasGoodHit)
 				{
 					if (!FlxG.save.data.downscroll)
 					{
@@ -1703,6 +1706,7 @@ class PlayState extends MusicBeatState
 				{
 					if (SONG.song != 'Tutorial')
 						camZooming = true;
+					daNote.wasGoodHit = true;
 
 					var altAnim:String = "";
 
@@ -1713,6 +1717,32 @@ class PlayState extends MusicBeatState
 					}
 
 					dad.playAnim('sing' + NoteAnims[Math.round(Math.abs(daNote.noteData)) % KeyAmount] + altAnim, true); //this is faster i think and allows for more then 4 notes
+
+					dadStrums.forEach(function(sprite:FlxSprite)
+					{
+						if (Math.abs(Math.round(Math.abs(daNote.noteData)) % KeyAmount) == sprite.ID)
+						{
+							sprite.animation.play('confirm', true);
+							if (sprite.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
+							{
+								sprite.centerOffsets();
+								sprite.offset.x -= 13;
+								sprite.offset.y -= 13;
+							}
+							else
+							{
+								sprite.centerOffsets();
+							}
+							sprite.animation.finishCallback = function(name:String)
+							{
+								sprite.animation.play('static',true);
+								sprite.centerOffsets();
+							}
+
+						}
+					});
+
+
 
 					dad.holdTimer = 0;
 
@@ -2024,15 +2054,37 @@ class PlayState extends MusicBeatState
 				}
 			});
 
+			possibleNotes.sort((a, b) -> Std.int(a.noteType - b.noteType)); //sorting twice is necessary as far as i know
+			haxe.ds.ArraySort.sort(possibleNotes, function(a, b):Int {
+				var notetypecompare:Int = Std.int(a.noteType - b.noteType);
+
+				if (notetypecompare == 0)
+				{
+					return Std.int(a.strumTime - b.strumTime);
+				}
+				return notetypecompare;
+			});
+			//possibleNotes.sort((a, b) -> Std.int(a.noteType - b.noteType) || Std.int(a.strumTime - b.strumTime));
+
 			if (possibleNotes.length > 0) //left down up right
 			{
-
-				var note:Note = possibleNotes[0];
+				var lasthitnote:Int = -1;
+				var lasthitnotetime:Float = -1;
 
 				for (note in possibleNotes) 
 				{
 					if (controlArray[note.noteData % KeyAmount])
 					{
+						if (lasthitnotetime > Conductor.songPosition - Conductor.safeZoneOffset
+							&& lasthitnotetime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
+						{
+							if (note.noteData == lasthitnote)
+							{
+								continue; //the jacks are too close together
+							}
+						}
+						lasthitnote = note.noteData;
+						lasthitnotetime = note.strumTime;
 						Config.NoteTypes[note.noteType].OnHit(note,this);
 					}
 				}

@@ -776,7 +776,7 @@ class PlayState extends MusicBeatState
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
-		verTxt = new FlxText(0, healthBarBG.y + (FlxG.save.data.downscroll ? -52 : 30), 0, "", 20);
+		verTxt = new FlxText(0, healthBarBG.y + (FlxG.save.data.downscroll ? -56 : 30), 0, "", 20);
 		verTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		verTxt.scrollFactor.set();
 		verTxt.text = SONG.song + " - " + CoolUtil.difficultyString() + "\nStrawberry Engine v0.0(Not ready for use)";
@@ -1891,6 +1891,11 @@ class PlayState extends MusicBeatState
 			daRating = 'bad';
 			score = 100;
 		}
+		else if (noteDiff > Conductor.safeZoneOffset * 0.9)
+		{
+			daRating = 'shit';
+			score = 100;
+		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.2)
 		{
 			daRating = 'good';
@@ -2077,7 +2082,7 @@ class PlayState extends MusicBeatState
 						if (lasthitnotetime > Conductor.songPosition - Conductor.safeZoneOffset
 							&& lasthitnotetime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
 						{
-							if (note.noteData == lasthitnote)
+							if ((note.noteData % KeyAmount) == (lasthitnote % KeyAmount))
 							{
 								continue; //the jacks are too close together
 							}

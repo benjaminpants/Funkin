@@ -11,6 +11,8 @@ class Config
     public static var Company:String = "ninjamuffin99";
     public static var Game:String = "funkin";
 
+    public static var EngineVersion:String = "0.0(Not ready for use)";
+
     public static var PixelStages:Array<String> = [ "senpai", "roses", "thorns" ];
 
 

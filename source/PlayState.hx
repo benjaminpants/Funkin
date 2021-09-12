@@ -103,6 +103,10 @@ class PlayState extends MusicBeatState
 
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
 
+	var hitpercentages:Array<Int> = [100];
+
+	var accuracy:Int = 0;
+
 	var NoteAnims:Array<String> = ['LEFT', 'DOWN', 'UP', 'RIGHT'];
 
 	var halloweenBG:FlxSprite;
@@ -779,7 +783,7 @@ class PlayState extends MusicBeatState
 		verTxt = new FlxText(0, healthBarBG.y + (FlxG.save.data.downscroll ? -50 : 38), 0, "", 20);
 		verTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		verTxt.scrollFactor.set();
-		verTxt.text = SONG.song + " - " + CoolUtil.difficultyString() + "\nStrawberry Engine v0.0(Not ready for use)";
+		verTxt.text = SONG.song + " - " + CoolUtil.difficultyString() + "\nStrawberry Engine v" + Config.EngineVersion;
 		add(verTxt);
 
 
@@ -1423,7 +1427,7 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Score:" + songScore + " | Combo:" + (combo > 0 ? combo - 1 : 0) + (combo == maxcombo ? "" : "(" + (maxcombo - 1) + ")") + " | Misses:" + misses;
+		scoreTxt.text = "Score:" + songScore + " | Combo:" + (combo > 0 ? combo - 1 : 0) + (combo == maxcombo ? "" : "(" + (maxcombo - 1) + ")") + " | Misses:" + misses + " | Accuracy:" + accuracy + "%";
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
@@ -1630,6 +1634,7 @@ class PlayState extends MusicBeatState
 		if (controls.CHEAT)
 		{
 			health += 1;
+			SONG.validScore = false;
 			trace("User is cheating!");
 		}
 
@@ -1863,6 +1868,17 @@ class PlayState extends MusicBeatState
 
 	var endingSong:Bool = false;
 
+	private function ReCalcAccuracy()
+	{
+		var total:Int = 0;
+		for (i in hitpercentages) {
+			total += i;
+		}
+
+		accuracy = Std.int(total / hitpercentages.length);
+		
+	}
+
 	private function popUpScore(strumtime:Float):Void
 	{
 		var noteDiff:Float = Math.abs(strumtime - Conductor.songPosition);
@@ -1881,19 +1897,10 @@ class PlayState extends MusicBeatState
 
 		var daRating:String = "sick";
 
-		if (noteDiff > Conductor.safeZoneOffset * 0.9)
-		{
-			daRating = 'shit';
-			score = 50;
-		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.75)
+		
+		if (noteDiff > Conductor.safeZoneOffset * 0.75)
 		{
 			daRating = 'bad';
-			score = 100;
-		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.9)
-		{
-			daRating = 'shit';
 			score = 100;
 		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.2)
@@ -1901,6 +1908,15 @@ class PlayState extends MusicBeatState
 			daRating = 'good';
 			score = 200;
 		}
+		else if (noteDiff > Conductor.safeZoneOffset * 0.9)
+		{
+			daRating = 'shit';
+			score = 50;
+		}
+
+		hitpercentages[hitpercentages.length] = Std.int(((250 - noteDiff) / 250) * 100);
+
+		ReCalcAccuracy();
 
 		songScore += score;
 
@@ -2192,6 +2208,8 @@ class PlayState extends MusicBeatState
 				songScore -= 10;
 				health -= 0.0475;
 				misses += 1;
+				hitpercentages.insert(0,0);
+				ReCalcAccuracy();
 			}
 			vocals.volume = 0;
 			if (combo > 5 && gf.animOffsets.exists('sad'))

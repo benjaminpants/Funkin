@@ -105,7 +105,7 @@ class PlayState extends MusicBeatState
 
 	var hitpercentages:Array<Int> = [100];
 
-	var accuracy:Int = 0;
+	var accuracy:Float = 0;
 
 	var NoteAnims:Array<String> = ['LEFT', 'DOWN', 'UP', 'RIGHT'];
 
@@ -781,7 +781,7 @@ class PlayState extends MusicBeatState
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
-		verTxt = new FlxText(0, healthBarBG.y + (FlxG.save.data.downscroll ? -50 : 38), 0, "", 20);
+		verTxt = new FlxText(0, 686, 0, "", 20);
 		verTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		verTxt.scrollFactor.set();
 		verTxt.text = SONG.song + " - " + CoolUtil.difficultyString() + "\nStrawberry Engine v" + Config.EngineVersion;
@@ -1909,6 +1909,13 @@ class PlayState extends MusicBeatState
 
 	var endingSong:Bool = false;
 
+
+	
+	private function roundtoprec(number:Float, ?precision=2): Float
+	{
+		number *= Math.pow(10, precision);
+		return Math.round(number) / Math.pow(10, precision);
+	}
 	private function ReCalcAccuracy()
 	{
 		var total:Int = 0;
@@ -1916,7 +1923,7 @@ class PlayState extends MusicBeatState
 			total += i;
 		}
 
-		accuracy = Std.int(total / hitpercentages.length);
+		accuracy = roundtoprec(total / hitpercentages.length);
 		
 	}
 
@@ -2137,7 +2144,7 @@ class PlayState extends MusicBeatState
 					if (controlArray[note.noteData % KeyAmount])
 					{
 						if (lasthitnotetime > Conductor.songPosition - Conductor.safeZoneOffset
-							&& lasthitnotetime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
+							&& lasthitnotetime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.2)) //reduce the past allowed barrier just so notes close together that aren't jacks dont cause missed inputs
 						{
 							if ((note.noteData % KeyAmount) == (lasthitnote % KeyAmount))
 							{

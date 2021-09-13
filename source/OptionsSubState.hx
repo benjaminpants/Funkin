@@ -23,7 +23,7 @@ class OptionsSubState extends OptionsMenuParent
 		FlxG.switchState(new MainMenuState());
 	}
 
-	override function OnSelection(selection:String,text:FlxText)
+	override function OnSelection(selection:String,text:Alphabet)
 	{
 		switch (selection)
 		{

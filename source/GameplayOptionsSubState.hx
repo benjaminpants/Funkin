@@ -24,7 +24,7 @@ class GameplayOptionsSubState extends OptionsMenuParent
 		FlxG.state.openSubState(new OptionsSubState());
 	}
 	
-	override function OnSelection(selection:String,text:FlxText)
+	override function OnSelection(selection:String,text:Alphabet)
 	{
 		switch (text.ID)
 		{
@@ -37,7 +37,7 @@ class GameplayOptionsSubState extends OptionsMenuParent
 		}
 	}
 
-	override function OnIncrement(selection:String,change:Int, text:FlxText)
+	override function OnIncrement(selection:String,change:Int, text:Alphabet)
 	{
 		switch (text.ID)
 		{

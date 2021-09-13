@@ -15,7 +15,7 @@ class OptionsMenuParent extends MusicBeatSubstate
 	var selector:FlxSprite;
 	var curSelected:Int = 0;
 
-	var grpOptionsTexts:FlxTypedGroup<FlxText>;
+	var grpOptionsTexts:FlxTypedGroup<Alphabet>;
 
 	public function new()
 	{
@@ -25,7 +25,7 @@ class OptionsMenuParent extends MusicBeatSubstate
 
 	function CreateText()
 	{
-		grpOptionsTexts = new FlxTypedGroup<FlxText>();
+		grpOptionsTexts = new FlxTypedGroup<Alphabet>();
 		add(grpOptionsTexts);
 
 		selector = new FlxSprite().makeGraphic(5, 5, FlxColor.RED);
@@ -33,7 +33,7 @@ class OptionsMenuParent extends MusicBeatSubstate
 
 		for (i in 0...textMenuItems.length)
 		{
-			var optionText:FlxText = new FlxText(20, 20 + (i * 50), 0, textMenuItems[i], 32);
+			var optionText:Alphabet = new Alphabet(20, 20 + (i * 50), textMenuItems[i] + ":", true, false);
 			optionText.ID = i;
 			grpOptionsTexts.add(optionText);
 		}
@@ -57,9 +57,9 @@ class OptionsMenuParent extends MusicBeatSubstate
 
 		if (controls.LEFT_P)
 		{
-			var texttoprovide:FlxText = null;
+			var texttoprovide:Alphabet = null;
 	
-			grpOptionsTexts.forEach(function(txt:FlxText)
+			grpOptionsTexts.forEach(function(txt:Alphabet)
 			{
 				if (txt.ID == curSelected)
 					texttoprovide = txt;
@@ -69,9 +69,9 @@ class OptionsMenuParent extends MusicBeatSubstate
 
 		if (controls.RIGHT_P)
 		{
-			var texttoprovide:FlxText = null;
+			var texttoprovide:Alphabet = null;
 	
-			grpOptionsTexts.forEach(function(txt:FlxText)
+			grpOptionsTexts.forEach(function(txt:Alphabet)
 			{
 				if (txt.ID == curSelected)
 					texttoprovide = txt;
@@ -80,7 +80,7 @@ class OptionsMenuParent extends MusicBeatSubstate
 			OnIncrement(textMenuItems[curSelected],1,texttoprovide);
 		}
 
-		grpOptionsTexts.forEach(function(txt:FlxText)
+		grpOptionsTexts.forEach(function(txt:Alphabet)
 		{
 			txt.color = FlxColor.WHITE;
 
@@ -93,9 +93,9 @@ class OptionsMenuParent extends MusicBeatSubstate
 
 		if (controls.ACCEPT)
 		{
-			var texttoprovide:FlxText = null;
+			var texttoprovide:Alphabet = null;
 
-			grpOptionsTexts.forEach(function(txt:FlxText)
+			grpOptionsTexts.forEach(function(txt:Alphabet)
 			{
 				if (txt.ID == curSelected)
 					texttoprovide = txt;
@@ -110,12 +110,12 @@ class OptionsMenuParent extends MusicBeatSubstate
 		
 	}
 
-	function OnSelection(selection:String,text:FlxText)
+	function OnSelection(selection:String,text:Alphabet)
 	{
 
 	}
 
-	function OnIncrement(selection:String,change:Int, text:FlxText)
+	function OnIncrement(selection:String,change:Int, text:Alphabet)
 	{
 	
 	}

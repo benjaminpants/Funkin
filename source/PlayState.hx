@@ -665,6 +665,7 @@ class PlayState extends MusicBeatState
 
 		boyfriend = new Boyfriend(770, 450, SONG.player1);
 
+		ReCalcAccuracy();
 		// REPOSITIONING PER STAGE
 		switch (curStage)
 		{
@@ -1427,7 +1428,47 @@ class PlayState extends MusicBeatState
 
 		super.update(elapsed);
 
-		scoreTxt.text = "Score:" + songScore + " | Combo:" + (combo > 0 ? combo - 1 : 0) + (combo == maxcombo ? "" : "(" + (maxcombo - 1) + ")") + " | Misses:" + misses + " | Accuracy:" + accuracy + "%";
+		var rating:String = "FC+";
+
+		if (accuracy == 99 && misses == 0)
+		{
+			rating = "FC";
+		}
+		else if (accuracy <= 20)
+		{
+			rating = "F";
+		}
+		else if (accuracy <= 30)
+		{
+			rating = "F+";
+		}
+		else if (accuracy <= 40)
+		{
+			rating = "D";
+		}
+		else if (accuracy <= 60)
+		{
+			rating = "C";
+		}
+		else if (accuracy <= 75)
+		{
+			rating = "B";
+		}
+		else if (accuracy <= 85)
+		{
+			rating = "A";
+		}
+		else if (accuracy <= 98)
+		{
+			rating = "S";
+		}
+		else if (accuracy >= 100 && misses != 0)
+		{
+			rating = "S+";
+		}
+		
+
+		scoreTxt.text = "Score:" + songScore + " | Combo:" + (combo > 0 ? combo - 1 : 0) + (combo == maxcombo ? "" : "(" + (maxcombo - 1) + ")") + " | Misses:" + misses + " | Accuracy:" + accuracy + "%" + " | " + rating;
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{

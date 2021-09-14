@@ -50,6 +50,7 @@ class Alphabet extends FlxSpriteGroup
 		this.text = text;
 		isBold = bold;
 
+		_curText = text;
 		if (text != "")
 		{
 			if (typed)
@@ -231,6 +232,18 @@ class Alphabet extends FlxSpriteGroup
 
 			y = FlxMath.lerp(y, (scaledY * 120) + (FlxG.height * 0.48), 0.16);
 			x = FlxMath.lerp(x, (targetY * 20) + 90, 0.16);
+		}
+
+		if (text != _curText)
+		{
+			trace("text changed!");
+			group.forEach(function(spr:FlxSprite)
+			{
+				spr.destroy();
+			});
+			clear();
+			_finalText = text;
+			addText();
 		}
 
 		super.update(elapsed);

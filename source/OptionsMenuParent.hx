@@ -33,7 +33,7 @@ class OptionsMenuParent extends MusicBeatSubstate
 
 		for (i in 0...textMenuItems.length)
 		{
-			var optionText:Alphabet = new Alphabet(20, 20 + (i * 50), textMenuItems[i] + ":", true, false);
+			var optionText:Alphabet = new Alphabet(10, 20 + (i * 75), textMenuItems[i], true, false);
 			optionText.ID = i;
 			grpOptionsTexts.add(optionText);
 		}

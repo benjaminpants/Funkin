@@ -1736,7 +1736,7 @@ class PlayState extends MusicBeatState
 
 				daNote.y = (strumy + (((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal((curnotetype.scrollspeedoverride == -1 ? SONG.speed : curnotetype.scrollspeedoverride), 2))) * (FlxG.save.data.downscroll ? 1 : -1)) );
 
-				if (daNote.isSustainNote)
+				if (daNote.isSustainNote && daNote.wasGoodHit)
 				{
 					if (!FlxG.save.data.downscroll)
 					{
@@ -1799,15 +1799,18 @@ class PlayState extends MusicBeatState
 					daNote.destroy();
 				}
 
+
+				if ((daNote.tooLate && (!daNote.wasGoodHit) && daNote.mustPress) && !daNote.wasBadHit)
+				{
+					daNote.wasBadHit = true;
+					Config.NoteTypes[daNote.noteType].OnMiss(daNote,this);
+				}
+
 				// WIP interpolation shit? Need to fix the pause issue
 				// daNote.y = (strumLine.y - (songTime - daNote.strumTime) * (0.45 * PlayState.SONG.speed));
 
 				if ((!FlxG.save.data.downscroll) ? (daNote.y < -daNote.height) : (daNote.y > FlxG.height + daNote.height))
 				{
-					if (daNote.tooLate || !daNote.wasGoodHit && daNote.mustPress)
-					{
-						Config.NoteTypes[daNote.noteType].OnMiss(daNote,this);
-					}
 
 					daNote.active = false;
 					daNote.visible = false;

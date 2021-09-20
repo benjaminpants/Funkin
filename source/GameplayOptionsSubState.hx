@@ -30,10 +30,10 @@ class GameplayOptionsSubState extends OptionsMenuParent
 		{
 			case 0:
 				FlxG.save.data.ghostnotes = !FlxG.save.data.ghostnotes;
-				text.text = "Ghost Notes: " + (FlxG.save.data.ghostnotes ? "On" : "Off");
+				ChangeText(0,"Ghost Notes: " + (FlxG.save.data.ghostnotes ? "On" : "Off"));
 			case 2:
 				FlxG.save.data.downscroll = !FlxG.save.data.downscroll;
-				text.text = (FlxG.save.data.downscroll ? "Downscroll" : "Upscroll");
+				ChangeText(2,(FlxG.save.data.downscroll ? "Downscroll" : "Upscroll"));
 		}
 	}
 
@@ -46,7 +46,7 @@ class GameplayOptionsSubState extends OptionsMenuParent
 				{
 					FlxG.save.data.fpscap = FlxG.save.data.fpscap + (change * 15);
 				}
-				text.text = "FPS Cap: " + FlxG.save.data.fpscap;
+				ChangeText(1,"FPS Cap: " + FlxG.save.data.fpscap);
 				openfl.Lib.current.stage.frameRate = FlxG.save.data.fpscap;
 
 		}

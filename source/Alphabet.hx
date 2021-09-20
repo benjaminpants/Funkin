@@ -299,6 +299,9 @@ class AlphaCharacter extends FlxSprite
 		animation.addByPrefix(letter, letter, 24);
 		animation.play(letter);
 
+		y = (110 - height);
+		y += row * 60;
+
 		updateHitbox();
 	}
 

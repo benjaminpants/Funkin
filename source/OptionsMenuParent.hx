@@ -110,6 +110,24 @@ class OptionsMenuParent extends MusicBeatSubstate
 		
 	}
 
+	public function ChangeText(id:Int, string:String)
+	{
+		var texttoprovide:Alphabet = null;
+	
+		grpOptionsTexts.forEach(function(txt:Alphabet)
+		{
+			if (txt.ID == id)
+				texttoprovide = txt;
+		});
+
+		
+		texttoprovide.destroy();
+
+		var optionText:Alphabet = new Alphabet(10, 20 + (id * 75), string, true, false);
+		optionText.ID = id;
+		grpOptionsTexts.add(optionText);
+	}
+
 	function OnSelection(selection:String,text:Alphabet)
 	{
 

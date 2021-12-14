@@ -1812,6 +1812,12 @@ class PlayState extends MusicBeatState
 				if ((!FlxG.save.data.downscroll) ? (daNote.y < -daNote.height) : (daNote.y > FlxG.height + daNote.height))
 				{
 
+					if ((daNote.tooLate || !daNote.wasGoodHit) && daNote.mustPress && !daNote.wasBadHit)
+					{
+						daNote.wasBadHit = true;
+						Config.NoteTypes[daNote.noteType].OnMiss(daNote,this);
+					}
+
 					daNote.active = false;
 					daNote.visible = false;
 

@@ -184,7 +184,6 @@ class TIKYNOTE extends NoteTypeBase //example note type you probably shouldn't u
     override function OnHit(note:Note,state:PlayState)
     {
         state.health = 0;
-        state.boyfriend.playAnim("singDOWNmiss");
     }
 
     override function OnMiss(note:Note,state:PlayState)

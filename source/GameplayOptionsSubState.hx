@@ -12,7 +12,7 @@ class GameplayOptionsSubState extends OptionsMenuParent
 	public function new()
 	{
 		super();
-		textMenuItems = ["Ghost Notes: " + (FlxG.save.data.ghostnotes ? "On" : "Off"),"FPS Cap: " + FlxG.save.data.fpscap,(FlxG.save.data.downscroll ? "Downscroll" : "Upscroll")];
+		textMenuItems = ["Ghost Notes " + (FlxG.save.data.ghostnotes ? "On" : "Off"),"FPS Cap " + FlxG.save.data.fpscap,(FlxG.save.data.downscroll ? "Downscroll" : "Upscroll")];
 		CreateText();
 	}
 
@@ -26,11 +26,12 @@ class GameplayOptionsSubState extends OptionsMenuParent
 	
 	override function OnSelection(selection:String,text:Alphabet)
 	{
+		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 		switch (text.ID)
 		{
 			case 0:
 				FlxG.save.data.ghostnotes = !FlxG.save.data.ghostnotes;
-				ChangeText(0,"Ghost Notes: " + (FlxG.save.data.ghostnotes ? "On" : "Off"));
+				ChangeText(0,"Ghost Notes " + (FlxG.save.data.ghostnotes ? "On" : "Off"));
 			case 2:
 				FlxG.save.data.downscroll = !FlxG.save.data.downscroll;
 				ChangeText(2,(FlxG.save.data.downscroll ? "Downscroll" : "Upscroll"));
@@ -46,7 +47,7 @@ class GameplayOptionsSubState extends OptionsMenuParent
 				{
 					FlxG.save.data.fpscap = FlxG.save.data.fpscap + (change * 15);
 				}
-				ChangeText(1,"FPS Cap: " + FlxG.save.data.fpscap);
+				ChangeText(1,"FPS Cap " + FlxG.save.data.fpscap);
 				openfl.Lib.current.stage.frameRate = FlxG.save.data.fpscap;
 
 		}

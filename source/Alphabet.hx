@@ -97,6 +97,7 @@ class Alphabet extends FlxSpriteGroup
 				// var letter:AlphaCharacter = new AlphaCharacter(30 * loopNum, 0);
 				var letter:AlphaCharacter = new AlphaCharacter(xPos, 0);
 
+
 				if (isBold)
 					letter.createBold(character);
 				else
@@ -107,6 +108,52 @@ class Alphabet extends FlxSpriteGroup
 				add(letter);
 
 				lastSprite = letter;
+			}
+			else if(AlphaCharacter.numbers.indexOf(character) != -1){
+				if (lastSprite != null)
+				{
+					xPos = lastSprite.x + lastSprite.width;
+				}
+
+				if (lastWasSpace)
+				{
+					xPos += 40;
+					lastWasSpace = false;
+				}
+
+				var number:AlphaCharacter = new AlphaCharacter(xPos, 0);
+				if (isBold)
+					number.createBoldNumber(character);
+				else
+				{
+					number.createNumber(character);
+				}
+				add(number);
+
+				lastSprite = number;
+			}
+			else if(AlphaCharacter.symbols.indexOf(character) != -1){
+				if (lastSprite != null)
+				{
+					xPos = lastSprite.x + lastSprite.width;
+				}
+
+				if (lastWasSpace)
+				{
+					xPos += 40;
+					lastWasSpace = false;
+				}
+
+				var symbol:AlphaCharacter = new AlphaCharacter(xPos, 0);
+				if (isBold)
+					symbol.createBoldSymbol(character);
+				else
+				{
+					symbol.createSymbol(character);
+				}
+				add(symbol);
+
+				lastSprite = symbol;
 			}
 
 			// loopNum += 1;
@@ -305,6 +352,14 @@ class AlphaCharacter extends FlxSprite
 		updateHitbox();
 	}
 
+	public function createBoldNumber(letter:String):Void
+		{
+			animation.addByPrefix(letter, "bold" + letter, 24);
+			animation.play(letter);
+
+			updateHitbox();
+		}
+
 	public function createSymbol(letter:String)
 	{
 		switch (letter)
@@ -327,4 +382,27 @@ class AlphaCharacter extends FlxSprite
 
 		updateHitbox();
 	}
+
+	public function createBoldSymbol(letter:String)
+		{
+			switch (letter)
+			{
+				case '.':
+					animation.addByPrefix(letter, 'PERIOD bold', 24);
+				case "'":
+					animation.addByPrefix(letter, 'APOSTRAPHIE bold', 24);
+				case "?":
+					animation.addByPrefix(letter, 'QUESTION MARK bold', 24);
+				case "!":
+					animation.addByPrefix(letter, 'EXCLAMATION POINT bold', 24);
+				case "(":
+					animation.addByPrefix(letter, 'bold (', 24);
+				case ")":
+					animation.addByPrefix(letter, 'bold )', 24);
+				default:
+					animation.addByPrefix(letter, 'bold ' + letter, 24);
+			}
+			animation.play(letter);
+			updateHitbox();
+		}
 }

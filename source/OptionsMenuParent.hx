@@ -2,6 +2,8 @@ package;
 
 import polymod.format.ParseRules.TextFileFormat;
 import GameplayOptionsSubState.GameplayOptionsSubState;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup.FlxTypedGroup;
@@ -12,7 +14,6 @@ class OptionsMenuParent extends MusicBeatSubstate
 {
 	var textMenuItems:Array<String> = ['if u see this report this to a dev!!'];
 
-	var selector:FlxSprite;
 	var curSelected:Int = 0;
 
 	var grpOptionsTexts:FlxTypedGroup<Alphabet>;
@@ -28,13 +29,13 @@ class OptionsMenuParent extends MusicBeatSubstate
 		grpOptionsTexts = new FlxTypedGroup<Alphabet>();
 		add(grpOptionsTexts);
 
-		selector = new FlxSprite().makeGraphic(5, 5, FlxColor.RED);
-		add(selector);
-
 		for (i in 0...textMenuItems.length)
 		{
-			var optionText:Alphabet = new Alphabet(10, 20 + (i * 75), textMenuItems[i], true, false);
+			var optionText:Alphabet = new Alphabet(0, (70 * i) + 30, textMenuItems[i], true, false);
 			optionText.ID = i;
+			optionText.isMenuItem = true;
+			optionText.targetY = i;
+			optionText.screenCenter(X);
 			grpOptionsTexts.add(optionText);
 		}
 	}
@@ -45,9 +46,11 @@ class OptionsMenuParent extends MusicBeatSubstate
 
 		if (controls.UP_P)
 			curSelected -= 1;
+			changeItemPos();
 
 		if (controls.DOWN_P)
 			curSelected += 1;
+			changeItemPos();
 
 		if (curSelected < 0)
 			curSelected = textMenuItems.length - 1;
@@ -110,6 +113,25 @@ class OptionsMenuParent extends MusicBeatSubstate
 		
 	}
 
+	function changeItemPos(){
+		var bullShit:Int = 0;
+
+		for (item in grpOptionsTexts.members)
+		{
+			item.targetY = bullShit - curSelected;
+			bullShit++;
+
+			item.alpha = 0.6;
+			// item.setGraphicSize(Std.int(item.width * 0.8));
+
+			if (item.targetY == 0)
+			{
+				item.alpha = 1;
+				// item.setGraphicSize(Std.int(item.width));
+			}
+		}
+	}
+
 	public function ChangeText(id:Int, string:String)
 	{
 		var texttoprovide:Alphabet = null;
@@ -120,17 +142,19 @@ class OptionsMenuParent extends MusicBeatSubstate
 				texttoprovide = txt;
 		});
 
-		
 		texttoprovide.destroy();
 
-		var optionText:Alphabet = new Alphabet(10, 20 + (id * 75), string, true, false);
+		var optionText:Alphabet = new Alphabet(10, (70 * id) + 30, string, true, false);
 		optionText.ID = id;
+		optionText.screenCenter(X);
+		optionText.isMenuItem = true;
+		optionText.targetY = curSelected - id;
 		grpOptionsTexts.add(optionText);
 	}
 
 	function OnSelection(selection:String,text:Alphabet)
 	{
-
+		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 	}
 
 	function OnIncrement(selection:String,change:Int, text:Alphabet)

@@ -172,6 +172,7 @@ class TIKYNOTE extends NoteTypeBase //example note type you probably shouldn't u
         super();
         name = "tiky";
 		opponentshouldhit = false;
+		scrollspeedoverride = 3;
     }
 
     override function InitializeVisuals(sprite:FlxSprite,notedata:Int,issustain:Bool,noteskin:Int,daStage:String,prevNote:Note,ineditor:Bool)

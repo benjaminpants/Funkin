@@ -1193,6 +1193,13 @@ class PlayState extends MusicBeatState
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime);
 	}
 
+	function strumTimeFromY(yPosition:Float, note:Note):Float
+	{
+		var curnotetype:NoteTypeBase = Config.NoteTypes[note.noteType];
+		return yPosition * (yPosition / Conductor.stepCrochet) / (0.45 * FlxMath.roundDecimal((curnotetype.scrollspeedoverride == -1 ? SONG.speed : curnotetype.scrollspeedoverride), 2));
+	}
+
+		
 	private function generateStaticArrows(player:Int):Void
 	{
 		for (i in 0...KeyAmount)
@@ -1809,7 +1816,7 @@ class PlayState extends MusicBeatState
 				// WIP interpolation shit? Need to fix the pause issue
 				// daNote.y = (strumLine.y - (songTime - daNote.strumTime) * (0.45 * PlayState.SONG.speed));
 
-				if ((!FlxG.save.data.downscroll) ? (daNote.y < -daNote.height) : (daNote.y > FlxG.height + daNote.height))
+				if (Conductor.songPosition >= daNote.strumTime + strumTimeFromY(120, daNote))
 				{
 
 					if ((daNote.tooLate || !daNote.wasGoodHit) && daNote.mustPress && !daNote.wasBadHit)

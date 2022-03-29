@@ -50,6 +50,8 @@ class GameplayOptionsSubState extends OptionsMenuParent
 				}
 				ChangeText(1,"FPS Cap " + FlxG.save.data.fpscap);
 				openfl.Lib.current.stage.frameRate = FlxG.save.data.fpscap;
+			default:
+				ChangeText(this.curSelected, textMenuItems[this.curSelected].toString());
 
 		}
 	}

@@ -34,6 +34,8 @@ class GameplayOptionsSubState extends OptionsMenuParent
 			case 2:
 				FlxG.save.data.downscroll = !FlxG.save.data.downscroll;
 				ChangeText(2,(FlxG.save.data.downscroll ? "Downscroll" : "Upscroll"));
+			default:
+				ChangeText(this.curSelected, textMenuItems[this.curSelected].toString());
 		}
 	}
 

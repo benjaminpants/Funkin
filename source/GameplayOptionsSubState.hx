@@ -23,10 +23,9 @@ class GameplayOptionsSubState extends OptionsMenuParent
 		FlxG.state.closeSubState();
 		FlxG.state.openSubState(new OptionsSubState());
 	}
-	
+
 	override function OnSelection(selection:String,text:Alphabet)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 		switch (text.ID)
 		{
 			case 0:

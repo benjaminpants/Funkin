@@ -67,6 +67,10 @@ class OptionsMenuParent extends MusicBeatSubstate
 				if (txt.ID == curSelected)
 					texttoprovide = txt;
 			});
+
+			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+
+			grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
 			OnIncrement(textMenuItems[curSelected],-1,texttoprovide);
 		}
 
@@ -79,7 +83,10 @@ class OptionsMenuParent extends MusicBeatSubstate
 				if (txt.ID == curSelected)
 					texttoprovide = txt;
 			});
-			
+
+			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+
+			grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
 			OnIncrement(textMenuItems[curSelected],1,texttoprovide);
 		}
 
@@ -104,6 +111,9 @@ class OptionsMenuParent extends MusicBeatSubstate
 					texttoprovide = txt;
 			});
 
+			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+
+			grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
 			OnSelection(textMenuItems[curSelected],texttoprovide);
 		}
 	}
@@ -134,27 +144,17 @@ class OptionsMenuParent extends MusicBeatSubstate
 
 	public function ChangeText(id:Int, string:String)
 	{
-		var texttoprovide:Alphabet = null;
-	
-		grpOptionsTexts.forEach(function(txt:Alphabet)
-		{
-			if (txt.ID == id)
-				texttoprovide = txt;
-		});
-
-		texttoprovide.destroy();
-
-		var optionText:Alphabet = new Alphabet(10, (70 * id) + 30, string, true, false);
+		var optionText:Alphabet = new Alphabet(10, (70 * curSelected) + 30, string, true, false);
 		optionText.ID = id;
-		optionText.screenCenter(X);
 		optionText.isMenuItem = true;
 		optionText.targetY = curSelected - id;
+		optionText.screenCenter(X);
 		grpOptionsTexts.add(optionText);
 	}
 
 	function OnSelection(selection:String,text:Alphabet)
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+
 	}
 
 	function OnIncrement(selection:String,change:Int, text:Alphabet)

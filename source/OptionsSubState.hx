@@ -14,7 +14,7 @@ class OptionsSubState extends OptionsMenuParent
 	public function new()
 	{
 		super();
-		textMenuItems = ['Master Volume', 'Sound Volume', 'Gameplay'];
+		textMenuItems = ['Master Volume', 'Sound Volume', 'Gameplay', 'Controls'];
 		CreateText();
 	}
 
@@ -30,6 +30,9 @@ class OptionsSubState extends OptionsMenuParent
 			case "Gameplay":
 				FlxG.state.closeSubState();
 				FlxG.state.openSubState(new GameplayOptionsSubState());
+			case "Controls":
+				FlxG.state.closeSubState();
+				FlxG.state.openSubState(new KeybindsSubState());
 		}
 	}
 }

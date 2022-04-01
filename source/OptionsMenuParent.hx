@@ -61,7 +61,7 @@ class OptionsMenuParent extends MusicBeatSubstate
 		if (controls.LEFT_P)
 		{
 			var texttoprovide:Alphabet = null;
-	
+
 			grpOptionsTexts.forEach(function(txt:Alphabet)
 			{
 				if (txt.ID == curSelected)
@@ -120,7 +120,7 @@ class OptionsMenuParent extends MusicBeatSubstate
 
 	function OnEscape()
 	{
-		
+
 	}
 
 	function changeItemPos(){

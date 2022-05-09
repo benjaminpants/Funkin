@@ -16,6 +16,8 @@ class OptionsMenuParent extends MusicBeatSubstate
 
 	var curSelected:Int = 0;
 
+	var allowInput:Bool = true;
+
 	var grpOptionsTexts:FlxTypedGroup<Alphabet>;
 
 	public function new()
@@ -44,52 +46,74 @@ class OptionsMenuParent extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 
-		if (controls.UP_P)
-			curSelected -= 1;
-			changeItemPos();
-
-		if (controls.DOWN_P)
-			curSelected += 1;
-			changeItemPos();
-
-		if (curSelected < 0)
-			curSelected = textMenuItems.length - 1;
-
-		if (curSelected >= textMenuItems.length)
-			curSelected = 0;
-
-		if (controls.LEFT_P)
+		if (allowInput)
 		{
-			var texttoprovide:Alphabet = null;
+			if (controls.UP_P)
+				curSelected -= 1;
+				changeItemPos();
 
-			grpOptionsTexts.forEach(function(txt:Alphabet)
+			if (controls.DOWN_P)
+				curSelected += 1;
+				changeItemPos();
+
+			if (curSelected < 0)
+				curSelected = textMenuItems.length - 1;
+
+			if (curSelected >= textMenuItems.length)
+				curSelected = 0;
+
+			if (controls.LEFT_P)
 			{
-				if (txt.ID == curSelected)
-					texttoprovide = txt;
-			});
+				var texttoprovide:Alphabet = null;
 
-			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+				grpOptionsTexts.forEach(function(txt:Alphabet)
+				{
+					if (txt.ID == curSelected)
+						texttoprovide = txt;
+				});
 
-			grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
-			OnIncrement(textMenuItems[curSelected],-1,texttoprovide);
-		}
+				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
-		if (controls.RIGHT_P)
-		{
-			var texttoprovide:Alphabet = null;
+				grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
+				OnIncrement(textMenuItems[curSelected],-1,texttoprovide);
+			}
+
+			if (controls.RIGHT_P)
+			{
+				var texttoprovide:Alphabet = null;
+		
+				grpOptionsTexts.forEach(function(txt:Alphabet)
+				{
+					if (txt.ID == curSelected)
+						texttoprovide = txt;
+				});
+
+				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+
+				grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
+				OnIncrement(textMenuItems[curSelected],1,texttoprovide);
+			}
+
+			if (controls.BACK)
+				OnEscape();
 	
-			grpOptionsTexts.forEach(function(txt:Alphabet)
+			if (controls.ACCEPT)
 			{
-				if (txt.ID == curSelected)
-					texttoprovide = txt;
-			});
+				var texttoprovide:Alphabet = null;
+	
+				grpOptionsTexts.forEach(function(txt:Alphabet)
+				{
+					if (txt.ID == curSelected)
+						texttoprovide = txt;
+				});
+	
+				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+	
+				grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
+				OnSelection(textMenuItems[curSelected],texttoprovide);
+			}
 
-			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-
-			grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
-			OnIncrement(textMenuItems[curSelected],1,texttoprovide);
 		}
-
 		grpOptionsTexts.forEach(function(txt:Alphabet)
 		{
 			txt.color = FlxColor.WHITE;
@@ -98,24 +122,6 @@ class OptionsMenuParent extends MusicBeatSubstate
 				txt.color = FlxColor.YELLOW;
 		});
 
-		if (controls.BACK)
-			OnEscape();
-
-		if (controls.ACCEPT)
-		{
-			var texttoprovide:Alphabet = null;
-
-			grpOptionsTexts.forEach(function(txt:Alphabet)
-			{
-				if (txt.ID == curSelected)
-					texttoprovide = txt;
-			});
-
-			FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-
-			grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
-			OnSelection(textMenuItems[curSelected],texttoprovide);
-		}
 	}
 
 	function OnEscape()

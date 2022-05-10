@@ -44,8 +44,6 @@ class OptionsMenuParent extends MusicBeatSubstate
 
 	override function update(elapsed:Float)
 	{
-		super.update(elapsed);
-
 		if (allowInput == true)
 		{
 			if (controls.UP_P)
@@ -121,7 +119,7 @@ class OptionsMenuParent extends MusicBeatSubstate
 			if (txt.ID == curSelected)
 				txt.color = FlxColor.YELLOW;
 		});
-
+		super.update(elapsed);
 	}
 
 	function OnEscape()

@@ -35,23 +35,23 @@ class KeybindsSubState extends OptionsMenuParent
 				if(FlxG.keys.justPressed.ESCAPE){
 					FlxG.save.data.keybinds[curSelected] = kbArray[curSelected];
 					states = 'idle';
-					allowInput = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'), 0.4);
 					ChangeText(curSelected, textMenuItems[curSelected]);
+					allowInput = true;
 				}
 				else if(FlxG.keys.justPressed.ENTER){
 					FlxG.save.data.keybinds[curSelected] = kbArray[curSelected];
 					states = 'idle';
-					allowInput = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'), 0.4);
 					ChangeText(curSelected, textMenuItems[curSelected]);
+					allowInput = true;
 				}
 				else if(FlxG.keys.justPressed.ANY){
 					kbArray[curSelected] = FlxG.keys.getIsDown()[0].ID.toString();
 					states = 'idle';
-					allowInput = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'), 0.4);
 					ChangeText(curSelected, textMenuItems[curSelected]);
+					allowInput = true;
 				}
 		}
 		super.update(elapsed);

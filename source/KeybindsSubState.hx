@@ -11,27 +11,42 @@ import openfl.Lib;
 
 class KeybindsSubState extends OptionsMenuParent
 {
-    public static var kbArray = ['A', 'S', 'W', 'D'];
+    public static var kbArray:Map<String,String> = ["Left Alt" => "A", "Down Alt" => "S", "Up Alt" => "W", "Right Alt" => "D"];
+	var kbArrayIds:Array<String> = [];
 	var states:String = "idle";
 	//left down up right
+
+	public function UpdateTextMenu()
+	{
+		textMenuItems = [];
+		kbArrayIds = [];
+        for (key => value in kbArray)
+		{
+			textMenuItems.push(key + " is " + value);
+			kbArrayIds.push(key);
+		}
+	}
 
 	public function new()
 	{
 		super();
-		if(FlxG.save.data.keybinds == null){
-			FlxG.save.data.keybinds = kbArray;
+
+		if(FlxG.save.data.keybinds_new == null){
+			FlxG.save.data.keybinds_new = kbArray;
 		}
-		kbArray = FlxG.save.data.keybinds;
-        textMenuItems = ["Left Note is " + kbArray[0], "Down Note is " + kbArray[1], "Up Note is " + kbArray[2], "Right Note is " + kbArray[3]];
+		kbArray = FlxG.save.data.keybinds_new;
+		
+		UpdateTextMenu();
+
 		CreateText();
 	}
+
 
 	override function update(elapsed:Float)
 	{
 		switch(states){
 			case 'selecting':
 				if(FlxG.keys.justPressed.ESCAPE){
-					FlxG.save.data.keybinds[curSelected] = kbArray[curSelected];
 					states = 'idle';
 					FlxG.sound.play(Paths.sound('confirmMenu'), 0.4);
 					grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
@@ -39,7 +54,6 @@ class KeybindsSubState extends OptionsMenuParent
 					allowInput = true;
 				}
 				else if(FlxG.keys.justPressed.ENTER){
-					FlxG.save.data.keybinds[curSelected] = kbArray[curSelected];
 					states = 'idle';
 					FlxG.sound.play(Paths.sound('confirmMenu'), 0.4);
 					grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
@@ -47,8 +61,8 @@ class KeybindsSubState extends OptionsMenuParent
 					allowInput = true;
 				}
 				else if(FlxG.keys.justPressed.ANY){
-					kbArray[curSelected] = FlxG.keys.getIsDown()[0].ID.toString();
-					textMenuItems = ["Left Note is " + kbArray[0], "Down Note is " + kbArray[1], "Up Note is " + kbArray[2], "Right Note is " + kbArray[3]];
+					kbArray[kbArrayIds[curSelected]] = FlxG.keys.getIsDown()[0].ID.toString();
+					UpdateTextMenu();
 					states = 'idle';
 					FlxG.sound.play(Paths.sound('confirmMenu'), 0.4);
 					grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
@@ -61,7 +75,8 @@ class KeybindsSubState extends OptionsMenuParent
 
 	override function OnEscape()
 	{
-		FlxG.save.data.keybinds = kbArray;
+		FlxG.save.data.keybinds_new = kbArray;
+		controls.setKeyboardScheme(KeyboardScheme.Solo, true);
 		FlxG.save.flush();
 		FlxG.state.closeSubState();
 		FlxG.state.openSubState(new OptionsSubState());

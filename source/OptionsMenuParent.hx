@@ -70,7 +70,7 @@ class OptionsMenuParent extends MusicBeatSubstate
 						texttoprovide = txt;
 				});
 
-				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+				FlxG.sound.play(Paths.sound('scrollMenu'), 0.5);
 
 				grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
 				OnIncrement(textMenuItems[curSelected],-1,texttoprovide);
@@ -86,7 +86,7 @@ class OptionsMenuParent extends MusicBeatSubstate
 						texttoprovide = txt;
 				});
 
-				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
+				FlxG.sound.play(Paths.sound('scrollMenu'), 0.5);
 
 				grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
 				OnIncrement(textMenuItems[curSelected],1,texttoprovide);

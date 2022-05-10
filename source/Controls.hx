@@ -492,8 +492,8 @@ class Controls extends FlxActionSet
 		if (reset)
 			removeKeyboard();
 
-		if(FlxG.save.data.keybinds == null){
-			FlxG.save.data.keybinds = KeybindsSubState.kbArray;
+		if(FlxG.save.data.keybinds_new == null){
+			FlxG.save.data.keybinds_new = KeybindsSubState.kbArray;
 		}
 		keyboardScheme = scheme;
 		
@@ -501,10 +501,10 @@ class Controls extends FlxActionSet
 		switch (scheme)
 		{
 			case Solo:
-				inline bindKeys(Control.UP, [FlxKey.fromString(FlxG.save.data.keybinds[2]), FlxKey.UP]);
-				inline bindKeys(Control.DOWN, [FlxKey.fromString(FlxG.save.data.keybinds[1]), FlxKey.DOWN]);
-				inline bindKeys(Control.LEFT, [FlxKey.fromString(FlxG.save.data.keybinds[0]), FlxKey.LEFT]);
-				inline bindKeys(Control.RIGHT, [FlxKey.fromString(FlxG.save.data.keybinds[3]), FlxKey.RIGHT]);
+				inline bindKeys(Control.UP, [FlxKey.fromString(FlxG.save.data.keybinds_new.get("Up Alt")), FlxKey.UP]);
+				inline bindKeys(Control.DOWN, [FlxKey.fromString(FlxG.save.data.keybinds_new.get("Down Alt")), FlxKey.DOWN]);
+				inline bindKeys(Control.LEFT, [FlxKey.fromString(FlxG.save.data.keybinds_new.get("Left Alt")), FlxKey.LEFT]);
+				inline bindKeys(Control.RIGHT, [FlxKey.fromString(FlxG.save.data.keybinds_new.get("Right Alt")), FlxKey.RIGHT]);
 				inline bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
 				inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
 				inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);

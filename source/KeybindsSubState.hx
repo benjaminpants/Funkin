@@ -11,9 +11,9 @@ import openfl.Lib;
 
 class KeybindsSubState extends OptionsMenuParent
 {
-    var kbArray = ['A', 'D', 'W', 'S'];
+    var kbArray = ['A', 'S', 'W', 'D'];
 	var states:String = "idle";
-	//left right up down
+	//left down up right
 
 	public function new()
 	{
@@ -22,7 +22,7 @@ class KeybindsSubState extends OptionsMenuParent
 			FlxG.save.data.keybinds = kbArray;
 		}
 		kbArray = FlxG.save.data.keybinds;
-        textMenuItems = ["Left Note is " + kbArray[0], "Right Note is " + kbArray[1], "Up Note is " + kbArray[2], "Down Note is " + kbArray[3]];
+        textMenuItems = ["Left Note is " + kbArray[0], "Down Note is " + kbArray[1], "Up Note is " + kbArray[2], "Right Note is " + kbArray[3]];
 		CreateText();
 	}
 
@@ -48,7 +48,7 @@ class KeybindsSubState extends OptionsMenuParent
 				}
 				else if(FlxG.keys.justPressed.ANY){
 					kbArray[curSelected] = FlxG.keys.getIsDown()[0].ID.toString();
-					textMenuItems = ["Left Note is " + kbArray[0], "Right Note is " + kbArray[1], "Up Note is " + kbArray[2], "Down Note is " + kbArray[3]];
+					textMenuItems = ["Left Note is " + kbArray[0], "Down Note is " + kbArray[1], "Up Note is " + kbArray[2], "Right Note is " + kbArray[3]];
 					states = 'idle';
 					FlxG.sound.play(Paths.sound('confirmMenu'), 0.4);
 					grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);

@@ -163,6 +163,15 @@ class PlayerSettings
 			FlxG.save.data.downscroll = false;
 		}
 
+		if(FlxG.save.data.keybinds_new == null)
+		{
+			FlxG.save.data.keybinds_new = KeybindsSubState.kbArray;
+		}
+		else
+		{
+			KeybindsSubState.kbArray = FlxG.save.data.keybinds_new;
+		}
+
 
 		// DeviceManager.init();
 	}

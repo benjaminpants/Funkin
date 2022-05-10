@@ -497,14 +497,6 @@ class Controls extends FlxActionSet
 		if (reset)
 			removeKeyboard();
 
-		if(FlxG.save.data.keybinds_new == null)
-		{
-			FlxG.save.data.keybinds_new = KeybindsSubState.kbArray;
-		}
-		else
-		{
-			KeybindsSubState.kbArray = FlxG.save.data.keybinds_new;
-		}
 		keyboardScheme = scheme;
 		
 		#if (haxe >= "4.0.0")

@@ -14,7 +14,7 @@ class OptionsSubState extends OptionsMenuParent
 	public function new()
 	{
 		super();
-		textMenuItems = ['Master Volume', 'Sound Volume', 'Gameplay', 'Controls'];
+		textMenuItems = ['Gameplay', 'Controls'];
 		CreateText();
 	}
 

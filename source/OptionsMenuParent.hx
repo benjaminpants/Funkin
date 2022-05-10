@@ -163,6 +163,6 @@ class OptionsMenuParent extends MusicBeatSubstate
 
 	function OnIncrement(selection:String,change:Int, text:Alphabet)
 	{
-	
+		ChangeText(text.ID, selection);
 	}
 }

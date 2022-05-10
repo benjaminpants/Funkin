@@ -16,14 +16,59 @@ class KeybindsSubState extends OptionsMenuParent
 	var states:String = "idle";
 	//left down up right
 
+
+	function StringHasDirection(a:String):Bool
+	{
+		return (a.indexOf("Left") != -1 || a.indexOf("Up") != -1 || a.indexOf("Down") != -1 || a.indexOf("Right") != -1);
+	}
+
+	public function ControlMenuSort(a:String, b:String):Int
+	{
+		//Put direction keybinds at the top, as that is likely what the user will want to change
+		if (StringHasDirection(a) && !StringHasDirection(b))
+		{
+			return 1;
+		}
+		else if (!StringHasDirection(a) && StringHasDirection(b))
+		{
+			return -1;
+		}
+		if (StringHasDirection(a) && StringHasDirection(b))
+		{
+			return 0;
+		}
+		if (a.indexOf("Left") != -1 && b.indexOf("Down") != -1)
+		{
+			return -1;
+		}
+		if (a.indexOf("Down") != -1 && b.indexOf("Up") != -1)
+		{
+			return -1;
+		}
+		if (a.indexOf("Up") != -1 && b.indexOf("Right") != -1)
+		{
+			return -1;
+		}
+
+		return 0;
+	}
+
+
+
 	public function UpdateTextMenu()
 	{
 		textMenuItems = [];
 		kbArrayIds = [];
-        for (key => value in kbArray)
+
+		var keys = [for(key in kbArray.keys()) key];
+
+		keys.sort(ControlMenuSort);
+		keys.sort(ControlMenuSort);
+
+        for (i in 0...keys.length)
 		{
-			textMenuItems.push(key + " is " + value);
-			kbArrayIds.push(key);
+			textMenuItems.push(keys[i] + " is " + kbArray[keys[i]]);
+			kbArrayIds.push(keys[i]);
 		}
 	}
 

@@ -489,7 +489,7 @@ class Controls extends FlxActionSet
 
 	public function getBoundButton(but:String):FlxKey
 	{
-		return FlxKey.fromString(FlxG.save.data.keybinds_new.get(but));
+		return FlxKey.fromString(KeybindsSubState.kbArray[but]);
 	}
 
 	public function setKeyboardScheme(scheme:KeyboardScheme, reset = true)
@@ -497,8 +497,13 @@ class Controls extends FlxActionSet
 		if (reset)
 			removeKeyboard();
 
-		if(FlxG.save.data.keybinds_new == null){
+		if(FlxG.save.data.keybinds_new == null)
+		{
 			FlxG.save.data.keybinds_new = KeybindsSubState.kbArray;
+		}
+		else
+		{
+			KeybindsSubState.kbArray = FlxG.save.data.keybinds_new;
 		}
 		keyboardScheme = scheme;
 		

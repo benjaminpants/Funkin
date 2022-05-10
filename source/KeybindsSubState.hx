@@ -11,7 +11,7 @@ import openfl.Lib;
 
 class KeybindsSubState extends OptionsMenuParent
 {
-    var kbArray = ['A', 'D', 'W', 'S'];
+    public static var kbArray = ['A', 'D', 'W', 'S'];
 	var states:String = "idle";
 	//left right up down
 
@@ -62,6 +62,7 @@ class KeybindsSubState extends OptionsMenuParent
 	override function OnEscape()
 	{
 		FlxG.save.data.keybinds = kbArray;
+		controls.setKeyboardScheme(KeyboardScheme.Solo, true);
 		FlxG.save.flush();
 		FlxG.state.closeSubState();
 		FlxG.state.openSubState(new OptionsSubState());

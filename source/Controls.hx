@@ -492,7 +492,11 @@ class Controls extends FlxActionSet
 		if(FlxG.save.data.keybinds_new == null){
 			FlxG.save.data.keybinds_new = KeybindsSubState.kbArray;
 		}
-		return FlxKey.fromString(FlxG.save.data.keybinds_new.get(but));
+		else
+		{
+			KeybindsSubState.kbArray = FlxG.save.data.keybinds_new;
+		}
+		return FlxKey.fromString(KeybindsSubState.kbArray.get(but));
 	}
 
 	public function setKeyboardScheme(scheme:KeyboardScheme, reset = true)

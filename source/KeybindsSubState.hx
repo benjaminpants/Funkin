@@ -30,7 +30,6 @@ class KeybindsSubState extends OptionsMenuParent
 
 	override function update(elapsed:Float)
 	{
-		super.update(elapsed);
 		switch(states){
 			case 'selecting':
 				if(FlxG.keys.justPressed.ESCAPE){
@@ -55,6 +54,7 @@ class KeybindsSubState extends OptionsMenuParent
 					ChangeText(curSelected, textMenuItems[curSelected]);
 				}
 		}
+		super.update(elapsed);
 	}
 
 	override function OnEscape()

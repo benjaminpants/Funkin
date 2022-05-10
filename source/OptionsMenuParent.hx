@@ -46,7 +46,7 @@ class OptionsMenuParent extends MusicBeatSubstate
 	{
 		super.update(elapsed);
 
-		if (allowInput)
+		if (allowInput == true)
 		{
 			if (controls.UP_P)
 				curSelected -= 1;
@@ -106,9 +106,9 @@ class OptionsMenuParent extends MusicBeatSubstate
 					if (txt.ID == curSelected)
 						texttoprovide = txt;
 				});
-	
+
 				FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
-	
+
 				grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
 				OnSelection(textMenuItems[curSelected],texttoprovide);
 			}
@@ -150,7 +150,7 @@ class OptionsMenuParent extends MusicBeatSubstate
 
 	public function ChangeText(id:Int, string:String)
 	{
-		var optionText:Alphabet = new Alphabet(10, (70 * curSelected) + 30, string, true, false);
+		var optionText:Alphabet = new Alphabet(0, (70 * curSelected) + 30, string, true, false);
 		optionText.ID = id;
 		optionText.isMenuItem = true;
 		optionText.targetY = curSelected - id;

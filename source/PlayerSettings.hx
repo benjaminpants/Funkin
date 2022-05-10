@@ -148,29 +148,7 @@ class PlayerSettings
 			player2.controls.addDefaultGamepad(1);
 		}
 
-		if (FlxG.save.data.ghostnotes == null)
-		{
-			FlxG.save.data.ghostnotes = false;
-		}
-
-		if (FlxG.save.data.fpscap == null)
-		{
-			FlxG.save.data.fpscap = 60;
-		}
-
-		if (FlxG.save.data.downscroll == null)
-		{
-			FlxG.save.data.downscroll = false;
-		}
-
-		if(FlxG.save.data.keybinds_new == null)
-		{
-			FlxG.save.data.keybinds_new = KeybindsSubState.kbArray;
-		}
-		else
-		{
-			KeybindsSubState.kbArray = FlxG.save.data.keybinds_new;
-		}
+		
 
 
 		// DeviceManager.init();

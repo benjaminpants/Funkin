@@ -1,6 +1,8 @@
 package;
 
 
+import flixel.group.FlxGroup;
+import flixel.graphics.frames.FlxImageFrame;
 import NoteType.NoteTypeBase;
 #if desktop
 import Discord.DiscordClient;
@@ -60,6 +62,10 @@ class PlayState extends MusicBeatState
 	var halloweenLevel:Bool = false;
 
 	private var vocals:FlxSound;
+
+	public var healthbarGroup:FlxTypedGroup<FlxBar> = new FlxTypedGroup<FlxBar>();
+	public var iconsGroup:FlxGroup = new FlxGroup();
+
 
 	public var dad:Character;
 	public var gf:Character;
@@ -760,21 +766,25 @@ class PlayState extends MusicBeatState
 		healthBarBG.scrollFactor.set();
 		add(healthBarBG);
 
-		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
-			'health', 0, 2);
-		healthBar.scrollFactor.set();
-		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
-		// healthBar
-		add(healthBar);
+		add(healthbarGroup);
+
+		healthbarGroup.visible = true;
+
+		add(iconsGroup);
+
+		iconsGroup.visible = true;
+
+		CreateHealthBar(true);
 
 		iconP1 = new HealthIcon(SONG.player1, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
-		add(iconP1);
+		iconsGroup.add(iconP1);
 
 		iconP2 = new HealthIcon(SONG.player2, false);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
-		add(iconP2);
+		iconsGroup.add(iconP2);
 
+		CreateHealthBar(false);
 
 		scoreTxt = new FlxText(healthBarBG.x, healthBarBG.y + 30, 0, "", 20);
 		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
@@ -784,7 +794,8 @@ class PlayState extends MusicBeatState
 		verTxt = new FlxText(0, 686, 0, "", 20);
 		verTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		verTxt.scrollFactor.set();
-		verTxt.text = SONG.song + " - " + CoolUtil.difficultyString() + "\nStrawberry Engine v" + Config.EngineVersion;
+		//TODO: ASK ERIZUR HOW TO FIX THE NEWLINE BUG
+		verTxt.text = SONG.song + " - " + CoolUtil.difficultyString() + "\nStrawberry Engine v" + Config.EngineVersion + "\n";
 		add(verTxt);
 
 
@@ -1313,6 +1324,46 @@ class PlayState extends MusicBeatState
 		FlxTween.tween(FlxG.camera, {zoom: 1.3}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut});
 	}
 
+	function CreateHealthBar(PlaceHolder:Bool = false)
+	{
+		if (healthBar != null)
+		{
+			//destroy all old healthbars
+			for (bar in healthbarGroup)
+			{
+				healthbarGroup.remove(bar);
+				bar.destroy();
+			}
+		}
+
+		var barcount:Int = 2;
+		for (i in 1...(barcount + 1))
+		{
+			healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + (4 * i) + (i - 1), RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int((healthBarBG.height - 8) / barcount) + 1, this,
+			'health', 0, 2);
+			healthBar.visible = false;
+			healthBar.scrollFactor.set();
+			if (!PlaceHolder)
+			{
+				trace((barcount - i) - 1);
+				var p2_color = iconP2.GetIconColor((barcount - i));
+				var p1_color = iconP1.GetIconColor((barcount - i));
+				p1_color.alpha = 255;
+				p2_color.alpha = 255;
+				healthBar.createFilledBar(p2_color, p1_color);
+			}
+			else
+			{
+				healthBar.createFilledBar(0x00000000, 0x00000000);
+			}
+			// healthBar
+			healthbarGroup.add(healthBar);
+
+			healthBar.cameras = [camHUD];
+			healthBar.visible = true;
+		}
+	}
+
 	override function openSubState(SubState:FlxSubState)
 	{
 		if (paused)
@@ -1524,6 +1575,8 @@ class PlayState extends MusicBeatState
 
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
 		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
+
+		//TODO if the icon changes update the healthbar accordingly? maybe that should just be left to whoever is editing the code
 
 		if (health > 2)
 			health = 2;

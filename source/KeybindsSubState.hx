@@ -37,6 +37,7 @@ class KeybindsSubState extends OptionsMenuParent
 					states = 'idle';
 					allowInput = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'), 0.4);
+					grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
 					ChangeText(curSelected, textMenuItems[curSelected]);
 				}
 				else if(FlxG.keys.justPressed.ENTER){
@@ -44,6 +45,7 @@ class KeybindsSubState extends OptionsMenuParent
 					states = 'idle';
 					allowInput = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'), 0.4);
+					grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
 					ChangeText(curSelected, textMenuItems[curSelected]);
 				}
 				else if(FlxG.keys.justPressed.ANY){
@@ -51,6 +53,7 @@ class KeybindsSubState extends OptionsMenuParent
 					states = 'idle';
 					allowInput = true;
 					FlxG.sound.play(Paths.sound('confirmMenu'), 0.4);
+					grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
 					ChangeText(curSelected, textMenuItems[curSelected]);
 				}
 		}

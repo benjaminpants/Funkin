@@ -487,6 +487,11 @@ class Controls extends FlxActionSet
 		}
 	}
 
+	public function getBoundButton(but:String):FlxKey
+	{
+		return FlxKey.fromString(FlxG.save.data.keybinds_new.get(but));
+	}
+
 	public function setKeyboardScheme(scheme:KeyboardScheme, reset = true)
 	{
 		if (reset)
@@ -501,10 +506,10 @@ class Controls extends FlxActionSet
 		switch (scheme)
 		{
 			case Solo:
-				inline bindKeys(Control.UP, [FlxKey.fromString(FlxG.save.data.keybinds_new.get("Up Alt")), FlxKey.UP]);
-				inline bindKeys(Control.DOWN, [FlxKey.fromString(FlxG.save.data.keybinds_new.get("Down Alt")), FlxKey.DOWN]);
-				inline bindKeys(Control.LEFT, [FlxKey.fromString(FlxG.save.data.keybinds_new.get("Left Alt")), FlxKey.LEFT]);
-				inline bindKeys(Control.RIGHT, [FlxKey.fromString(FlxG.save.data.keybinds_new.get("Right Alt")), FlxKey.RIGHT]);
+				inline bindKeys(Control.UP, [getBoundButton("Up Alt"), FlxKey.UP]);
+				inline bindKeys(Control.DOWN, [getBoundButton("Down Alt"), FlxKey.DOWN]);
+				inline bindKeys(Control.LEFT, [getBoundButton("Left Alt"), FlxKey.LEFT]);
+				inline bindKeys(Control.RIGHT, [getBoundButton("Right Alt"), FlxKey.RIGHT]);
 				inline bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
 				inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
 				inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);

@@ -50,6 +50,7 @@ class KeybindsSubState extends OptionsMenuParent
 				}
 				else if(FlxG.keys.justPressed.ANY){
 					kbArray[curSelected] = FlxG.keys.getIsDown()[0].ID.toString();
+					textMenuItems = ["Left Note is " + kbArray[0], "Right Note is " + kbArray[1], "Up Note is " + kbArray[2], "Down Note is " + kbArray[3]];
 					states = 'idle';
 					FlxG.sound.play(Paths.sound('confirmMenu'), 0.4);
 					grpOptionsTexts.remove(grpOptionsTexts.members[curSelected]);
@@ -64,7 +65,7 @@ class KeybindsSubState extends OptionsMenuParent
 	{
 		FlxG.save.flush();
 		FlxG.state.closeSubState();
-		FlxG.state.openSubState(new GameplayOptionsSubState());
+		FlxG.state.openSubState(new OptionsSubState());
 	}
 
 	override function OnSelection(selection:String,text:Alphabet)
@@ -72,7 +73,7 @@ class KeybindsSubState extends OptionsMenuParent
 		if(states == 'idle'){
 			states = 'selecting';
 			allowInput = false;
-			ChangeText(curSelected, 'Waiting for keyboard input');
+			ChangeText(curSelected, 'Waiting input');
 		}
 		else if(states == 'selecting'){
 			states = 'idle';

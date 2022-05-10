@@ -19,11 +19,9 @@ class KeybindsSubState extends OptionsMenuParent
 	{
 		super();
 		if(FlxG.save.data.keybinds == null){
-			FlxG.save.data.keybinds = ['A', 'D', 'W', 'S'];
+			FlxG.save.data.keybinds = kbArray;
 		}
-		for (i in 0...FlxG.save.data.keybinds){
-			kbArray[i] = FlxG.save.data.keybinds[i];
-		}
+		kbArray = FlxG.save.data.keybinds;
         textMenuItems = ["Left Note is " + kbArray[0], "Right Note is " + kbArray[1], "Up Note is " + kbArray[2], "Down Note is " + kbArray[3]];
 		CreateText();
 	}
@@ -63,6 +61,7 @@ class KeybindsSubState extends OptionsMenuParent
 
 	override function OnEscape()
 	{
+		FlxG.save.data.keybinds = kbArray;
 		FlxG.save.flush();
 		FlxG.state.closeSubState();
 		FlxG.state.openSubState(new OptionsSubState());

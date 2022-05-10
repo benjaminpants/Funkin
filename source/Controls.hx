@@ -492,16 +492,19 @@ class Controls extends FlxActionSet
 		if (reset)
 			removeKeyboard();
 
+		if(FlxG.save.data.keybinds == null){
+			FlxG.save.data.keybinds = KeybindsSubState.kbArray;
+		}
 		keyboardScheme = scheme;
 		
 		#if (haxe >= "4.0.0")
 		switch (scheme)
 		{
 			case Solo:
-				inline bindKeys(Control.UP, [W, FlxKey.UP]);
-				inline bindKeys(Control.DOWN, [S, FlxKey.DOWN]);
-				inline bindKeys(Control.LEFT, [A, FlxKey.LEFT]);
-				inline bindKeys(Control.RIGHT, [D, FlxKey.RIGHT]);
+				inline bindKeys(Control.UP, [FlxKey.fromString(FlxG.save.data.keybinds[2]), FlxKey.UP]);
+				inline bindKeys(Control.DOWN, [FlxKey.fromString(FlxG.save.data.keybinds[3]), FlxKey.DOWN]);
+				inline bindKeys(Control.LEFT, [FlxKey.fromString(FlxG.save.data.keybinds[0]), FlxKey.LEFT]);
+				inline bindKeys(Control.RIGHT, [FlxKey.fromString(FlxG.save.data.keybinds[1]), FlxKey.RIGHT]);
 				inline bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
 				inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
 				inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);

@@ -502,9 +502,9 @@ class Controls extends FlxActionSet
 		{
 			case Solo:
 				inline bindKeys(Control.UP, [FlxKey.fromString(FlxG.save.data.keybinds[2]), FlxKey.UP]);
-				inline bindKeys(Control.DOWN, [FlxKey.fromString(FlxG.save.data.keybinds[3]), FlxKey.DOWN]);
+				inline bindKeys(Control.DOWN, [FlxKey.fromString(FlxG.save.data.keybinds[1]), FlxKey.DOWN]);
 				inline bindKeys(Control.LEFT, [FlxKey.fromString(FlxG.save.data.keybinds[0]), FlxKey.LEFT]);
-				inline bindKeys(Control.RIGHT, [FlxKey.fromString(FlxG.save.data.keybinds[1]), FlxKey.RIGHT]);
+				inline bindKeys(Control.RIGHT, [FlxKey.fromString(FlxG.save.data.keybinds[3]), FlxKey.RIGHT]);
 				inline bindKeys(Control.ACCEPT, [Z, SPACE, ENTER]);
 				inline bindKeys(Control.BACK, [BACKSPACE, ESCAPE]);
 				inline bindKeys(Control.PAUSE, [P, ENTER, ESCAPE]);

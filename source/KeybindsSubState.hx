@@ -11,7 +11,7 @@ import openfl.Lib;
 
 class KeybindsSubState extends OptionsMenuParent
 {
-    var kbArray = ['A', 'S', 'W', 'D'];
+    public static var kbArray = ['A', 'S', 'W', 'D'];
 	var states:String = "idle";
 	//left down up right
 

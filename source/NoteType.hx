@@ -108,6 +108,11 @@ class NoteTypeBase
 
 			sprite.x += sprite.width / 2;
 
+			if (FlxG.save.data.downscroll) //flip the trail on the last note so it looks right
+				{
+					sprite.flipY = true;
+				}
+
 			switch (notedata)
 			{
 				case 2:
@@ -144,11 +149,6 @@ class NoteTypeBase
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed;
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
-			}
-
-			if (FlxG.save.data.downscroll) //flip the trail on the last note so it looks right
-			{
-				sprite.flipY = true;
 			}
 		}
     }

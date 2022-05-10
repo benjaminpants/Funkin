@@ -63,6 +63,9 @@ class KeybindsSubState extends OptionsMenuParent
 
 	override function OnEscape()
 	{
+		for (i in 0...FlxG.save.data.keybinds){
+			FlxG.save.data.keybinds[i] = kbArray[i];
+		}
 		FlxG.save.flush();
 		FlxG.state.closeSubState();
 		FlxG.state.openSubState(new OptionsSubState());

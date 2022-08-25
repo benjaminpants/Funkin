@@ -24,6 +24,8 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
+import Controls.Control;
+import Controls.KeyboardScheme;
 import io.newgrounds.NG;
 import lime.app.Application;
 import openfl.Assets;
@@ -122,8 +124,8 @@ class TitleState extends MusicBeatState
 		else
 		{
 			KeybindsSubState.kbArray = FlxG.save.data.keybinds_new;
+			controls.setKeyboardScheme(KeyboardScheme.Solo, true);
 		}
-
 
 		openfl.Lib.current.stage.frameRate = FlxG.save.data.fpscap;
 	}

@@ -13,7 +13,7 @@ class Config
 
     public static var EngineVersion:String = "0.0(Not ready for use)";
 
-    public static var PixelStages:Array<String> = [ "senpai", "roses", "thorns" ];
+    public static var PixelStages:Array<String> = [ "senpai", "roses", "thorns", "test" ];
 
     public static var DialogueCharacters:Map<String,DialogueCharacter> = [
         "bf-pixel" => new DialogueCharacter("weeb/bfPortrait",'Boyfriend portrait enter',false,"pixel_",1,true),

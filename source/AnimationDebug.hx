@@ -15,8 +15,8 @@ import flixel.util.FlxColor;
 class AnimationDebug extends FlxState
 {
 	var bf:Boyfriend;
-	var dad:Character;
-	var char:Character;
+	var dad:SpriteCharacter;
+	var char:SpriteCharacter;
 	var textAnim:FlxText;
 	var dumbTexts:FlxTypedGroup<FlxText>;
 	var animList:Array<String> = [];
@@ -44,7 +44,7 @@ class AnimationDebug extends FlxState
 
 		if (isDad)
 		{
-			dad = new Character(0, 0, daAnim);
+			dad = new SpriteCharacter(0, 0, daAnim);
 			dad.screenCenter();
 			dad.debugMode = true;
 			add(dad);

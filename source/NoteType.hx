@@ -28,7 +28,7 @@ class NoteTypeBase
 
     }
 
-    public function InitializeVisuals(sprite:FlxSprite,notedata:Int,issustain:Bool,noteskin:Int,daStage:String,prevNote:Note,ineditor:Bool)
+    public function InitializeVisuals(sprite:Note,notedata:Int,issustain:Bool,noteskin:Int,daStage:String,prevNote:Note,ineditor:Bool)
     {
 
         var swagWidth:Float = 160 * 0.7;
@@ -56,10 +56,17 @@ class NoteTypeBase
 					sprite.animation.add('greenhold', [2]);
 					sprite.animation.add('redhold', [3]);
 					sprite.animation.add('bluehold', [1]);
+
 				}
 
 				sprite.setGraphicSize(Std.int(sprite.width * PlayState.daPixelZoom));
+
 				sprite.updateHitbox();
+
+				if (issustain)
+				{
+					sprite.noteOffset = (sprite.width * 0.75);
+				}
 
 			default:
 				sprite.frames = Paths.getSparrowAtlas('NOTE_assets');
@@ -82,21 +89,22 @@ class NoteTypeBase
 				sprite.setGraphicSize(Std.int(sprite.width * 0.7));
 				sprite.updateHitbox();
 				sprite.antialiasing = true;
+
+				if (issustain)
+				{
+					sprite.noteOffset = sprite.width / 3;
+				}
 		}
 
 		switch (notedata)
 		{
 			case 0:
-				sprite.x += swagWidth * 0;
 				sprite.animation.play('purpleScroll');
 			case 1:
-				sprite.x += swagWidth * 1;
 				sprite.animation.play('blueScroll');
 			case 2:
-				sprite.x += swagWidth * 2;
 				sprite.animation.play('greenScroll');
 			case 3:
-				sprite.x += swagWidth * 3;
 				sprite.animation.play('redScroll');
 		}
 
@@ -104,9 +112,7 @@ class NoteTypeBase
 
 		if (issustain && prevNote != null)
 		{
-			sprite.alpha = 0.6;
-
-			sprite.x += sprite.width / 2;
+			sprite.alphaMult = 0.6;
 
 			if (FlxG.save.data.downscroll) //flip the trail on the last note so it looks right
 				{
@@ -126,11 +132,6 @@ class NoteTypeBase
 			}
 
 			sprite.updateHitbox();
-
-			sprite.x -= sprite.width / 2;
-
-			if (PlayState.curStage.startsWith('school'))
-				sprite.x += 30;
 
 			if (prevNote.isSustainNote)
 			{
@@ -175,7 +176,7 @@ class TIKYNOTE extends NoteTypeBase //example note type you probably shouldn't u
 		scrollspeedoverride = 3;
     }
 
-    override function InitializeVisuals(sprite:FlxSprite,notedata:Int,issustain:Bool,noteskin:Int,daStage:String,prevNote:Note,ineditor:Bool)
+    override function InitializeVisuals(sprite:Note,notedata:Int,issustain:Bool,noteskin:Int,daStage:String,prevNote:Note,ineditor:Bool)
     {
         super.InitializeVisuals(sprite,notedata,issustain,noteskin,daStage,prevNote,ineditor);
         sprite.color = FlxColor.RED;

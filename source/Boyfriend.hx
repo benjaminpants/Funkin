@@ -7,7 +7,7 @@ import flixel.util.FlxTimer;
 
 using StringTools;
 
-class Boyfriend extends Character
+class Boyfriend extends SpriteCharacter
 {
 	public var stunned:Bool = false;
 
@@ -20,19 +20,19 @@ class Boyfriend extends Character
 	{
 		if (!debugMode)
 		{
-			if (animation.curAnim.name.startsWith('sing'))
+			if (myChar.animation.curAnim.name.startsWith('sing'))
 			{
 				holdTimer += elapsed;
 			}
 			else
 				holdTimer = 0;
 
-			if (animation.curAnim.name.endsWith('miss') && animation.curAnim.finished && !debugMode)
+			if (myChar.animation.curAnim.name.endsWith('miss') && myChar.animation.curAnim.finished && !debugMode)
 			{
 				playAnim('idle', true, false, 10);
 			}
 
-			if (animation.curAnim.name == 'firstDeath' && animation.curAnim.finished)
+			if (myChar.animation.curAnim.name == 'firstDeath' && myChar.animation.curAnim.finished)
 			{
 				playAnim('deathLoop');
 			}

@@ -29,7 +29,7 @@ class Note extends FlxSprite
 
 	public var noteScore:Float = 1;
 
-	public var MyStrum:FlxSprite;
+	public var MyStrum:StrumNote;
 
 	private var InPlayState:Bool = false;
 
@@ -41,6 +41,9 @@ class Note extends FlxSprite
 	public static var BLUE_NOTE:Int = 1;
 	public static var RED_NOTE:Int = 3;
 
+	public var alphaMult:Float = 1.0;
+	public var noteOffset:Float = 0;
+
 
 	public function ScanForViableStrum(musthit:Bool)
 	{
@@ -48,7 +51,7 @@ class Note extends FlxSprite
 			InPlayState = true;
 			if (musthit)
 			{
-				state.playerStrums.forEach(function(spr:FlxSprite)
+				state.playerStrums.forEach(function(spr:StrumNote)
 				{
 					if (spr.ID == (noteData % 4))
 					{
@@ -59,7 +62,7 @@ class Note extends FlxSprite
 			}
 			else
 			{
-				state.dadStrums.forEach(function(spr:FlxSprite)
+				state.dadStrums.forEach(function(spr:StrumNote)
 					{
 						if (spr.ID == (noteData % 4))
 						{
@@ -68,6 +71,12 @@ class Note extends FlxSprite
 						}
 					});
 			}
+	}
+
+	public function GoToStrum(strum:StrumNote)
+	{
+		x = strum.x + noteOffset;
+		alpha = strum.alpha * alphaMult;
 	}
 
 
@@ -111,7 +120,8 @@ class Note extends FlxSprite
 
 		if (MyStrum != null)
 		{
-			x = MyStrum.x + (isSustainNote ? (InPixelStage ? width - (width / 3) : width + (width / 9)) : 0);
+			//x = MyStrum.x + (isSustainNote ? (InPixelStage ? width - (width / 3) : width + (width / 9)) : 0);
+			GoToStrum(MyStrum);
 		}
 		else
 		{

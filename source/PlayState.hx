@@ -1973,7 +1973,7 @@ class PlayState extends MusicBeatState
 			score = 50;
 		}
 
-		hitpercentages[hitpercentages.length] = Std.int(((250 - noteDiff) / 250) * 100);
+		hitpercentages[hitpercentages.length] = Std.int(((Conductor.safeZoneOffset - noteDiff) / Conductor.safeZoneOffset) * 100);
 
 		ReCalcAccuracy();
 

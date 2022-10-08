@@ -28,7 +28,7 @@ class SpriteCharacter extends Character
 
 	public override function animationExists(animationToCheck:String):Bool
 	{
-		return animOffsets.exists('sad');
+		return animOffsets.exists(animationToCheck);
 	}
 
 	public override function getGraphicMidpoint(?point:FlxPoint):FlxPoint {

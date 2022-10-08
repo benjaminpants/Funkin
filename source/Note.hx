@@ -48,10 +48,21 @@ class Note extends FlxSprite
 	public function ScanForViableStrum(musthit:Bool)
 	{
 		var state:PlayState = cast(FlxG.state,PlayState);
-			InPlayState = true;
-			if (musthit)
+		InPlayState = true;
+		if (musthit)
+		{
+			state.playerStrums.forEach(function(spr:StrumNote)
 			{
-				state.playerStrums.forEach(function(spr:StrumNote)
+				if (spr.ID == (noteData % 4))
+				{
+					x = spr.x;
+					MyStrum = spr;
+				}
+			});
+		}
+		else
+		{
+			state.dadStrums.forEach(function(spr:StrumNote)
 				{
 					if (spr.ID == (noteData % 4))
 					{
@@ -59,18 +70,11 @@ class Note extends FlxSprite
 						MyStrum = spr;
 					}
 				});
-			}
-			else
-			{
-				state.dadStrums.forEach(function(spr:StrumNote)
-					{
-						if (spr.ID == (noteData % 4))
-						{
-							x = spr.x;
-							MyStrum = spr;
-						}
-					});
-			}
+		}
+		if (MyStrum != null)
+		{
+			GoToStrum(MyStrum);
+		}
 	}
 
 	public function GoToStrum(strum:StrumNote)
@@ -93,7 +97,7 @@ class Note extends FlxSprite
 
 		x += 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
-		y -= 2000;
+		y -= 5000;
 		this.strumTime = strumTime;
 
 		this.noteData = noteData;

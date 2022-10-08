@@ -37,7 +37,14 @@ class HealthIcon extends FlxSprite
 		animation.add('parents-christmas', [17], 0, false, isPlayer);
 		animation.add('monster', [19, 20], 0, false, isPlayer);
 		animation.add('monster-christmas', [19, 20], 0, false, isPlayer);
-		animation.play(char);
+		if (animation.exists(char))
+		{
+			animation.play(char);
+		}
+		else
+		{
+			animation.play('face');
+		}
 		scrollFactor.set();
 	}
 
@@ -85,7 +92,7 @@ class HealthIcon extends FlxSprite
 			case 'monster-christmas':
 				return new FlxColor(0xFFF3FF6E);
 			default:
-				return FlxColor.WHITE;
+				return new FlxColor(0xFFA1A1A1);
 		}
 	}
 

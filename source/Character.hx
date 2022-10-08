@@ -26,10 +26,12 @@ class Character extends FlxTypedSpriteGroup<FlxSprite>
 
     private function set_currentAnim(x) 
     {
-        return this.currentAnim = currentAnim;
+        return this.currentAnim = x;
     }
 
     public var debugMode:Bool = false;
+
+    public var stunned:Bool = false; //maybe i should delete this variable at some point
 
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = 'bf';
@@ -65,15 +67,16 @@ class Character extends FlxTypedSpriteGroup<FlxSprite>
         return true;
     }
 
-    public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
+    public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Bool
     {
         if (!Force)
         {
             if (!canChangetoAnim(AnimName))
             {
-                return;
+                return false;
             }
         }
         currentAnim = AnimName;
+        return true;
     }
 }

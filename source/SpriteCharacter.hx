@@ -19,7 +19,7 @@ class SpriteCharacter extends Character
 {
 	public var animOffsets:Map<String, Array<Dynamic>>;
 
-	public var myChar:FlxSprite = new FlxSprite();
+	public var myChar:FlxSprite;
 
 	public override function get_currentAnim() 
 	{
@@ -40,6 +40,8 @@ class SpriteCharacter extends Character
 		super(x, y, character, isActPlayer);
 
 		animOffsets = new Map<String, Array<Dynamic>>();
+
+		myChar = new FlxSprite();
 
 		add(myChar);
 
@@ -484,8 +486,6 @@ class SpriteCharacter extends Character
 				myChar.setGraphicSize(Std.int(width * 6));
 				myChar.updateHitbox();
 
-				playAnim('idle');
-
 				myChar.antialiasing = false;
 
 				var evilTrail = new FlxTrail(myChar, null, 4, 24, 0.3, 0.069);
@@ -495,6 +495,8 @@ class SpriteCharacter extends Character
 				remove(myChar);
 				add(evilTrail);
 				add(myChar);
+
+				playAnim('idle');
 				// evilTrail.scrollFactor.set(1.1, 1.1);
 
 			case 'parents-christmas':
@@ -530,6 +532,11 @@ class SpriteCharacter extends Character
 		{
 			flipX = !flipX;
 
+			if (myChar.animation.curAnim == null)
+			{
+				return;
+			}
+
 			// Doesn't flip for BF, since his are already in the right place???
 			if (!curCharacter.startsWith('bf'))
 			{
@@ -558,6 +565,32 @@ class SpriteCharacter extends Character
 
 	override function update(elapsed:Float)
 	{
+		if ((!debugMode) && isPlayer)
+		{
+			if (myChar.animation.curAnim.name.startsWith('sing'))
+			{
+				holdTimer += elapsed;
+			}
+			else
+				holdTimer = 0;
+
+			if (myChar.animation.curAnim.name.endsWith('miss') && myChar.animation.curAnim.finished && !debugMode)
+			{
+				playAnim('idle', true, false, 10);
+			}
+
+			if (myChar.animation.curAnim.name == 'firstDeath' && myChar.animation.curAnim.finished)
+			{
+				playAnim('deathLoop');
+			}
+		}
+
+		if (myChar.animation.curAnim == null)
+		{
+			super.update(elapsed);
+			return;
+		}
+
 		if (!curCharacter.startsWith('bf'))
 		{
 			if (myChar.animation.curAnim.name.startsWith('sing'))
@@ -651,12 +684,12 @@ class SpriteCharacter extends Character
 		}
 	}
 
-	public override function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
+	public override function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Bool
 	{
 		if (myChar.animation.getByName(AnimName) == null)
 		{
 			trace(curCharacter + " is missing animation: \"" + AnimName + "\"");
-			return; //if the animation doesn't exist dont try to play it dumby
+			return false; //if the animation doesn't exist dont try to play it dumby
 		}
 		myChar.animation.play(AnimName, Force, Reversed, Frame);
 
@@ -684,6 +717,7 @@ class SpriteCharacter extends Character
 				danced = !danced;
 			}
 		}
+		return true;
 	}
 
 	public function addOffset(name:String, x:Float = 0, y:Float = 0)

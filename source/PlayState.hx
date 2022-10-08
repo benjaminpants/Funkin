@@ -70,7 +70,7 @@ class PlayState extends MusicBeatState
 
 	public var dad:Character;
 	public var gf:Character;
-	public var boyfriend:Boyfriend;
+	public var boyfriend:Character;
 
 	private var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
@@ -156,6 +156,17 @@ class PlayState extends MusicBeatState
 	var detailsText:String = "";
 	var detailsPausedText:String = "";
 	#end
+
+	public static function createCharacter(xx:Float,yy:Float,character:String, ?isPlayer:Bool = false):Character
+	{
+		switch (character)
+		{
+			default:
+				return new SpriteCharacter(xx,yy,character,isPlayer);
+			case 'test-character':
+				return new ExampleCustomCharacter(xx,yy,character,isPlayer);
+		}
+	}
 
 	override public function create()
 	{
@@ -627,10 +638,10 @@ class PlayState extends MusicBeatState
 		if (curStage == 'limo')
 			gfVersion = 'gf-car';
 
-		gf = new SpriteCharacter(400, 130, gfVersion);
+		gf = createCharacter(400, 130, gfVersion);
 		gf.scrollFactor.set(0.95, 0.95);
 
-		dad = new SpriteCharacter(100, 100, SONG.player2);
+		dad = createCharacter(100, 100, SONG.player2);
 
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
 
@@ -672,7 +683,7 @@ class PlayState extends MusicBeatState
 				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
 		}
 
-		boyfriend = new Boyfriend(770, 450, SONG.player1);
+		boyfriend = createCharacter(770, 450, SONG.player1, true);
 
 		ReCalcAccuracy();
 		// REPOSITIONING PER STAGE

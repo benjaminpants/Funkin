@@ -1273,7 +1273,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		var barcount:Int = 2;
+		var barcount:Int = 2; //change this incase you dont need the bar splitting
 		for (i in 1...(barcount + 1))
 		{
 			healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + (4 * i) + (i - 1), RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int((healthBarBG.height - 8) / barcount) + 1, this,

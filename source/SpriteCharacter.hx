@@ -1,5 +1,6 @@
 package;
 
+import flixel.math.FlxPoint;
 import haxe.Log;
 import lime.system.System;
 import flixel.system.debug.log.Log;
@@ -28,6 +29,10 @@ class SpriteCharacter extends Character
 	public override function animationExists(animationToCheck:String):Bool
 	{
 		return animOffsets.exists('sad');
+	}
+
+	public override function getGraphicMidpoint(?point:FlxPoint):FlxPoint {
+		return myChar.getGraphicMidpoint();
 	}
 
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isActPlayer:Bool = false)

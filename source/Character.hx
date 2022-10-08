@@ -1,3 +1,4 @@
+import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -17,6 +18,10 @@ class Character extends FlxTypedSpriteGroup<FlxSprite>
     public function get_currentAnim() 
     {
         return currentAnim;
+    }
+
+    public override function getGraphicMidpoint(?point:FlxPoint):FlxPoint {
+        return super.getGraphicMidpoint(point);
     }
 
     private function set_currentAnim(x) 

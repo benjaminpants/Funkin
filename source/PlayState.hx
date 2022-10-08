@@ -183,7 +183,7 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD);
 
-		FlxG.cameras.setDefaultDrawTarget(camGame, false);
+		FlxCamera.defaultCameras = [camGame]; //i tried fixing this and it didn't work
 
 		persistentUpdate = true;
 		persistentDraw = true;
@@ -1630,7 +1630,7 @@ class PlayState extends MusicBeatState
 		if (camZooming)
 		{
 			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95 * (60 / FlxG.save.data.fpscap));
-			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95 * (60 / FlxG.save.data.fpscap));
+			camHUD.zoom = FlxMath.lerp(camHUD.initialZoom, camHUD.zoom, 0.95 * (60 / FlxG.save.data.fpscap)); //not perfect but eh
 		}
 
 		FlxG.watch.addQuick("beatShit", curBeat);

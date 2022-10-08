@@ -183,7 +183,7 @@ class PlayState extends MusicBeatState
 		FlxG.cameras.reset(camGame);
 		FlxG.cameras.add(camHUD);
 
-		FlxCamera.defaultCameras = [camGame]; //i tried fixing this and it didn't work
+		FlxG.cameras.setDefaultDrawTarget(camGame, false);
 
 		persistentUpdate = true;
 		persistentDraw = true;
@@ -1226,17 +1226,9 @@ class PlayState extends MusicBeatState
 			// FlxG.log.add(i);
 			var babyArrow:StrumNote = new StrumNote(0, strumLine.y, (curStage == 'school' || curStage == 'schoolEvil') ? 'pixel' : 'normal', i, player == 1);
 
-			switch (Math.abs(i))
-			{
-				case 0:
-					babyArrow.x += Note.swagWidth * 0;
-				case 1:
-					babyArrow.x += Note.swagWidth * 1;
-				case 2:
-					babyArrow.x += Note.swagWidth * 2;
-				case 3:
-					babyArrow.x += Note.swagWidth * 3;
-			}
+			babyArrow.x += Note.swagWidth * Math.abs(i);
+			babyArrow.x += 78 + (78 / KeyAmount);
+			babyArrow.x += ((FlxG.width / 2) * player);
 
 			babyArrow.updateHitbox();
 			babyArrow.scrollFactor.set();
@@ -1260,8 +1252,6 @@ class PlayState extends MusicBeatState
 			}
 
 			babyArrow.animation.play('static');
-			babyArrow.x += 50;
-			babyArrow.x += ((FlxG.width / 2) * player);
 
 			strumLineNotes.add(babyArrow);
 		}

@@ -7,9 +7,9 @@ import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 
-class GameOverSubstate extends MusicBeatSubstate
+class GameOverSubstate extends MusicBeatSubstate //TODO: rewrite this.
 {
-	var bf:Character;
+	var bf:SpriteCharacter;
 	var camFollow:FlxObject;
 
 	var stageSuffix:String = "";
@@ -34,7 +34,7 @@ class GameOverSubstate extends MusicBeatSubstate
 
 		Conductor.songPosition = 0;
 
-		bf = PlayState.createCharacter(x, y, daBf, true);
+		bf = new SpriteCharacter(x, y, daBf, true);
 		add(bf);
 
 		camFollow = new FlxObject(bf.getGraphicMidpoint().x, bf.getGraphicMidpoint().y, 1, 1);
@@ -70,12 +70,12 @@ class GameOverSubstate extends MusicBeatSubstate
 				FlxG.switchState(new FreeplayState());
 		}
 
-		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.curFrame == 12)
+		if (bf.currentAnim == 'firstDeath' && bf.myChar.animation.curAnim.curFrame == 12)
 		{
 			FlxG.camera.follow(camFollow, LOCKON, 0.01);
 		}
 
-		if (bf.animation.curAnim.name == 'firstDeath' && bf.animation.curAnim.finished)
+		if (bf.currentAnim == 'firstDeath' && bf.myChar.animation.curAnim.finished)
 		{
 			FlxG.sound.playMusic(Paths.music('gameOver' + stageSuffix));
 		}

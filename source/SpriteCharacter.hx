@@ -23,6 +23,10 @@ class SpriteCharacter extends Character
 
 	public override function get_currentAnim() 
 	{
+		if (myChar.animation.curAnim == null)
+		{
+			return "";
+		}
 		return myChar.animation.curAnim.name;
 	}
 

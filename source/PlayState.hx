@@ -139,6 +139,8 @@ class PlayState extends MusicBeatState
 	var scoreTxt:FlxText;
 	var verTxt:FlxText;
 
+	public var downScroll = false;
+
 	public static var campaignScore:Int = 0;
 
 	var defaultCamZoom:Float = 1.05;
@@ -171,6 +173,7 @@ class PlayState extends MusicBeatState
 	override public function create()
 	{
 		thisState = this;
+		downScroll = FlxG.save.data.downscroll;
 
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
@@ -730,7 +733,7 @@ class PlayState extends MusicBeatState
 
 		Conductor.songPosition = -5000;
 
-		strumLine = new FlxSprite(0, (FlxG.save.data.downscroll ? FlxG.height - 125 : 50)).makeGraphic(FlxG.width, 10);
+		strumLine = new FlxSprite(0, (downScroll ? FlxG.height - 125 : 50)).makeGraphic(FlxG.width, 10);
 		strumLine.scrollFactor.set();
 
 		strumLineNotes = new FlxTypedGroup<FlxSprite>();
@@ -766,7 +769,7 @@ class PlayState extends MusicBeatState
 
 		FlxG.fixedTimestep = false;
 
-		healthBarBG = new FlxSprite(0, (!FlxG.save.data.downscroll ? FlxG.height : 80) * 0.9).loadGraphic(Paths.image('healthBar'));
+		healthBarBG = new FlxSprite(0, (!downScroll ? FlxG.height : 80) * 0.9).loadGraphic(Paths.image('healthBar'));
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
 		add(healthBarBG);
@@ -791,15 +794,17 @@ class PlayState extends MusicBeatState
 
 		CreateHealthBar(false);
 
-		scoreTxt = new FlxText(healthBarBG.x, healthBarBG.y + 30, 0, "", 20);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreTxt = new FlxText(healthBarBG.x, healthBarBG.y + 30, healthBarBG.width, "", 20);
+		scoreTxt.setFormat(Paths.font("phantomuff.ttf"), 16, FlxColor.WHITE, CENTER,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
+		scoreTxt.antialiasing = true;
 		add(scoreTxt);
 
-		verTxt = new FlxText(0, 686, 0, "", 20);
-		verTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		verTxt = new FlxText(0, 676, 0, "", 20);
+		verTxt.setFormat(Paths.font("phantomuff.ttf"), 16, FlxColor.WHITE, LEFT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		verTxt.scrollFactor.set();
-		// TODO: ASK ERIZUR HOW TO FIX THE NEWLINE BUG
+		verTxt.antialiasing = true;
+		//TODO: ASK ERIZUR HOW TO FIX THE NEWLINE BUG
 		verTxt.text = SONG.song + " - " + CoolUtil.difficultyString() + "\nStrawberry Engine v" + Config.EngineVersion + "\n";
 		add(verTxt);
 
@@ -1738,14 +1743,19 @@ class PlayState extends MusicBeatState
 					strumy = daNote.MyStrum.y;
 				}
 
-				daNote.y = (strumy
-					+
-					(((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal((curnotetype.scrollspeedoverride == -1 ? SONG.speed : curnotetype.scrollspeedoverride),
-						2))) * (FlxG.save.data.downscroll ? 1 : -1)));
+				daNote.y = (strumy + (((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal((curnotetype.scrollspeedoverride == -1 ? SONG.speed : curnotetype.scrollspeedoverride), 2))) * (downScroll ? 1 : -1)) );
+
+				if (daNote.isSustainNote && downScroll && daNote.animation != null)
+				{
+					if (daNote.animation.curAnim.name.endsWith('end'))
+					{
+						daNote.y += (daNote.height * 2.05);
+					}
+				}
 
 				if (daNote.isSustainNote && daNote.wasGoodHit)
 				{
-					if (!FlxG.save.data.downscroll)
+					if (!downScroll)
 					{
 						daNote.clipRect = new FlxRect(0, strumy + (Note.swagWidth / 2 - daNote.y), daNote.width * 2, FlxG.height);
 					}

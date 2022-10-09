@@ -585,12 +585,12 @@ class ChartingState extends MusicBeatState
 			FlxG.switchState(new PlayState());
 		}
 
-		if (FlxG.keys.justPressed.T)
+		if (FlxG.keys.justPressed.Y)
 		{
 			SNAP_SIZE += 2;
 			SNAP_SIZE = Math.round(Math.min(40,SNAP_SIZE));
 		}
-		if (FlxG.keys.justPressed.R)
+		if (FlxG.keys.justPressed.U)
 		{
 			SNAP_SIZE -= 2;
 			SNAP_SIZE = Math.round(Math.max(2,SNAP_SIZE));

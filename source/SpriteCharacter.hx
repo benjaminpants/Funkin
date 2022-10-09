@@ -421,7 +421,7 @@ class SpriteCharacter extends Character
 				myChar.animation.addByPrefix('firstDeath', "BF Dies pixel", 24, false);
 				myChar.animation.addByPrefix('deathLoop', "Retry Loop", 24, true);
 				myChar.animation.addByPrefix('deathConfirm', "RETRY CONFIRM", 24, false);
-				animation.play('firstDeath');
+				myChar.animation.play('firstDeath');
 
 				addOffset('firstDeath');
 				addOffset('deathLoop', -37);

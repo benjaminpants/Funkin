@@ -59,6 +59,8 @@ class ChartingState extends MusicBeatState
 
 	var GRID_SIZE:Int = 40;
 
+	var SNAP_SIZE:Int = 40;
+
 	var dummyArrow:FlxSprite;
 
 	var curRenderedNotes:FlxTypedGroup<Note>;
@@ -504,7 +506,7 @@ class ChartingState extends MusicBeatState
 			curnoteType -= 1;
 		}
 
-		typeText.text = "Note Type: " + Config.NoteTypes[curnoteType].name + "\n(C to decrease, V to increase)";
+		typeText.text = "Note Type: " + Config.NoteTypes[curnoteType].name + "\n(C to decrease, V to increase)\n";
 
 		Conductor.songPosition = FlxG.sound.music.time;
 		_song.song = typingShit.text;
@@ -570,7 +572,7 @@ class ChartingState extends MusicBeatState
 			if (FlxG.keys.pressed.SHIFT)
 				dummyArrow.y = FlxG.mouse.y;
 			else
-				dummyArrow.y = Math.floor(FlxG.mouse.y / GRID_SIZE) * GRID_SIZE;
+				dummyArrow.y = Math.floor(FlxG.mouse.y / SNAP_SIZE) * SNAP_SIZE;
 		}
 
 		if (FlxG.keys.justPressed.ENTER)
@@ -581,6 +583,17 @@ class ChartingState extends MusicBeatState
 			FlxG.sound.music.stop();
 			vocals.stop();
 			FlxG.switchState(new PlayState());
+		}
+
+		if (FlxG.keys.justPressed.T)
+		{
+			SNAP_SIZE += 2;
+			SNAP_SIZE = Math.round(Math.min(40,SNAP_SIZE));
+		}
+		if (FlxG.keys.justPressed.R)
+		{
+			SNAP_SIZE -= 2;
+			SNAP_SIZE = Math.round(Math.max(2,SNAP_SIZE));
 		}
 
 		if (FlxG.keys.justPressed.E)
@@ -700,7 +713,9 @@ class ChartingState extends MusicBeatState
 			+ " / "
 			+ Std.string(FlxMath.roundDecimal(FlxG.sound.music.length / 1000, 2))
 			+ "\nSection: "
-			+ curSection;
+			+ curSection
+			+ "\nSnap Size:"
+			+ SNAP_SIZE;
 		super.update(elapsed);
 	}
 

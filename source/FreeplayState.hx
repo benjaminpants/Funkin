@@ -215,6 +215,8 @@ class FreeplayState extends MusicBeatState
 		if (curSelected >= Config.Songs.length)
 			curSelected = 0;
 
+		changeDiff(0);
+
 		// selector.y = (70 * curSelected) + 30;
 
 		#if !switch

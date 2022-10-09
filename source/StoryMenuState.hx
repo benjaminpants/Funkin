@@ -57,10 +57,12 @@ class StoryMenuState extends MusicBeatState
 
 		scoreText = new FlxText(10, 10, 0, "SCORE: 49324858", 36);
 		scoreText.setFormat(Paths.font("phantomuff.ttf"), 32);
+		scoreText.antialiasing = true;
 
 		txtWeekTitle = new FlxText(FlxG.width * 0.7, 10, 0, "", 32);
 		txtWeekTitle.setFormat(Paths.font("phantomuff.ttf"), 32, FlxColor.WHITE, RIGHT);
 		txtWeekTitle.alpha = 0.7;
+		txtWeekTitle.antialiasing = true;
 
 		var rankText:FlxText = new FlxText(0, 10);
 		rankText.text = 'RANK: GREAT';
@@ -94,6 +96,7 @@ class StoryMenuState extends MusicBeatState
 			var weekThing:MenuItem = new MenuItem(0, yellowBG.y + yellowBG.height + 10, Config.Weeks[i].name);
 			weekThing.y += ((weekThing.height + 20) * i);
 			weekThing.targetY = i;
+			weekThing.antialiasing = true;
 			grpWeekText.add(weekThing);
 
 			weekThing.screenCenter(X);
@@ -112,8 +115,6 @@ class StoryMenuState extends MusicBeatState
 				grpLocks.add(lock);
 			}
 		}
-
-		trace("Line 96");
 
 		for (char in 0...3)
 		{
@@ -151,10 +152,12 @@ class StoryMenuState extends MusicBeatState
 		leftArrow.animation.addByPrefix('idle', "arrow left");
 		leftArrow.animation.addByPrefix('press', "arrow push left");
 		leftArrow.animation.play('idle');
+		leftArrow.antialiasing = true;
 		difficultySelectors.add(leftArrow);
 
 		sprDifficulty = new FlxText(leftArrow.x + 30, leftArrow.y - DIFFICULTY_OFFSET, 368);
 		sprDifficulty.setFormat(Paths.font("diffifont.ttf"), 84, FlxColor.WHITE,FlxTextAlign.CENTER);
+		sprDifficulty.antialiasing = true;
 		changeDifficulty();
 
 		difficultySelectors.add(sprDifficulty);
@@ -164,6 +167,7 @@ class StoryMenuState extends MusicBeatState
 		rightArrow.animation.addByPrefix('idle', 'arrow right');
 		rightArrow.animation.addByPrefix('press', "arrow push right", 24, false);
 		rightArrow.animation.play('idle');
+		rightArrow.antialiasing = true;
 		difficultySelectors.add(rightArrow);
 
 		trace("Line 150");
@@ -326,6 +330,8 @@ class StoryMenuState extends MusicBeatState
 			curWeek = 0;
 		if (curWeek < 0)
 			curWeek = Config.Weeks.length - 1;
+
+		changeDifficulty(0);
 
 		var bullShit:Int = 0;
 

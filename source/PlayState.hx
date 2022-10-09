@@ -1,5 +1,6 @@
 package;
 
+import Config.Difficulty;
 import flixel.group.FlxGroup;
 import flixel.graphics.frames.FlxImageFrame;
 import NoteType.NoteTypeBase;
@@ -56,7 +57,7 @@ class PlayState extends MusicBeatState
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:Int = 0;
 	public static var storyPlaylist:Array<String> = [];
-	public static var storyDifficulty:Int = 1;
+	public static var storyDifficulty:Difficulty;
 	public static var thisState:PlayState;
 
 	var halloweenLevel:Bool = false;
@@ -236,15 +237,7 @@ class PlayState extends MusicBeatState
 
 		#if desktop
 		// Making difficulty text for Discord Rich Presence.
-		switch (storyDifficulty)
-		{
-			case 0:
-				storyDifficultyText = "Easy";
-			case 1:
-				storyDifficultyText = "Normal";
-			case 2:
-				storyDifficultyText = "Hard";
-		}
+		storyDifficultyText = storyDifficulty.Name;
 
 		iconRPC = SONG.player2;
 
@@ -805,7 +798,7 @@ class PlayState extends MusicBeatState
 		verTxt.scrollFactor.set();
 		verTxt.antialiasing = true;
 		//TODO: ASK ERIZUR HOW TO FIX THE NEWLINE BUG
-		verTxt.text = SONG.song + " - " + CoolUtil.difficultyString() + "\nStrawberry Engine v" + Config.EngineVersion + "\n";
+		verTxt.text = SONG.song + " - " + storyDifficulty.Name + "\nStrawberry Engine v" + Config.EngineVersion + "\n";
 		add(verTxt);
 
 		strumLineNotes.cameras = [camHUD];
@@ -1878,25 +1871,19 @@ class PlayState extends MusicBeatState
 				FlxG.switchState(new StoryMenuState());
 
 				// if ()
-				StoryMenuState.weekUnlocked[Std.int(Math.min(storyWeek + 1, StoryMenuState.weekUnlocked.length - 1))] = true;
+				//StoryMenuState.weekUnlocked[Std.int(Math.min(storyWeek + 1, StoryMenuState.weekUnlocked.length - 1))] = true;
 
 				if (SONG.validScore)
 				{
 					Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
 				}
 
-				FlxG.save.data.weekUnlocked = StoryMenuState.weekUnlocked;
+				//FlxG.save.data.weekUnlocked = StoryMenuState.weekUnlocked;
 				FlxG.save.flush();
 			}
 			else
 			{
-				var difficulty:String = "";
-
-				if (storyDifficulty == 0)
-					difficulty = '-easy';
-
-				if (storyDifficulty == 2)
-					difficulty = '-hard';
+				var difficulty:String = "-" + (storyDifficulty.Name.toLowerCase());
 
 				trace('LOADING NEXT SONG');
 				trace(PlayState.storyPlaylist[0].toLowerCase() + difficulty);

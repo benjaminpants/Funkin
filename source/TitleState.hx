@@ -113,6 +113,9 @@ class TitleState extends MusicBeatState
 			controls.setKeyboardScheme(KeyboardScheme.Solo, true);
 		}
 
+		Config.LoadInitialData();
+		
+
 		openfl.Lib.current.stage.frameRate = FlxG.save.data.fpscap;
 	}
 

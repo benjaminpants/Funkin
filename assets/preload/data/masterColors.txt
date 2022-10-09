@@ -1,0 +1,3 @@
+diff_easy:#00FF00
+diff_normal:#FFFF00
+diff_hard:#FF0000

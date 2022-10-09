@@ -794,14 +794,16 @@ class PlayState extends MusicBeatState
 
 		CreateHealthBar(false);
 
-		scoreTxt = new FlxText(healthBarBG.x, healthBarBG.y + 30, 0, "", 20);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+		scoreTxt = new FlxText(healthBarBG.x, healthBarBG.y + 30, healthBarBG.width, "", 20);
+		scoreTxt.setFormat(Paths.font("phantomuff.ttf"), 16, FlxColor.WHITE, CENTER,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
+		scoreTxt.antialiasing = true;
 		add(scoreTxt);
 
-		verTxt = new FlxText(0, 686, 0, "", 20);
-		verTxt.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, LEFT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+		verTxt = new FlxText(0, 676, 0, "", 20);
+		verTxt.setFormat(Paths.font("phantomuff.ttf"), 16, FlxColor.WHITE, LEFT,FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		verTxt.scrollFactor.set();
+		verTxt.antialiasing = true;
 		//TODO: ASK ERIZUR HOW TO FIX THE NEWLINE BUG
 		verTxt.text = SONG.song + " - " + CoolUtil.difficultyString() + "\nStrawberry Engine v" + Config.EngineVersion + "\n";
 		add(verTxt);

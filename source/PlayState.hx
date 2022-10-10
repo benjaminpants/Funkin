@@ -269,11 +269,39 @@ class PlayState extends MusicBeatState
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 		#end
 
-		switch (SONG.song.toLowerCase())
+		if (SONG.stage == null)
 		{
-			case 'spookeez' | 'monster' | 'south':
-				{
+			switch (SONG.song) //too lazy to edit all the charts
+			{
+				case 'spookeez' | 'monster' | 'south':
 					curStage = 'spooky';
+				case 'pico' | 'philly' | 'blammed':
+					curStage = 'philly';
+				case 'satin-panties' | 'high' | 'milf':
+					curStage = 'limo';
+				case 'cocoa' | 'eggnog':
+					curStage = 'mall';
+				case 'winter-horrorland':
+					curStage = 'mallEvil';
+				case 'senpai' | 'roses':
+					curStage = 'school';
+				case 'thorns':
+					curStage = 'schoolEvil';
+				default:
+					curStage = 'stage';
+			}
+		}
+		if (SONG.girlfriend == null)
+		{
+			SONG.girlfriend = 'gf';
+		}
+
+		curStage = SONG.stage;
+
+		switch (SONG.stage)
+		{
+			case 'spooky':
+				{
 					halloweenLevel = true;
 
 					var hallowTex = Paths.getSparrowAtlas('halloween_bg');
@@ -288,9 +316,8 @@ class PlayState extends MusicBeatState
 
 					isHalloween = true;
 				}
-			case 'pico' | 'blammed' | 'philly':
+			case 'philly':
 				{
-					curStage = 'philly';
 
 					var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.image('philly/sky'));
 					bg.scrollFactor.set(0.1, 0.1);
@@ -333,9 +360,8 @@ class PlayState extends MusicBeatState
 					streetBehind.antialiasing = true;
 					phillyTrain.antialiasing = true;
 				}
-			case 'milf' | 'satin-panties' | 'high':
+			case 'limo':
 				{
-					curStage = 'limo';
 					defaultCamZoom = 0.90;
 
 					var skyBG:FlxSprite = new FlxSprite(-120, -50).loadGraphic(Paths.image('limo/limoSunset'));
@@ -380,9 +406,8 @@ class PlayState extends MusicBeatState
 					fastCar = new FlxSprite(-300, 160).loadGraphic(Paths.image('limo/fastCarLol'));
 					// add(limo);
 				}
-			case 'cocoa' | 'eggnog':
+			case 'mall':
 				{
-					curStage = 'mall';
 
 					defaultCamZoom = 0.80;
 
@@ -436,9 +461,8 @@ class PlayState extends MusicBeatState
 					santa.antialiasing = true;
 					add(santa);
 				}
-			case 'winter-horrorland':
+			case 'mallEvil':
 				{
-					curStage = 'mallEvil';
 					var bg:FlxSprite = new FlxSprite(-400, -500).loadGraphic(Paths.image('christmas/evilBG'));
 					bg.antialiasing = true;
 					bg.scrollFactor.set(0.2, 0.2);
@@ -456,9 +480,8 @@ class PlayState extends MusicBeatState
 					evilSnow.antialiasing = true;
 					add(evilSnow);
 				}
-			case 'senpai' | 'roses':
+			case 'school':
 				{
-					curStage = 'school';
 
 					// defaultCamZoom = 0.9;
 
@@ -523,9 +546,8 @@ class PlayState extends MusicBeatState
 					bgGirls.updateHitbox();
 					add(bgGirls);
 				}
-			case 'thorns':
+			case 'schoolEvil':
 				{
-					curStage = 'schoolEvil';
 
 					var waveEffectBG = new FlxWaveEffect(FlxWaveMode.ALL, 2, -1, 3, 2);
 					var waveEffectFG = new FlxWaveEffect(FlxWaveMode.ALL, 2, -1, 5, 2);
@@ -614,22 +636,7 @@ class PlayState extends MusicBeatState
 				}
 		}
 
-		var gfVersion:String = 'gf';
-
-		switch (curStage)
-		{
-			case 'limo':
-				gfVersion = 'gf-car';
-			case 'mall' | 'mallEvil':
-				gfVersion = 'gf-christmas';
-			case 'school':
-				gfVersion = 'gf-pixel';
-			case 'schoolEvil':
-				gfVersion = 'gf-pixel';
-		}
-
-		if (curStage == 'limo')
-			gfVersion = 'gf-car';
+		var gfVersion:String = SONG.girlfriend;
 
 		gf = createCharacter(400, 130, gfVersion);
 		gf.scrollFactor.set(0.95, 0.95);

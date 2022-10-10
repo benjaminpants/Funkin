@@ -1,6 +1,10 @@
 bf
 dad
 gf
+gf-christmas
+gf-car
+gf-pixel
+gf-christmas
 spooky
 pico
 mom
@@ -10,7 +14,6 @@ parents-christmas
 test-character
 monster-christmas
 bf-christmas
-gf-christmas
 monster
 bf-pixel
 senpai

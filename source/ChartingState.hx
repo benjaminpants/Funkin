@@ -129,7 +129,9 @@ class ChartingState extends MusicBeatState
 				player2: 'dad',
 				speed: 1,
 				validScore: false,
-				keys: 4
+				keys: 4,
+				girlfriend: 'gf',
+				stage: 'stage'
 			};
 		}
 
@@ -246,6 +248,8 @@ class ChartingState extends MusicBeatState
 
 		var characters:Array<String> = CoolUtil.coolTextFile(Paths.txt('characterList'));
 
+		var stages:Array<String> = CoolUtil.coolTextFile(Paths.txt('stageList'));
+
 		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
 		{
 			_song.player1 = characters[Std.parseInt(character)];
@@ -258,6 +262,20 @@ class ChartingState extends MusicBeatState
 		});
 
 		player2DropDown.selectedLabel = _song.player2;
+
+		var player3DropDown = new FlxUIDropDownMenu(10, 160, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
+		{
+			_song.girlfriend = characters[Std.parseInt(character)];
+		});
+
+		player3DropDown.selectedLabel = _song.girlfriend;
+
+		var stageDropDown = new FlxUIDropDownMenu(140, 160, FlxUIDropDownMenu.makeStrIdLabelArray(stages, true), function(stage:String)
+		{
+			_song.stage = stages[Std.parseInt(stage)];
+		});
+
+		stageDropDown.selectedLabel = _song.stage;
 
 		var tab_group_song = new FlxUI(null, UI_box);
 		tab_group_song.name = "Song";
@@ -273,6 +291,8 @@ class ChartingState extends MusicBeatState
 		tab_group_song.add(stepperSpeed);
 		tab_group_song.add(player1DropDown);
 		tab_group_song.add(player2DropDown);
+		tab_group_song.add(player3DropDown);
+		tab_group_song.add(stageDropDown);
 
 		UI_box.addGroup(tab_group_song);
 		UI_box.scrollFactor.set();

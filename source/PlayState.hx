@@ -92,6 +92,8 @@ class PlayState extends MusicBeatState
 
 	public var health:Float = 1;
 
+	public var healthSmoothed:Float = 1;
+
 	private var combo:Int = 0;
 	private var maxcombo:Int = 0;
 	private var misses:Int = 0;
@@ -269,9 +271,11 @@ class PlayState extends MusicBeatState
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 		#end
 
+		curStage = SONG.stage;
+		
 		if (SONG.stage == null)
 		{
-			switch (SONG.song) //too lazy to edit all the charts
+			switch (SONG.song.toLowerCase()) //too lazy to edit all the charts
 			{
 				case 'spookeez' | 'monster' | 'south':
 					curStage = 'spooky';
@@ -296,9 +300,7 @@ class PlayState extends MusicBeatState
 			SONG.girlfriend = 'gf';
 		}
 
-		curStage = SONG.stage;
-
-		switch (SONG.stage)
+		switch (curStage)
 		{
 			case 'spooky':
 				{
@@ -637,6 +639,25 @@ class PlayState extends MusicBeatState
 		}
 
 		var gfVersion:String = SONG.girlfriend;
+
+		trace(gfVersion);
+
+		if (gfVersion == null)
+		{
+			switch (curStage)
+			{
+				case 'limo':
+					gfVersion = 'gf-car';
+				case 'mall' | 'mallEvil':
+					gfVersion = 'gf-christmas';
+				case 'school':
+					gfVersion = 'gf-pixel';
+				case 'schoolEvil':
+					gfVersion = 'gf-pixel';
+				default:
+					gfVersion = 'gf';
+			}
+		}
 
 		gf = createCharacter(400, 130, gfVersion);
 		gf.scrollFactor.set(0.95, 0.95);
@@ -1285,7 +1306,7 @@ class PlayState extends MusicBeatState
 				+ (4 * i)
 				+ (i - 1), RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8),
 				Std.int((healthBarBG.height - 8) / barcount)
-				+ 1, this, 'health', 0, 2);
+				+ 1, this, 'healthSmoothed', 0, 2);
 			healthBar.visible = false;
 			healthBar.scrollFactor.set();
 			if (!PlaceHolder)
@@ -1305,6 +1326,7 @@ class PlayState extends MusicBeatState
 			healthbarGroup.add(healthBar);
 
 			healthBar.cameras = [camHUD];
+			healthBar.numDivisions = Std.int(healthBarBG.width);
 			healthBar.visible = true;
 		}
 	}
@@ -1517,8 +1539,8 @@ class PlayState extends MusicBeatState
 
 		var iconOffset:Int = 26;
 
-		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
-		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
+		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthSmoothed, 0, 2, 100, 0) * 0.01) - iconOffset);
+		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthSmoothed, 0, 2, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
 
 		// TODO if the icon changes update the healthbar accordingly? maybe that should just be left to whoever is editing the code
 
@@ -1848,6 +1870,8 @@ class PlayState extends MusicBeatState
 		if (FlxG.keys.justPressed.ONE)
 			endSong();
 		#end
+
+		healthSmoothed = FlxMath.lerp(healthSmoothed,health,Math.min(elapsed * 20,1));
 	}
 
 	function endSong():Void

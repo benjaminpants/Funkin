@@ -179,6 +179,7 @@ class StoryMenuState extends MusicBeatState
 		txtTracklist.alignment = CENTER;
 		txtTracklist.font = rankText.font;
 		txtTracklist.color = 0xFFe55777;
+		txtTracklist.antialiasing = true;
 		add(txtTracklist);
 		// add(rankText);
 		add(scoreText);

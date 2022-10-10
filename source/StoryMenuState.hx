@@ -83,8 +83,6 @@ class StoryMenuState extends MusicBeatState
 
 		grpLocks = new FlxTypedGroup<FlxSprite>();
 		add(grpLocks);
-
-		trace("Line 70");
 		
 		#if desktop
 		// Updating Discord Rich Presence

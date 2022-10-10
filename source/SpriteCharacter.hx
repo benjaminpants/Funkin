@@ -39,6 +39,10 @@ class SpriteCharacter extends Character
 		return myChar.getGraphicMidpoint();
 	}
 
+	public override function getMidpoint(?point:FlxPoint):FlxPoint {
+		return myChar.getMidpoint(point);
+	}
+
 	public function new(x:Float, y:Float, ?character:String = "bf", ?isActPlayer:Bool = false)
 	{
 		super(x, y, character, isActPlayer);
@@ -554,7 +558,7 @@ class SpriteCharacter extends Character
 				animOffsets['singLEFT'] = oldrightsets;
 
 				// IF THEY HAVE MISS ANIMATIONS??
-				if (animation.getByName('singRIGHTmiss') != null)
+				if (myChar.animation.getByName('singRIGHTmiss') != null)
 				{
 					var oldmisssets = animOffsets['singRIGHTmiss'];
 					var oldMiss = myChar.animation.getByName('singRIGHTmiss').frames;

@@ -295,10 +295,6 @@ class PlayState extends MusicBeatState
 					curStage = 'stage';
 			}
 		}
-		if (SONG.girlfriend == null)
-		{
-			SONG.girlfriend = 'gf';
-		}
 
 		switch (curStage)
 		{
@@ -639,8 +635,6 @@ class PlayState extends MusicBeatState
 		}
 
 		var gfVersion:String = SONG.girlfriend;
-
-		trace(gfVersion);
 
 		if (gfVersion == null)
 		{

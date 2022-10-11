@@ -1698,13 +1698,13 @@ class PlayState extends MusicBeatState
 					{
 						var centerx = (FlxG.width / 2) - (strum.width / 2);
 						var centery = (FlxG.height / 2) - (strum.height / 2);
-						FlxTween.tween(strum, {x: centerx, y: centery, alpha: 0.2, angle: strum.ID * 90, noteAngle: strum.ID * 90, noteVisualAngle: strum.ID * 90}, 4, {ease: FlxEase.cubeInOut});
+						FlxTween.tween(strum, {x: centerx, y: centery, alpha: 0.2, angle: strum.ID * 90, noteAngle: strum.ID * 90, noteVisualAngle: strum.ID * 90}, 32, {ease: FlxEase.cubeInOut});
 					});
 					playerStrums.forEach(function(strum:StrumNote)
 					{
 						var centerx = (FlxG.width / 2) - (strum.width / 2);
 						var centery = (FlxG.height / 2) - (strum.height / 2);
-						FlxTween.tween(strum, {x: centerx, y: centery, angle: strum.ID * 90, noteAngle: strum.ID * 90, noteVisualAngle: strum.ID * 90}, 4, {ease: FlxEase.cubeInOut});
+						FlxTween.tween(strum, {x: centerx, y: centery, angle: strum.ID * 90, noteAngle: strum.ID * 90, noteVisualAngle: strum.ID * 90}, 32, {ease: FlxEase.cubeInOut});
 					});
 			}
 		}
@@ -1798,7 +1798,7 @@ class PlayState extends MusicBeatState
 				var rotateBase:FlxPoint = rotatePosition(dist,curStrum.noteAngle + 90, (downScroll ? 1 : -1));
 				var rotateOffset:FlxPoint = rotatePosition(daNote.noteOffset,curStrum.noteVisualAngle, (downScroll ? 1 : -1));
 				daNote.y = curStrum.y + rotateBase.y;
-				daNote.x = curStrum.x + rotateBase.x;
+				daNote.x = curStrum.x + (rotateBase.x * -1);
 				daNote.x += rotateOffset.x; //curStrum.noteVisualAngle;
 				daNote.y += rotateOffset.y; //curStrum.noteVisualAngle;
 

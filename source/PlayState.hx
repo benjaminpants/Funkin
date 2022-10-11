@@ -31,6 +31,7 @@ import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxPoint;
+import flixel.math.FlxAngle;
 import flixel.math.FlxRect;
 import flixel.system.FlxSound;
 import flixel.text.FlxText;
@@ -1411,6 +1412,16 @@ class PlayState extends MusicBeatState
 		vocals.play();
 	}
 
+
+	function rotatePosition(dist:Float,angle:Float,?ymult:Float = 1):FlxPoint
+	{
+		var point:FlxPoint = new FlxPoint();
+		point.y = (dist * Math.sin((angle) * FlxAngle.TO_RAD)) * ymult;
+		point.x = (dist * Math.cos((angle) * FlxAngle.TO_RAD));
+
+		return point;
+	}
+
 	private var paused:Bool = false;
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;
@@ -1677,6 +1688,27 @@ class PlayState extends MusicBeatState
 			}
 		}
 
+		if (curSong == 'Test')
+		{
+			switch (curBeat)
+			{
+				case 32:
+					camZooming = true;
+					dadStrums.forEach(function(strum:StrumNote)
+					{
+						var centerx = (FlxG.width / 2) - (strum.width / 2);
+						var centery = (FlxG.height / 2) - (strum.height / 2);
+						FlxTween.tween(strum, {x: centerx, y: centery, alpha: 0.2, angle: strum.ID * 90, noteAngle: strum.ID * 90, noteVisualAngle: strum.ID * 90}, 4, {ease: FlxEase.cubeInOut});
+					});
+					playerStrums.forEach(function(strum:StrumNote)
+					{
+						var centerx = (FlxG.width / 2) - (strum.width / 2);
+						var centery = (FlxG.height / 2) - (strum.height / 2);
+						FlxTween.tween(strum, {x: centerx, y: centery, angle: strum.ID * 90, noteAngle: strum.ID * 90, noteVisualAngle: strum.ID * 90}, 4, {ease: FlxEase.cubeInOut});
+					});
+			}
+		}
+
 		if (curSong == 'Bopeebo')
 		{
 			switch (curBeat)
@@ -1753,31 +1785,49 @@ class PlayState extends MusicBeatState
 					daNote.active = true;
 				}
 
-				var strumy:Float = strumLine.y;
-				if (daNote.MyStrum != null)
+				if (daNote.MyStrum == null)
 				{
-					strumy = daNote.MyStrum.y;
+					return;
 				}
 
-				daNote.y = (strumy + (((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal((curnotetype.scrollspeedoverride == -1 ? SONG.speed : curnotetype.scrollspeedoverride), 2))) * (downScroll ? 1 : -1)) );
+				var curStrum:StrumNote = daNote.MyStrum;
+
+				var dist:Float = (((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal((curnotetype.scrollspeedoverride == -1 ? SONG.speed : curnotetype.scrollspeedoverride), 2))));
+
+
+				var rotateBase:FlxPoint = rotatePosition(dist,curStrum.noteAngle + 90, (downScroll ? 1 : -1));
+				var rotateOffset:FlxPoint = rotatePosition(daNote.noteOffset,curStrum.noteVisualAngle, (downScroll ? 1 : -1));
+				daNote.y = curStrum.y + rotateBase.y;
+				daNote.x = curStrum.x + rotateBase.x;
+				daNote.x += rotateOffset.x; //curStrum.noteVisualAngle;
+				daNote.y += rotateOffset.y; //curStrum.noteVisualAngle;
 
 				if (daNote.isSustainNote && downScroll && daNote.animation != null)
 				{
 					if (daNote.animation.curAnim.name.endsWith('end'))
 					{
-						daNote.y += (daNote.height * 2.05);
+						var rotateHehe:FlxPoint = rotatePosition((daNote.height * 2.05),curStrum.noteVisualAngle + 90, (downScroll ? 1 : -1));
+						daNote.x += rotateHehe.x;
+						daNote.y += rotateHehe.y;
 					}
 				}
 
 				if (daNote.isSustainNote && daNote.wasGoodHit)
 				{
-					if (!downScroll)
+					if (curStrum.noteAngle == 0)
 					{
-						daNote.clipRect = new FlxRect(0, strumy + (Note.swagWidth / 2 - daNote.y), daNote.width * 2, FlxG.height);
+						if (!downScroll)
+						{
+							daNote.clipRect = new FlxRect(0, curStrum.y + (Note.swagWidth / 2 - daNote.y), daNote.width * 2, FlxG.height);
+						}
+						else
+						{
+							daNote.clipRect = new FlxRect(0, (-curStrum.y) + (daNote.y + (Note.swagWidth / 2)), FlxG.height, FlxG.height);
+						}
 					}
 					else
 					{
-						daNote.clipRect = new FlxRect(0, (-strumy) + (daNote.y + (Note.swagWidth / 2)), FlxG.height, FlxG.height);
+						daNote.visible = false;
 					}
 				}
 

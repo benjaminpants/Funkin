@@ -6,6 +6,12 @@ class StrumNote extends FlxSprite
 {
 	public var baseX:Float;
 	public var playerStrum:Bool;
+
+    public var noteAngle:Float;
+
+    public var noteVisualAngle:Float;
+
+
     public function new(x:Float, y:Float, type:String, strumID:Int, playerStrum:Bool)
     {
         super(x, y);

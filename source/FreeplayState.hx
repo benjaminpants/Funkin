@@ -87,6 +87,7 @@ class FreeplayState extends MusicBeatState
 		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
 		// scoreText.autoSize = false;
 		scoreText.setFormat(Paths.font("phantomuff.ttf"), 32, FlxColor.WHITE, RIGHT);
+		scoreText.antialiasing = true;
 		// scoreText.alignment = RIGHT;
 
 		var scoreBG:FlxSprite = new FlxSprite(scoreText.x - 6, 0).makeGraphic(Std.int(FlxG.width * 0.35), 66, 0xFF000000);
@@ -95,6 +96,7 @@ class FreeplayState extends MusicBeatState
 
 		diffText = new FlxText(scoreText.x, scoreText.y + 36, 0, "", 24);
 		diffText.font = scoreText.font;
+		diffText.antialiasing = true;
 		add(diffText);
 
 		add(scoreText);

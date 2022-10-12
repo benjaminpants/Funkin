@@ -1417,7 +1417,7 @@ class PlayState extends MusicBeatState
 	{
 		var point:FlxPoint = new FlxPoint();
 		point.y = (dist * Math.sin((angle) * FlxAngle.TO_RAD)) * ymult;
-		point.x = (dist * Math.cos((angle) * FlxAngle.TO_RAD));
+		point.x = (dist * Math.cos((angle) * FlxAngle.TO_RAD)) * -1;
 
 		return point;
 	}
@@ -1796,9 +1796,9 @@ class PlayState extends MusicBeatState
 
 
 				var rotateBase:FlxPoint = rotatePosition(dist,curStrum.noteAngle + 90, (downScroll ? 1 : -1));
-				var rotateOffset:FlxPoint = rotatePosition(daNote.noteOffset,curStrum.noteVisualAngle, (downScroll ? 1 : -1));
+				var rotateOffset:FlxPoint = rotatePosition(daNote.noteOffset * -1,curStrum.noteVisualAngle, (downScroll ? 1 : -1));
 				daNote.y = curStrum.y + rotateBase.y;
-				daNote.x = curStrum.x + (rotateBase.x * -1);
+				daNote.x = curStrum.x + rotateBase.x;
 				daNote.x += rotateOffset.x; //curStrum.noteVisualAngle;
 				daNote.y += rotateOffset.y; //curStrum.noteVisualAngle;
 

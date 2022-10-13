@@ -98,6 +98,8 @@ class Config
         interp.variables.set("FlxTween",FlxTween);
         interp.variables.set("Note",Note);
         interp.variables.set("StrumNote",StrumNote);
+        interp.variables.set("FlxG",FlxG);
+        interp.variables.set("FlxColor",FlxColor);
     }
 
     public static function FindCommonSharedDifficulties(songs:Array<SongMetadata>):Array<Difficulty>

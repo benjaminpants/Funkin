@@ -214,9 +214,18 @@ class PlayState extends MusicBeatState
 
 		KeyAmount = (SONG.keys > 0 ? SONG.keys : 4); // just incase
 
-		var script = hscriptParser.parseString(Assets.getText(Paths.hx(SONG.song.toLowerCase() + '/script')));
+		var scriptPath:String = Paths.hx(SONG.song.toLowerCase() + '/script');
 
-		hscriptInterp.execute(script);
+		#if desktop
+		if (FileSystem.exists(scriptPath))
+		{
+
+			var script = hscriptParser.parseString(Assets.getText(scriptPath));
+
+			hscriptInterp.execute(script);
+
+		}
+		#end
 
 		// no more dialogue for html builds someone fix this please
 		#if desktop

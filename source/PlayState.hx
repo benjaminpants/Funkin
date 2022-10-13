@@ -2534,6 +2534,7 @@ class PlayState extends MusicBeatState
 		{
 			// dad.dance();
 		}
+		CallFunction("stepHit");
 	}
 
 	var lightningStrikeBeat:Int = 0;

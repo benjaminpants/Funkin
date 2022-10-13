@@ -24,6 +24,11 @@ function beatHit()
 	}
 }
 
+function stepHit()
+{
+	ps.gf.playAnim("cheer",true);
+}
+
 
 function songStarted()
 {

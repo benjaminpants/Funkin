@@ -1352,7 +1352,6 @@ class PlayState extends MusicBeatState
 			healthBar.scrollFactor.set();
 			if (!PlaceHolder)
 			{
-				trace((barcount - i) - 1);
 				var p2_color = iconP2.GetIconColor((barcount - i));
 				var p1_color = iconP1.GetIconColor((barcount - i));
 				p1_color.alpha = 255;

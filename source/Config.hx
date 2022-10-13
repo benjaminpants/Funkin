@@ -1,3 +1,4 @@
+import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.tweens.FlxTween;
 import haxe.Exception;
 import NoteType;
@@ -42,7 +43,7 @@ class Config
 
 
 
-    //below is stuff that is handled at runtime. dont change anything here unless you have to.
+    //below is stuff that i probably shouldn't put in this object but i did anyway
     public static var Songs:Array<SongMetadata> = [];
     public static var Weeks:Array<WeekMetadata> = [];
 
@@ -99,7 +100,20 @@ class Config
         interp.variables.set("Note",Note);
         interp.variables.set("StrumNote",StrumNote);
         interp.variables.set("FlxG",FlxG);
-        interp.variables.set("FlxColor",FlxColor);
+    }
+
+    public static function CallFunction(interp:Interp, funcName:String, ?args:Array<Dynamic>):Dynamic
+    {
+        var output:Dynamic = null;
+        try
+        {
+            output = interp.variables.get(funcName)(args);
+        }
+        catch(e)
+        {
+
+        }
+        return output;
     }
 
     public static function FindCommonSharedDifficulties(songs:Array<SongMetadata>):Array<Difficulty>

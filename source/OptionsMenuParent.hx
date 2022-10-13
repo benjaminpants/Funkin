@@ -1,6 +1,8 @@
 package;
 
+#if polymod
 import polymod.format.ParseRules.TextFileFormat;
+#end
 import GameplayOptionsSubState.GameplayOptionsSubState;
 import flixel.tweens.FlxTween;
 import flixel.tweens.FlxEase;

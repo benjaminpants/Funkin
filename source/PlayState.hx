@@ -1,6 +1,10 @@
 package;
 
+#if hscript
 import hscript.Parser;
+import hscript.Interp;
+import hscript.Expr;
+#end
 import Config.Difficulty;
 import flixel.group.FlxGroup;
 import flixel.graphics.frames.FlxImageFrame;
@@ -8,7 +12,9 @@ import NoteType.NoteTypeBase;
 #if desktop
 import Discord.DiscordClient;
 import sys.FileSystem;
+#if polymod
 import polymod.fs.SysFileSystem;
+#end
 #end
 import Section.SwagSection;
 import Song.SwagSong;
@@ -49,7 +55,6 @@ import lime.utils.Assets;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
-import hscript.Interp;
 
 using StringTools;
 
@@ -65,6 +70,7 @@ class PlayState extends MusicBeatState
 
 	public var hscriptParser:Parser;
 	public var hscriptInterp:Interp;
+	public var hscriptCurScript:Expr;
 
 	var halloweenLevel:Bool = false;
 
@@ -97,6 +103,8 @@ class PlayState extends MusicBeatState
 	private var gfSpeed:Int = 1;
 
 	public var health:Float = 1;
+
+	public var hasScript:Bool = false;
 
 	public var healthSmoothed:Float = 1;
 
@@ -179,6 +187,19 @@ class PlayState extends MusicBeatState
 		}
 	}
 
+	public function CallFunction(funcName:String, ?args:Array<Dynamic>, ?script:Expr):Dynamic
+	{
+		if (script == null) 
+		{
+			script = hscriptCurScript;
+		}
+		if (script == null)
+		{
+			return null;
+		}
+		return Config.CallFunction(hscriptInterp,funcName,args);
+	}
+
 	override public function create()
 	{
 		thisState = this;
@@ -220,9 +241,9 @@ class PlayState extends MusicBeatState
 		if (FileSystem.exists(scriptPath))
 		{
 
-			var script = hscriptParser.parseString(Assets.getText(scriptPath));
+			hscriptCurScript = hscriptParser.parseString(Assets.getText(scriptPath));
 
-			hscriptInterp.execute(script);
+			hscriptInterp.execute(hscriptCurScript);
 
 		}
 		#end
@@ -925,6 +946,8 @@ class PlayState extends MusicBeatState
 		}
 
 		super.create();
+
+		CallFunction("create");
 	}
 
 	function schoolIntro(?dialogueBox:DialogueBox):Void
@@ -1149,6 +1172,8 @@ class PlayState extends MusicBeatState
 		// Updating Discord Rich Presence (with Time Left)
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC, true, songLength);
 		#end
+
+		CallFunction("songStarted");
 	}
 
 	var debugNum:Int = 0;

@@ -341,7 +341,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		switch (curStage)
+		switch (curStage) //ONE DAY, THIS SHALL BE GONE
 		{
 			case 'spooky':
 				{

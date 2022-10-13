@@ -70,6 +70,8 @@ class PlayState extends MusicBeatState
 
 	public var hscriptParser:Parser;
 
+	public var elapsedTime:Float;
+
 	public var Scripts:Array<Script> = [];
 
 	var halloweenLevel:Bool = false;
@@ -1473,6 +1475,8 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
+
+		elapsedTime += elapsed;
 		#if !debug
 		perfectMode = false;
 		#end
@@ -1940,6 +1944,7 @@ class PlayState extends MusicBeatState
 		#end
 
 		healthSmoothed = FlxMath.lerp(healthSmoothed,health,Math.min(elapsed * 20,1));
+		CallFunction("update",[elapsed]);
 	}
 
 	function endSong():Void

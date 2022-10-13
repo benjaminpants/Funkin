@@ -5,6 +5,16 @@ var ps = PlayState.thisState;
 
 var funny = 0.5;
 
+function create()
+{
+	trace("yipee");
+}
+
+function update(elapsed)
+{
+	ps.boyfriend.y -= Math.sin(ps.elapsedTime);
+}
+
 function beatHit()
 {
 	if (ps.curBeat % 4)

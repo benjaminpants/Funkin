@@ -207,6 +207,10 @@ class PlayState extends MusicBeatState
 		hscriptParser.allowTypes = true;
 		hscriptParser.allowJSON = true;
 		hscriptInterp = new Interp();
+		hscriptInterp.errorHandler = function(e:hscript.Error)
+		{
+			trace(e);
+		}
 		downScroll = FlxG.save.data.downscroll;
 
 		Config.AllowInterpStuff(hscriptInterp);
@@ -1824,7 +1828,7 @@ class PlayState extends MusicBeatState
 
 
 				var rotateBase:FlxPoint = rotatePosition(dist,curStrum.noteAngle + 90, (downScroll ? 1 : -1));
-				var rotateOffset:FlxPoint = rotatePosition(daNote.noteOffset * -1,curStrum.noteVisualAngle, (downScroll ? 1 : -1));
+				var rotateOffset:FlxPoint = rotatePosition(daNote.noteOffset * -1,curStrum.noteAngle, (downScroll ? 1 : -1)); //not using visual angle for this since the trails should always be in the direction the notes are heading
 				daNote.y = curStrum.y + rotateBase.y;
 				daNote.x = curStrum.x + rotateBase.x;
 				daNote.x += rotateOffset.x; //curStrum.noteVisualAngle;

@@ -105,13 +105,14 @@ class Config
     public static function CallFunction(interp:Interp, funcName:String, ?args:Array<Dynamic>):Dynamic
     {
         var output:Dynamic = null;
+        trace(interp.variables.get(funcName));
         try
         {
             output = interp.variables.get(funcName)(args);
         }
         catch(e)
         {
-
+            trace("error!" + e.message);
         }
         return output;
     }

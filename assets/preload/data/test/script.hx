@@ -1,4 +1,3 @@
-import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.tweens.FlxTween;
 
 

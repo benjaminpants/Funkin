@@ -27,6 +27,10 @@ class Script //give every script its own interpreter so no variable conflicts!!!
 
     public function CallFunction(funcName:String, ?args:Array<Dynamic>):Dynamic
     {
+        if (hscriptInterp.variables.get(funcName) == null)
+        {
+            return null;
+        }
         var output:Dynamic = null;
         try
         {

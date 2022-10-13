@@ -9,15 +9,27 @@ import flixel.tweens.FlxTween;
 
 class Script //give every script its own interpreter so no variable conflicts!!!!
 {
+
+    public static var functionBlacklist:Map<ScriptType,Array<String>> = [
+        ScriptType.Basic => [],
+        ScriptType.Stage => ['create']
+
+
+    ];
+
+
+
     public var hscriptInterp:Interp = new Interp();
 	public var hscriptCurScript:Expr;
+    public var type:ScriptType = ScriptType.Basic;
 
-    public function new(parser:Parser, script:String)
+    public function new(parser:Parser, script:String, ?tp:ScriptType = ScriptType.Basic)
     {
         hscriptCurScript = parser.parseString(script);
         Config.AllowInterpStuff(hscriptInterp);
         hscriptInterp.errorHandler = Script.ErrorHandler;
         hscriptInterp.execute(hscriptCurScript);
+        type = tp;
     }
 
     public static function ErrorHandler(e:hscript.Error)
@@ -46,7 +58,9 @@ class Script //give every script its own interpreter so no variable conflicts!!!
 }
 
 
-
-
+enum ScriptType
+{
+    Basic; Stage; NoteScript;
+}
 
 #end

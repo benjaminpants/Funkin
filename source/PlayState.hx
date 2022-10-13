@@ -1,5 +1,6 @@
 package;
 
+import Script.ScriptType;
 #if hscript
 import hscript.Parser;
 import hscript.Interp;
@@ -74,8 +75,6 @@ class PlayState extends MusicBeatState
 
 	public var Scripts:Array<Script> = [];
 
-	var halloweenLevel:Bool = false;
-
 	private var vocals:FlxSound;
 
 	public var healthbarGroup:FlxTypedGroup<FlxBar> = new FlxTypedGroup<FlxBar>();
@@ -136,7 +135,6 @@ class PlayState extends MusicBeatState
 	var NoteAnims:Array<String> = ['LEFT', 'DOWN', 'UP', 'RIGHT'];
 
 	var halloweenBG:FlxSprite;
-	var isHalloween:Bool = false;
 
 	var phillyCityLights:FlxTypedGroup<FlxSprite>;
 	var phillyTrain:FlxSprite;
@@ -189,15 +187,18 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function CallFunction(funcName:String, ?args:Array<Dynamic>):Dynamic
+	public function CallFunction(funcName:String, ?args:Array<Dynamic>, ?ignoreBlacklist:Bool = false):Dynamic
 	{
 		#if hscript
 		for (s in Scripts)
 		{
-			var output:Dynamic = s.CallFunction(funcName,args);
-			if (output != null)
+			if (ignoreBlacklist || !Script.functionBlacklist[s.type].contains(funcName))
 			{
-				return output;
+				var output:Dynamic = s.CallFunction(funcName,args);
+				if (output != null)
+				{
+					return output;
+				}
 			}
 		}
 		#end
@@ -247,7 +248,7 @@ class PlayState extends MusicBeatState
 		}
 		#end
 
-		// no more dialogue for html builds someone fix this please
+		// fuck your html builds.
 		#if desktop
 		if (FileSystem.exists(Paths.txt(SONG.song.toLowerCase() + '/' + SONG.song.toLowerCase() + 'Dialogue')))
 		{
@@ -341,24 +342,10 @@ class PlayState extends MusicBeatState
 			}
 		}
 
+		var stagepath = Paths.extensionModText('stages/$curStage','hx');
+
 		switch (curStage) //ONE DAY, THIS SHALL BE GONE
 		{
-			case 'spooky':
-				{
-					halloweenLevel = true;
-
-					var hallowTex = Paths.getSparrowAtlas('halloween_bg');
-
-					halloweenBG = new FlxSprite(-200, -100);
-					halloweenBG.frames = hallowTex;
-					halloweenBG.animation.addByPrefix('idle', 'halloweem bg0');
-					halloweenBG.animation.addByPrefix('lightning', 'halloweem bg lightning strike', 24, false);
-					halloweenBG.animation.play('idle');
-					halloweenBG.antialiasing = true;
-					add(halloweenBG);
-
-					isHalloween = true;
-				}
 			case 'philly':
 				{
 
@@ -650,7 +637,13 @@ class PlayState extends MusicBeatState
 						add(waveSpriteFG);
 					 */
 				}
+			
 			default:
+				var stagescript = new Script(hscriptParser,Assets.getText(stagepath),ScriptType.Stage);
+				Scripts.push(stagescript);
+				stagescript.CallFunction("create");
+				
+			case 'stage':
 				{
 					defaultCamZoom = 0.9;
 					curStage = 'stage';
@@ -2510,18 +2503,6 @@ class PlayState extends MusicBeatState
 		startedMoving = false;
 	}
 
-	function lightningStrikeShit():Void
-	{
-		FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
-		halloweenBG.animation.play('lightning');
-
-		lightningStrikeBeat = curBeat;
-		lightningOffset = FlxG.random.int(8, 24);
-
-		boyfriend.playAnim('scared', true);
-		gf.playAnim('scared', true);
-	}
-
 	override function stepHit()
 	{
 		super.stepHit();
@@ -2536,9 +2517,6 @@ class PlayState extends MusicBeatState
 		}
 		CallFunction("stepHit");
 	}
-
-	var lightningStrikeBeat:Int = 0;
-	var lightningOffset:Int = 8;
 
 	override function beatHit()
 	{
@@ -2648,10 +2626,6 @@ class PlayState extends MusicBeatState
 				}
 		}
 
-		if (isHalloween && FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset)
-		{
-			lightningStrikeShit();
-		}
 		CallFunction('beatHit');
 	}
 

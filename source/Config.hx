@@ -12,6 +12,7 @@ import haxe.Json;
 import lime.utils.Assets;
 import hscript.Interp;
 import hscript.Parser;
+import flixel.FlxSprite;
 
 
 class Config
@@ -103,6 +104,9 @@ class Config
         interp.variables.set("Note",Note);
         interp.variables.set("StrumNote",StrumNote);
         interp.variables.set("FlxG",FlxG);
+        interp.variables.set("Paths",Paths);
+        interp.variables.set("CoolUtil",CoolUtil);
+        interp.variables.set("FlxSprite",FlxSprite);
     }
 
     public static function FindCommonSharedDifficulties(songs:Array<SongMetadata>):Array<Difficulty>

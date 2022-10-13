@@ -1,5 +1,6 @@
 package;
 
+import hscript.Parser;
 import Config.Difficulty;
 import flixel.group.FlxGroup;
 import flixel.graphics.frames.FlxImageFrame;
@@ -48,6 +49,7 @@ import lime.utils.Assets;
 import openfl.display.BlendMode;
 import openfl.display.StageQuality;
 import openfl.filters.ShaderFilter;
+import hscript.Interp;
 
 using StringTools;
 
@@ -60,6 +62,9 @@ class PlayState extends MusicBeatState
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Difficulty;
 	public static var thisState:PlayState;
+
+	public var hscriptParser:Parser;
+	public var hscriptInterp:Interp;
 
 	var halloweenLevel:Bool = false;
 
@@ -177,7 +182,13 @@ class PlayState extends MusicBeatState
 	override public function create()
 	{
 		thisState = this;
+		hscriptParser = new Parser();
+		hscriptParser.allowTypes = true;
+		hscriptParser.allowJSON = true;
+		hscriptInterp = new Interp();
 		downScroll = FlxG.save.data.downscroll;
+
+		Config.AllowInterpStuff(hscriptInterp);
 
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
@@ -202,6 +213,10 @@ class PlayState extends MusicBeatState
 		Conductor.changeBPM(SONG.bpm);
 
 		KeyAmount = (SONG.keys > 0 ? SONG.keys : 4); // just incase
+
+		var script = hscriptParser.parseString(Assets.getText(Paths.hx(SONG.song.toLowerCase() + '/script')));
+
+		hscriptInterp.execute(script);
 
 		// no more dialogue for html builds someone fix this please
 		#if desktop
@@ -1685,27 +1700,6 @@ class PlayState extends MusicBeatState
 				case 163:
 					// FlxG.sound.music.stop();
 					// FlxG.switchState(new TitleState());
-			}
-		}
-
-		if (curSong == 'Test')
-		{
-			switch (curBeat)
-			{
-				case 32:
-					camZooming = true;
-					dadStrums.forEach(function(strum:StrumNote)
-					{
-						var centerx = (FlxG.width / 2) - (strum.width / 2);
-						var centery = (FlxG.height / 2) - (strum.height / 2);
-						FlxTween.tween(strum, {x: centerx, y: centery, alpha: 0.2, angle: strum.ID * 90, noteAngle: strum.ID * 90, noteVisualAngle: strum.ID * 90}, 32, {ease: FlxEase.cubeInOut});
-					});
-					playerStrums.forEach(function(strum:StrumNote)
-					{
-						var centerx = (FlxG.width / 2) - (strum.width / 2);
-						var centery = (FlxG.height / 2) - (strum.height / 2);
-						FlxTween.tween(strum, {x: centerx, y: centery, angle: strum.ID * 90, noteAngle: strum.ID * 90, noteVisualAngle: strum.ID * 90}, 32, {ease: FlxEase.cubeInOut});
-					});
 			}
 		}
 

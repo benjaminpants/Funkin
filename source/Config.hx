@@ -1,12 +1,16 @@
+import flixel.tweens.FlxTween;
 import haxe.Exception;
 import NoteType;
 import lime.system.System;
 import flixel.system.debug.log.Log;
+import flixel.tweens.FlxEase;
 import flixel.FlxG;
 import DialogueCharacter;
 import flixel.util.FlxColor;
 import haxe.Json;
 import lime.utils.Assets;
+import hscript.Interp;
+import hscript.Parser;
 
 
 class Config
@@ -82,6 +86,18 @@ class Config
             swagWeek.difficulties = FindCommonSharedDifficulties(songs);
             Weeks.push(swagWeek);
         }
+    }
+
+    public static function AllowInterpStuff(interp:Interp)
+    {
+        interp.variables.set("Math",Math);
+        //interp.variables.set("Config",Config); //nevermind dont do this this is DANGEROUS
+        interp.variables.set("PlayState",PlayState);
+        interp.variables.set("PauseSubState",PauseSubState);
+        interp.variables.set("FlxEase",FlxEase);
+        interp.variables.set("FlxTween",FlxTween);
+        interp.variables.set("Note",Note);
+        interp.variables.set("StrumNote",StrumNote);
     }
 
     public static function FindCommonSharedDifficulties(songs:Array<SongMetadata>):Array<Difficulty>

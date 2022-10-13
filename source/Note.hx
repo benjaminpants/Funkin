@@ -80,7 +80,7 @@ class Note extends FlxSprite
 	public function GoToStrum(strum:StrumNote)
 	{
 		//x = strum.x + noteOffset;
-		angle = strum.noteVisualAngle; //handle this here for now
+		angle = isSustainNote ? strum.noteAngle : strum.noteVisualAngle; //handle this here for now
 		alpha = strum.alpha * alphaMult;
 	}
 

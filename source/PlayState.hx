@@ -69,8 +69,8 @@ class PlayState extends MusicBeatState
 	public static var thisState:PlayState;
 
 	public var hscriptParser:Parser;
-	public var hscriptInterp:Interp;
-	public var hscriptCurScript:Expr;
+
+	public var Scripts:Array<Script> = [];
 
 	var halloweenLevel:Bool = false;
 
@@ -187,17 +187,19 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function CallFunction(funcName:String, ?args:Array<Dynamic>, ?script:Expr):Dynamic
+	public function CallFunction(funcName:String, ?args:Array<Dynamic>):Dynamic
 	{
-		if (script == null) 
+		#if hscript
+		for (s in Scripts)
 		{
-			script = hscriptCurScript;
+			var output:Dynamic = s.CallFunction(funcName,args);
+			if (output != null)
+			{
+				return output;
+			}
 		}
-		if (script == null)
-		{
-			return null;
-		}
-		return Config.CallFunction(hscriptInterp,funcName,args);
+		#end
+		return null;
 	}
 
 	override public function create()
@@ -206,14 +208,7 @@ class PlayState extends MusicBeatState
 		hscriptParser = new Parser();
 		hscriptParser.allowTypes = true;
 		hscriptParser.allowJSON = true;
-		hscriptInterp = new Interp();
-		hscriptInterp.errorHandler = function(e:hscript.Error)
-		{
-			trace(e);
-		}
 		downScroll = FlxG.save.data.downscroll;
-
-		Config.AllowInterpStuff(hscriptInterp);
 
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
@@ -245,9 +240,7 @@ class PlayState extends MusicBeatState
 		if (FileSystem.exists(scriptPath))
 		{
 
-			hscriptCurScript = hscriptParser.parseString(Assets.getText(scriptPath));
-
-			hscriptInterp.execute(hscriptCurScript);
+			Scripts.push(new Script(hscriptParser,Assets.getText(scriptPath)));
 
 		}
 		#end

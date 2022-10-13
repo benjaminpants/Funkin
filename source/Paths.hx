@@ -1,6 +1,7 @@
 package;
 
 import flixel.FlxG;
+import sys.FileSystem;
 import flixel.graphics.frames.FlxAtlasFrames;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
@@ -11,9 +12,61 @@ class Paths
 
 	static var currentLevel:String;
 
+	public static var foundModsPath:Array<String>;
+
 	static public function setCurrentLevel(name:String)
 	{
 		currentLevel = name.toLowerCase();
+	}
+	
+	inline static public function mods(key:String = "") 
+	{
+		return 'mods/' + key;
+	}
+	static public function getModDirectories():Array<String> 
+	{
+		var foundMods:Array<String> = [];
+		var modsFolder:String = mods();
+		if(FileSystem.exists(modsFolder)) 
+		{
+			for (folder in FileSystem.readDirectory(modsFolder))
+			{
+				var path = haxe.io.Path.join([modsFolder, folder]);
+				if (FileSystem.isDirectory(path))
+				{
+					foundMods.push(folder);
+				}
+			}
+		}
+
+		return foundMods;
+	}
+
+	static function getfromMod(file:String)
+	{
+		for (p in foundModsPath)
+		{
+			if (FileSystem.exists(p + '/assets/$file'))
+			{
+				return p + '/assets/$file';
+			}
+		}
+		return 'assets/$file';
+	}
+
+	static function getAllModFiles(file:String, includeBase:Bool):Array<String>
+	{
+		var allFiles:Array<String> = [];
+
+		for (p in foundModsPath)
+		{
+			if (FileSystem.exists(p + '/assets/$file'))
+			{
+				allFiles.push(p + '/assets/$file');
+			}
+		}
+
+		return allFiles;
 	}
 
 	static function getPath(file:String, type:AssetType, library:Null<String>)
@@ -78,6 +131,19 @@ class Paths
 		return getPath('data/$key.json', TEXT, library);
 	}
 
+	static public function firstModWithFile(path:String, assetType:AssetType, ?library:String)
+	{
+		for (mpath in Paths.foundModsPath)
+		{
+			var pot_path:String = haxe.io.Path.join([mods(mpath),"assets",path]);
+			if (FileSystem.exists(pot_path))
+			{
+				return pot_path;
+			}
+		}
+		return getPath(path, TEXT, library);
+	}
+
 	static public function sound(key:String, ?library:String)
 	{
 		return getPath('sounds/$key.$SOUND_EXT', SOUND, library);
@@ -121,5 +187,16 @@ class Paths
 	inline static public function getPackerAtlas(key:String, ?library:String)
 	{
 		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), file('images/$key.txt', library));
+	}
+
+
+	inline static public function jsonMod(key:String, ?library:String)
+	{
+		return firstModWithFile('data/$key.json',TEXT,library);
+	}
+
+	inline static public function extensionModText(key:String, extension:String, ?library:String)
+	{
+		return firstModWithFile('data/$key.$extension',TEXT,library);
 	}
 }

@@ -51,8 +51,11 @@ class Config
 
     public static function LoadInitialData()
     {
+
+        Paths.foundModsPath = Paths.getModDirectories();
+        
         //load the master color scheme file
-        var initColors = CoolUtil.coolTextFile(Paths.txt('masterColors'));
+        var initColors = CoolUtil.coolTextFileWithMods(Paths.txt('masterColors'));
 
         
         for (i in 0...initColors.length)
@@ -63,7 +66,7 @@ class Config
         }
 
         //song list and weeks
-        var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
+        var initSonglist = CoolUtil.coolTextFileWithMods(Paths.txt('freeplaySonglist'));
 
 		for (i in 0...initSonglist.length)
 		{
@@ -71,11 +74,11 @@ class Config
 			Songs.push(new SongMetadata(splitstring[0], Std.parseInt(splitstring[1]), splitstring[2],getDifficulties(splitstring[0])));
 		}
 
-        var initWeeklist = CoolUtil.coolTextFile(Paths.txt('weekList')); //todo: OBSOLETE THIS STUPID FILE!!!!!
+        var initWeeklist = CoolUtil.coolTextFileWithMods(Paths.txt('weekList')); //todo: OBSOLETE THIS STUPID FILE!!!!!
 
         for (i in 0...initWeeklist.length)
         {
-            var rawJson:String = Assets.getText(Paths.json('weeks/' + initWeeklist[i].toLowerCase()));
+            var rawJson:String = Assets.getText(Paths.jsonMod('weeks/' + initWeeklist[i].toLowerCase()));
             var swagWeek:WeekMetadata = Json.parse(rawJson);
             trace("Adding:" + swagWeek.weekTitle);
             swagWeek.difficulties = new Array<Difficulty>(); //ignore anyones attempts to manually add in difficulties, and properly define the variable in the case they dont try breakign things.
@@ -154,7 +157,7 @@ class Config
 
     public static function getDifficulties(songname:String):Array<Difficulty>
     {
-        var difficultiesFile = CoolUtil.coolTextFile(Paths.txt(songname.toLowerCase() + '/' + "difficulties"));
+        var difficultiesFile = CoolUtil.coolTextFileWithMods(Paths.txt(songname.toLowerCase() + '/' + "difficulties"));
 
         var difficulties:Array<Difficulty> = new Array<Difficulty>();
 

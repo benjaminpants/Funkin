@@ -17,4 +17,3 @@ Winter-Horrorland,5,monster-christmas
 Senpai,6,senpai
 Roses,6,senpai
 Thorns,6,spirit
-Test,1,bf-pixel

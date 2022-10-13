@@ -160,7 +160,7 @@ class PlayState extends MusicBeatState
 
 	public static var campaignScore:Int = 0;
 
-	var defaultCamZoom:Float = 1.05;
+	public var defaultCamZoom:Float = 1.05;
 
 	// how big to stretch the pixel art assets
 	public static var daPixelZoom:Float = 6;
@@ -234,7 +234,7 @@ class PlayState extends MusicBeatState
 
 		KeyAmount = (SONG.keys > 0 ? SONG.keys : 4); // just incase
 
-		var scriptPath:String = Paths.hx(SONG.song.toLowerCase() + '/script');
+		var scriptPath:String = Paths.extensionModText(SONG.song.toLowerCase() + '/script','hx');
 
 		#if desktop
 		if (FileSystem.exists(scriptPath))
@@ -2052,15 +2052,15 @@ class PlayState extends MusicBeatState
 
 		var daRating:String = "sick";
 
-		if (noteDiff > Conductor.safeZoneOffset * 0.75)
-		{
-			daRating = 'bad';
-			score = 100;
-		}
-		else if (noteDiff > Conductor.safeZoneOffset * 0.2)
+		if (noteDiff > Conductor.safeZoneOffset * 0.2)
 		{
 			daRating = 'good';
 			score = 200;
+		}
+		else if (noteDiff > Conductor.safeZoneOffset * 0.75)
+		{
+			daRating = 'bad';
+			score = 100;
 		}
 		else if (noteDiff > Conductor.safeZoneOffset * 0.9)
 		{
@@ -2362,7 +2362,7 @@ class PlayState extends MusicBeatState
 			}
 			else
 			{
-				songScore -= 10;
+				songScore -= 100;
 				health -= 0.0475;
 				misses += 1;
 				hitpercentages.insert(0, 0);
@@ -2646,6 +2646,7 @@ class PlayState extends MusicBeatState
 		{
 			lightningStrikeShit();
 		}
+		CallFunction('beatHit');
 	}
 
 	var curLight:Int = 0;

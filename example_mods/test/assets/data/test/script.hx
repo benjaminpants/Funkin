@@ -3,7 +3,16 @@ import flixel.tweens.FlxTween;
 
 var ps = PlayState.thisState;
 
+var funny = 0.5;
 
+function beatHit()
+{
+	if (ps.curBeat % 4)
+	{
+		ps.defaultCamZoom += funny;
+		funny *= -1;
+	}
+}
 
 
 function songStarted()

@@ -131,7 +131,7 @@ class Paths
 		return getPath('data/$key.json', TEXT, library);
 	}
 
-	static public function firstModWithFile(path:String, assetType:AssetType, ?library:String)
+	static public function firstModWithFile(path:String, assetType:AssetType, ?library:String, ?extensionIfVanilla:String = '')
 	{
 		for (mpath in Paths.foundModsPath)
 		{
@@ -141,7 +141,7 @@ class Paths
 				return pot_path;
 			}
 		}
-		return getPath(path, TEXT, library);
+		return extensionIfVanilla + getPath(path, TEXT, library);
 	}
 
 	static public function sound(key:String, ?library:String)
@@ -161,12 +161,12 @@ class Paths
 
 	inline static public function voices(song:String)
 	{
-		return 'songs:assets/songs/${song.toLowerCase()}/Voices.$SOUND_EXT';
+		return firstModWithFile('songs/${song.toLowerCase()}/Voices.$SOUND_EXT',SOUND,null,'songs:');
 	}
 
 	inline static public function inst(song:String)
 	{
-		return 'songs:assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
+		return firstModWithFile('songs/${song.toLowerCase()}/Inst.$SOUND_EXT',SOUND,null,'songs:');//'songs:assets/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
 	}
 
 	inline static public function image(key:String, ?library:String)

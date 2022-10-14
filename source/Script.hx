@@ -47,7 +47,7 @@ class Script //give every script its own interpreter so no variable conflicts!!!
     {
         var errorstring:String = "";
         #if hscriptPos
-        
+        errorstring = e.toString();
         #else
             errorstring = "Error Type:" + e.getName();
         #end

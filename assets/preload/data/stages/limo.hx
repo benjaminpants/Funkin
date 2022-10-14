@@ -1,4 +1,5 @@
 
+
 var fastCar;
 
 var grpLimoDancers;
@@ -51,6 +52,7 @@ function createBG()
 	limo.antialiasing = true;
 
 	fastCar = new FlxSprite(-300, 160).loadGraphic(Paths.image('limo/fastCarLol'));
+	CurState.add(fastCar);
 }
 
 function beatHit()
@@ -67,7 +69,6 @@ function beatHit()
 function create()
 {
 	resetFastCar();
-	CurState.add(fastCar);
 }
 
 

@@ -26,5 +26,11 @@ function createBG()
 	stageCurtains.active = false;
 
 	CurState.add(stageCurtains);
+	
+	CurState.add(CurState.gf);
+	
+	CurState.add(CurState.dad);
+
+	CurState.add(CurState.boyfriend);
 
 }

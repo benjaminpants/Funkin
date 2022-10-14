@@ -334,6 +334,34 @@ class PlayState extends MusicBeatState
 
 		var stagepath = Paths.extensionModText('stages/$curStage','hx');
 
+		var gfVersion:String = SONG.girlfriend;
+
+		if (gfVersion == null)
+		{
+			switch (curStage)
+			{
+				case 'limo':
+					gfVersion = 'gf-car';
+				case 'mall' | 'mallEvil':
+					gfVersion = 'gf-christmas';
+				case 'school':
+					gfVersion = 'gf-pixel';
+				case 'schoolEvil':
+					gfVersion = 'gf-pixel';
+				default:
+					gfVersion = 'gf';
+			}
+		}
+
+		gf = createCharacter(400, 130, gfVersion);
+		gf.scrollFactor.set(0.95, 0.95);
+
+		dad = createCharacter(100, 100, SONG.player2);
+
+		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
+
+		boyfriend = createCharacter(770, 450, SONG.player1, true);
+
 		switch (curStage) //ONE DAY, THIS SHALL BE GONE
 		{
 			case 'mall':
@@ -544,32 +572,6 @@ class PlayState extends MusicBeatState
 				stagescript.CallFunction("createBG");
 		}
 
-		var gfVersion:String = SONG.girlfriend;
-
-		if (gfVersion == null)
-		{
-			switch (curStage)
-			{
-				case 'limo':
-					gfVersion = 'gf-car';
-				case 'mall' | 'mallEvil':
-					gfVersion = 'gf-christmas';
-				case 'school':
-					gfVersion = 'gf-pixel';
-				case 'schoolEvil':
-					gfVersion = 'gf-pixel';
-				default:
-					gfVersion = 'gf';
-			}
-		}
-
-		gf = createCharacter(400, 130, gfVersion);
-		gf.scrollFactor.set(0.95, 0.95);
-
-		dad = createCharacter(100, 100, SONG.player2);
-
-		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
-
 		switch (SONG.player2)
 		{
 			case 'gf':
@@ -608,18 +610,10 @@ class PlayState extends MusicBeatState
 				camPos.set(dad.getGraphicMidpoint().x + 300, dad.getGraphicMidpoint().y);
 		}
 
-		boyfriend = createCharacter(770, 450, SONG.player1, true);
-
 		ReCalcAccuracy();
 		// REPOSITIONING PER STAGE
 		switch (curStage)
 		{
-			case 'limo':
-				boyfriend.y -= 220;
-				boyfriend.x += 260;
-
-				
-
 			case 'mall':
 				boyfriend.x += 200;
 
@@ -639,17 +633,6 @@ class PlayState extends MusicBeatState
 				gf.x += 180;
 				gf.y += 300;
 		}
-
-
-		
-		CallFunction("beforeGFSpawn");
-		add(gf);
-
-		CallFunction("beforeDADSpawn");
-		add(dad);
-
-		CallFunction("beforeBFSpawn");
-		add(boyfriend);
 
 		var doof:DialogueBox = new DialogueBox(false, dialogue);
 		// doof.x += 70;

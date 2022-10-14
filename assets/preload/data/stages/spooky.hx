@@ -16,6 +16,12 @@ function createBG()
 	halloweenBG.animation.play('idle');
 	halloweenBG.antialiasing = true;
 	CurState.add(halloweenBG);
+	
+	CurState.add(CurState.gf);
+	
+	CurState.add(CurState.dad);
+
+	CurState.add(CurState.boyfriend);
 
 }
 

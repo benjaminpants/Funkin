@@ -1,4 +1,4 @@
-
+import BackgroundDancer;
 
 var fastCar;
 
@@ -28,8 +28,8 @@ function createBG()
 
 	for (i in 0...5)
 	{
-		var dancer:BackgroundDancer = new BackgroundDancer((370 * i) + 130, bgLimo.y - 400);
-		dancer.scrollFactor.set(0.4, 0.4);
+		var dancer = new BackgroundDancer((370 * i) + 130, bgLimo.y - 400);
+		dancer.scrollFactor.set(0.4, 0.4); //WHY IS THIS CRASHING. KILL ME
 		grpLimoDancers.add(dancer);
 	}
 
@@ -53,6 +53,20 @@ function createBG()
 
 	fastCar = new FlxSprite(-300, 160).loadGraphic(Paths.image('limo/fastCarLol'));
 	CurState.add(fastCar);
+	
+	CurState.add(CurState.gf);
+
+	CurState.add(limo);
+	
+	CurState.add(CurState.dad);
+
+	CurState.add(CurState.boyfriend);
+	
+	
+	CurState.boyfriend.y -= 220;
+	CurState.boyfriend.x += 260;
+	
+	resetFastCar();
 }
 
 function beatHit()
@@ -64,17 +78,6 @@ function beatHit()
 
 	if (FlxG.random.bool(10) && fastCarCanDrive)
 		fastCarDrive();
-}
-
-function create()
-{
-	resetFastCar();
-}
-
-
-function beforeDADSpawn()
-{
-	add(limo);
 }
 
 function resetFastCar()

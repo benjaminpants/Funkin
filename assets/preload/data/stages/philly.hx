@@ -57,6 +57,13 @@ function createBG()
 	street.antialiasing = true;
 	streetBehind.antialiasing = true;
 	phillyTrain.antialiasing = true;
+	
+	
+	CurState.add(CurState.gf);
+	
+	CurState.add(CurState.dad);
+
+	CurState.add(CurState.boyfriend);
 }
 
 function update(elapsed)

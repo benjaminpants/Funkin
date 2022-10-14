@@ -14,6 +14,7 @@ import lime.utils.Assets;
 import hscript.Interp;
 import hscript.Parser;
 import flixel.FlxSprite;
+import flixel.util.FlxTimer;
 
 
 class Config
@@ -111,6 +112,7 @@ class Config
         interp.variables.set("CurState",FlxG.state);
         interp.variables.set("Std",Std);
         interp.variables.set("FlxSound",FlxSound);
+        interp.variables.set("FlxTimer",FlxTimer);
         interp.variables.set("ScriptUtils",ScriptUtils);
     }
 

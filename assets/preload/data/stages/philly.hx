@@ -11,7 +11,7 @@ var trainFinishing = false;
 var trainCooldown = 0;
 var startedMoving = false;
 
-function create()
+function createBG()
 {
 	var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.image('philly/sky'));
 	bg.scrollFactor.set(0.1, 0.1);

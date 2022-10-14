@@ -5,7 +5,7 @@ var halloweenBG;
 var lightningStrikeBeat = 0;
 var lightningOffset = 8;
 
-function create()
+function createBG()
 {
 	var hallowTex = Paths.getSparrowAtlas('halloween_bg');
 

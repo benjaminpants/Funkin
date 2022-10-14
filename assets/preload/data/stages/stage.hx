@@ -1,6 +1,6 @@
 
 
-function create()
+function createBG()
 {
 
 	CurState.defaultCamZoom = 0.9;

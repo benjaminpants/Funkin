@@ -14,7 +14,7 @@ class Script //give every script its own interpreter so no variable conflicts!!!
 
     public static var functionBlacklist:Map<ScriptType,Array<String>> = [
         ScriptType.Basic => [],
-        ScriptType.Stage => ['create']
+        ScriptType.Stage => []//['create']
 
 
     ];

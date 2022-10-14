@@ -1,7 +1,5 @@
 
 
-var ps = PlayState.thisState;
-
 var halloweenBG;
 
 var lightningStrikeBeat = 0;
@@ -17,13 +15,13 @@ function create()
 	halloweenBG.animation.addByPrefix('lightning', 'halloweem bg lightning strike', 24, false);
 	halloweenBG.animation.play('idle');
 	halloweenBG.antialiasing = true;
-	ps.add(halloweenBG);
+	CurState.add(halloweenBG);
 
 }
 
 function beatHit()
 {
-	if (FlxG.random.bool(10) && ps.curBeat > lightningStrikeBeat + lightningOffset)
+	if (FlxG.random.bool(10) && CurState.curBeat > lightningStrikeBeat + lightningOffset)
 	{
 		lightningStrikeShit();
 	}
@@ -34,9 +32,9 @@ function lightningStrikeShit()
 	FlxG.sound.play(Paths.soundRandom('thunder_', 1, 2));
 	halloweenBG.animation.play('lightning');
 
-	lightningStrikeBeat = ps.curBeat;
+	lightningStrikeBeat = CurState.curBeat;
 	lightningOffset = FlxG.random.int(8, 24);
 
-	ps.boyfriend.playAnim('scared', true);
-	ps.gf.playAnim('scared', true);
+	CurState.boyfriend.playAnim('scared', true);
+	CurState.gf.playAnim('scared', true);
 }

@@ -1,3 +1,4 @@
+import flixel.system.FlxSound;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.tweens.FlxTween;
 import haxe.Exception;
@@ -107,6 +108,10 @@ class Config
         interp.variables.set("Paths",Paths);
         interp.variables.set("CoolUtil",CoolUtil);
         interp.variables.set("FlxSprite",FlxSprite);
+        interp.variables.set("CurState",FlxG.state);
+        interp.variables.set("Std",Std);
+        interp.variables.set("FlxSound",FlxSound);
+        interp.variables.set("ScriptUtils",ScriptUtils);
     }
 
     public static function FindCommonSharedDifficulties(songs:Array<SongMetadata>):Array<Difficulty>

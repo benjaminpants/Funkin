@@ -5,6 +5,8 @@ import hscript.Interp;
 import hscript.Expr;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.tweens.FlxTween;
+import flixel.FlxG;
+import flixel.addons.transition.FlxTransitionableState;
 
 
 class Script //give every script its own interpreter so no variable conflicts!!!!
@@ -25,7 +27,16 @@ class Script //give every script its own interpreter so no variable conflicts!!!
 
     public function new(parser:Parser, script:String, ?tp:ScriptType = ScriptType.Basic)
     {
-        hscriptCurScript = parser.parseString(script);
+        try 
+        {
+            hscriptCurScript = parser.parseString(script);
+        }
+        catch(e)
+        {
+            FlxTransitionableState.skipNextTransIn = true;
+		    FlxTransitionableState.skipNextTransOut = true;
+            FlxG.switchState(new ErrorScene(e.message));
+        }
         Config.AllowInterpStuff(hscriptInterp);
         hscriptInterp.errorHandler = Script.ErrorHandler;
         hscriptInterp.execute(hscriptCurScript);
@@ -34,7 +45,15 @@ class Script //give every script its own interpreter so no variable conflicts!!!
 
     public static function ErrorHandler(e:hscript.Error)
     {
-        trace("Error with HSCRIPT!!\n" + e);
+        var errorstring:String = "";
+        #if hscriptPos
+        
+        #else
+            errorstring = "Error Type:" + e.getName();
+        #end
+        FlxTransitionableState.skipNextTransIn = true;
+		FlxTransitionableState.skipNextTransOut = true;
+        FlxG.switchState(new ErrorScene(errorstring));
     }
 
     public function CallFunction(funcName:String, ?args:Array<Dynamic>):Dynamic
@@ -50,7 +69,9 @@ class Script //give every script its own interpreter so no variable conflicts!!!
         }
         catch(e)
         {
-            trace("error!" + e.message);
+            FlxTransitionableState.skipNextTransIn = true;
+            FlxTransitionableState.skipNextTransOut = true;
+            FlxG.switchState(new ErrorScene(e.message));
         }
         return output;
     }

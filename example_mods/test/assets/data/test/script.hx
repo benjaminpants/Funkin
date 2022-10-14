@@ -13,6 +13,11 @@ function create()
 function update(elapsed)
 {
 	ps.boyfriend.y -= Math.sin(ps.elapsedTime);
+	
+	if (FlxG.keys.justPressed.ZERO)
+	{
+		fart = fart + 1; //crash the game on purpose.
+	}
 }
 
 function beatHit()

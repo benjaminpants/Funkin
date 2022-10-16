@@ -1,5 +1,3 @@
-import BackgroundDancer;
-
 var fastCar;
 
 var grpLimoDancers;

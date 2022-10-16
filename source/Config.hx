@@ -114,6 +114,10 @@ class Config
         interp.variables.set("FlxSound",FlxSound);
         interp.variables.set("FlxTimer",FlxTimer);
         interp.variables.set("ScriptUtils",ScriptUtils);
+
+        //stupid
+        interp.variables.set("BackgroundDancer",BackgroundDancer);
+        interp.variables.set("BackgroundGirls",BackgroundGirls);
     }
 
     public static function FindCommonSharedDifficulties(songs:Array<SongMetadata>):Array<Difficulty>

@@ -27,7 +27,7 @@ function createBG()
 	for (i in 0...5)
 	{
 		var dancer = new BackgroundDancer((370 * i) + 130, bgLimo.y - 400);
-		dancer.scrollFactor.set(0.4, 0.4); //WHY IS THIS CRASHING. KILL ME
+		dancer.scrollFactor.set(0.4, 0.4);
 		grpLimoDancers.add(dancer);
 	}
 

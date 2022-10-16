@@ -24,13 +24,12 @@ function createBG()
 	stageCurtains.antialiasing = true;
 	stageCurtains.scrollFactor.set(1.3, 1.3);
 	stageCurtains.active = false;
+	
+	//add these idiots before the curtains.
+	CurState.add(CurState.gf);
+	CurState.add(CurState.dad);
+	CurState.add(CurState.boyfriend);
 
 	CurState.add(stageCurtains);
 	
-	CurState.add(CurState.gf);
-	
-	CurState.add(CurState.dad);
-
-	CurState.add(CurState.boyfriend);
-
 }

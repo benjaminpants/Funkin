@@ -44,8 +44,6 @@ class Config
 
 
 
-
-
     //below is stuff that i probably shouldn't put in this object but i did anyway
     public static var Songs:Array<SongMetadata> = [];
     public static var Weeks:Array<WeekMetadata> = [];

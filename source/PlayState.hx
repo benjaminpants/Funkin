@@ -1088,6 +1088,7 @@ class PlayState extends MusicBeatState
 		return point;
 	}
 
+
 	private var paused:Bool = false;
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;

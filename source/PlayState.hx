@@ -69,8 +69,6 @@ class PlayState extends MusicBeatState
 	public static var storyDifficulty:Difficulty;
 	public static var thisState:PlayState;
 
-	public var hscriptParser:Parser;
-
 	public var elapsedTime:Float;
 
 	public var Scripts:Array<Script> = [];
@@ -192,9 +190,6 @@ class PlayState extends MusicBeatState
 	override public function create()
 	{
 		thisState = this;
-		hscriptParser = new Parser();
-		hscriptParser.allowTypes = true;
-		hscriptParser.allowJSON = true;
 		downScroll = FlxG.save.data.downscroll;
 
 		if (FlxG.sound.music != null)
@@ -227,7 +222,7 @@ class PlayState extends MusicBeatState
 		if (FileSystem.exists(scriptPath))
 		{
 
-			Scripts.push(new Script(hscriptParser,Assets.getText(scriptPath)));
+			Scripts.push(new Script(Main.hscriptParser,Assets.getText(scriptPath)));
 
 		}
 		#end
@@ -359,7 +354,7 @@ class PlayState extends MusicBeatState
 		switch (curStage) //ONE DAY, THIS SHALL BE GONE
 		{
 			default:
-				var stagescript = new Script(hscriptParser,Assets.getText(stagepath),ScriptType.Stage);
+				var stagescript = new Script(Main.hscriptParser,Assets.getText(stagepath),ScriptType.Stage);
 				Scripts.push(stagescript);
 				stagescript.CallFunction("createBG");
 		}

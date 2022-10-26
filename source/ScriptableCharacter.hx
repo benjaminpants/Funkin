@@ -7,6 +7,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.math.FlxMath;
 import flixel.util.FlxTimer;
 import flixel.group.FlxGroup;
+import lime.utils.Assets;
 
 using StringTools;
 
@@ -41,7 +42,7 @@ class ScriptableCharacter extends Character
 
         var characterscriptpath:String = Paths.extensionModText('characters/$character/script','hx');
 
-        script = new Script(Main.hscriptParser,characterscriptpath,Script.ScriptType.Character);
+        script = new Script(Main.hscriptParser,Assets.getText(characterscriptpath),Script.ScriptType.Character);
 
         Config.AllowInterpStuff(script.hscriptInterp,this);
 

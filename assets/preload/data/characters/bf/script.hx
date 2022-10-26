@@ -1,5 +1,7 @@
 function create(x,y,character,isActPlayer)
 {
+
+	trace(this);
 	var tex = Paths.getSparrowAtlas('BOYFRIEND');
 	this.myChar.frames = tex;
 	this.myChar.animation.addByPrefix('idle', 'BF idle dance', 24, false);

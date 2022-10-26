@@ -162,6 +162,8 @@ class PlayState extends MusicBeatState
 	{
 		switch (character)
 		{
+			case 'bf':
+				return new ScriptableSpriteCharacter(xx, yy, character, isPlayer);
 			default:
 				return new SpriteCharacter(xx, yy, character, isPlayer);
 			case 'test-character':

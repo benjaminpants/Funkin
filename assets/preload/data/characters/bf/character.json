@@ -1,0 +1,6 @@
+{
+	"name":"bf",
+	"nativePlayer":true,
+	"inheritedClass":"ScriptableSpriteCharacter",
+	"healthBarColors":["0xFF31B0D1"]
+}

@@ -1,3 +1,5 @@
+import sys.FileSystem;
+import haxe.DynamicAccess;
 import flixel.system.FlxSound;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.tweens.FlxTween;
@@ -47,6 +49,7 @@ class Config
     //below is stuff that i probably shouldn't put in this object but i did anyway
     public static var Songs:Array<SongMetadata> = [];
     public static var Weeks:Array<WeekMetadata> = [];
+    public static var Characters:Array<CharacterMetadata> = [];
 
     public static var MasterColors:Map<String,FlxColor> = new Map<String,FlxColor>();
 
@@ -90,6 +93,21 @@ class Config
             }
             swagWeek.difficulties = FindCommonSharedDifficulties(songs);
             Weeks.push(swagWeek);
+        }
+
+        //characters
+        var initCharlist = CoolUtil.coolTextFileWithMods(Paths.txt('characterList'));
+
+        for (i in 0...initCharlist.length)
+        {
+            var path:String = Paths.jsonMod('characters/' + initCharlist[i].toLowerCase() + 'character');
+            if (FileSystem.exists(path))
+            {
+                trace("character exists:" + initCharlist[i]);
+                var characterData:String = Assets.getText(path);
+                var swagCharacter:CharacterMetadata = Json.parse(characterData);
+                Characters.push(swagCharacter);
+            }
         }
     }
 
@@ -223,6 +241,14 @@ typedef WeekMetadata =
     public var characters:Array<String>;
     public var weekTitle:String;
     public var difficulties:Array<Difficulty>;
+}
+
+typedef CharacterMetadata =
+{
+    public var name:String;
+    public var inheritedClass:String;
+    public var nativePlayer:Bool;
+    public var healthBarColors:Array<String>;
 }
 
 class Difficulty

@@ -56,8 +56,8 @@ function playAnim(AnimName, Force, Reversed, Frame)
 function dance()
 {
 	//damn it
-	/*
-	if (!this.currentAnim.startsWith('hair'))
+	
+	if (!StringTools.startsWith(this.currentAnim,"hair"))
 	{
 		this.danced = !this.danced;
 
@@ -70,5 +70,5 @@ function dance()
 			this.playAnim('danceLeft');
 		}
 	}
-	*/
+	
 }

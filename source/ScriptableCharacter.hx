@@ -60,7 +60,7 @@ class ScriptableCharacter extends Character
 
     public override function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Bool 
     {
-        return script.CallFunction("animationExists",[AnimName,Force,Reversed,Frame]);
+        return script.CallFunction("playAnim",[AnimName,Force,Reversed,Frame]);
     }
 
 }

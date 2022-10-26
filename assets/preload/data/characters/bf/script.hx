@@ -1,7 +1,5 @@
-function create(x,y,character,isActPlayer)
+function new(x,y,character,isActPlayer)
 {
-
-	trace(this);
 	var tex = Paths.getSparrowAtlas('BOYFRIEND');
 	this.myChar.frames = tex;
 	this.myChar.animation.addByPrefix('idle', 'BF idle dance', 24, false);
@@ -42,5 +40,5 @@ function create(x,y,character,isActPlayer)
 	
 	this.myChar.antialiasing = true;
 	
-	this.add(myChar)
+	this.add(this.myChar);
 }

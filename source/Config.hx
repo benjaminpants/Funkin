@@ -131,6 +131,7 @@ class Config
         interp.variables.set("FlxTimer",FlxTimer);
         interp.variables.set("ScriptUtils",ScriptUtils);
         interp.variables.set("this",me);
+        interp.variables.set("StringTools",StringTools);
 
         //stupid
         interp.variables.set("BackgroundDancer",BackgroundDancer);

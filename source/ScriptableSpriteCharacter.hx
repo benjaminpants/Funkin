@@ -180,22 +180,7 @@ class ScriptableSpriteCharacter extends ScriptableCharacter
 		else
 			myChar.offset.set(0, 0);
 
-		if (curCharacter == 'gf')
-		{
-			if (AnimName == 'singLEFT')
-			{
-				danced = true;
-			}
-			else if (AnimName == 'singRIGHT')
-			{
-				danced = false;
-			}
-
-			if (AnimName == 'singUP' || AnimName == 'singDOWN')
-			{
-				danced = !danced;
-			}
-		}
+		super.playAnim(AnimName, Force, Reversed, Frame);
 		return true;
 	}
 

@@ -1,0 +1,6 @@
+{
+	"name":"gf",
+	"nativePlayer":false,
+	"inheritedClass":"SpriteBase",
+	"healthBarColors":["0xFFA5004D"]
+}

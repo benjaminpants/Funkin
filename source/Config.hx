@@ -100,7 +100,7 @@ class Config
 
         for (i in 0...initCharlist.length)
         {
-            var path:String = Paths.jsonMod('characters/' + initCharlist[i].toLowerCase() + 'character');
+            var path:String = Paths.jsonMod('characters/' + initCharlist[i].toLowerCase() + '/character');
             if (FileSystem.exists(path))
             {
                 trace("character exists:" + initCharlist[i]);

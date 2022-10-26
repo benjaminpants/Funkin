@@ -24,6 +24,8 @@ class ScriptableSpriteCharacter extends ScriptableCharacter
 
 	public var myMetadata:CharacterMetadata;
 
+	public var singHoldTime:Float = 4;
+
 	public override function get_currentAnim() 
 	{
 		if (myChar.animation.curAnim == null)
@@ -53,6 +55,8 @@ class ScriptableSpriteCharacter extends ScriptableCharacter
 
 		myMetadata = Config.Characters.filter(f -> f.name == character)[0]; //its very bad to assume the man exists but we gotta
 
+		trace(myMetadata); //what the fuck.
+
 		myChar = new FlxSprite();
 
 		super(x, y, character, isActPlayer);
@@ -69,7 +73,7 @@ class ScriptableSpriteCharacter extends ScriptableCharacter
 			}
 
 			// Doesn't flip for BF, since his are already in the right place???
-			if (!curCharacter.startsWith('bf'))
+			if (!myMetadata.nativePlayer)
 			{
 				// var animArray
 				var oldrightsets = animOffsets['singRIGHT'];
@@ -124,29 +128,20 @@ class ScriptableSpriteCharacter extends ScriptableCharacter
 			return;
 		}
 
-		if (!curCharacter.startsWith('bf'))
+		if (!myMetadata.nativePlayer)
 		{
 			if (myChar.animation.curAnim.name.startsWith('sing'))
 			{
 				holdTimer += elapsed;
 			}
 
-			var dadVar:Float = 4;
-
-			if (curCharacter == 'dad')
-				dadVar = 6.1;
-			if (holdTimer >= Conductor.stepCrochet * dadVar * 0.001)
+			//if (curCharacter == 'dad')
+				//dadVar = 6.1;
+			if (holdTimer >= Conductor.stepCrochet * singHoldTime * 0.001)
 			{
 				dance();
 				holdTimer = 0;
 			}
-		}
-
-		switch (curCharacter)
-		{
-			case 'gf':
-				if (myChar.animation.curAnim.name == 'hairFall' && myChar.animation.curAnim.finished)
-					playAnim('danceRight');
 		}
 
 		super.update(elapsed);

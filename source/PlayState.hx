@@ -1,5 +1,6 @@
 package;
 
+import Config.CharacterMetadata;
 import Script.ScriptType;
 #if hscript
 import hscript.Parser;
@@ -163,7 +164,15 @@ class PlayState extends MusicBeatState
 		switch (character)
 		{
 			default:
-				return new ScriptableSpriteCharacter(xx, yy, character, isPlayer);
+				var metaData:CharacterMetadata = Config.Characters.filter(f -> f.name == character)[0];
+				switch (metaData.inheritedClass)
+				{
+					case "Base":
+						return new ScriptableCharacter(xx, yy, character, isPlayer);
+					case "SpriteBase":
+						return new ScriptableSpriteCharacter(xx, yy, character, isPlayer);
+				}
+				throw new haxe.Exception("Invalid character type:" + metaData.inheritedClass);
 			case 'test-character':
 				return new ExampleCustomCharacter(xx, yy, character, isPlayer);
 		}

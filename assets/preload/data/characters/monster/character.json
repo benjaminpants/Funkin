@@ -1,6 +1,6 @@
 {
-	"name":"dad",
+	"name":"monster",
 	"nativePlayer":false,
 	"inheritedClass":"SpriteBase",
-	"healthBarColors":["#AF66CE"]
+	"healthBarColors":["#F3FF6E"]
 }

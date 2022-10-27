@@ -15,6 +15,8 @@ using Character;
 
 using StringTools;
 
+//there are some bugs with flipX here but im obsoleting this class anyway so...
+
 class SpriteCharacter extends Character
 {
 	public var animOffsets:Map<String, Array<Dynamic>>;

@@ -1,0 +1,6 @@
+{
+	"name":"spooky",
+	"nativePlayer":false,
+	"inheritedClass":"SpriteBase",
+	"healthBarColors":["#D57E00","#B4B4B4"]
+}

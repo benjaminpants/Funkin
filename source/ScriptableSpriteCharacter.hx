@@ -65,7 +65,7 @@ class ScriptableSpriteCharacter extends ScriptableCharacter
 
 		if (isPlayer)
 		{
-			flipX = !flipX;
+			myChar.flipX = !myChar.flipX;
 
 			if (myChar.animation.curAnim == null)
 			{

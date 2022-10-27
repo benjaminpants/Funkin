@@ -1,5 +1,6 @@
 package;
 
+import Config.CharacterMetadata;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 
@@ -26,6 +27,10 @@ class HealthIcon extends FlxSprite
 
 	public static function GetIconColorStatic(Layer:Int = 0, character:String = "bf")
 	{
+		var meta:CharacterMetadata = Config.Characters.filter(f -> f.name == character)[0];
+		if (meta == null) return new FlxColor(0xFFA1A1A1);
+		return FlxColor.fromString(meta.healthBarColors[Std.int(Math.min(Layer,meta.healthBarColors.length - 1))]);
+		/*
 		switch (character)
 		{
 			case 'bf':
@@ -69,6 +74,7 @@ class HealthIcon extends FlxSprite
 			default:
 				return new FlxColor(0xFFA1A1A1);
 		}
+		*/
 	}
 
 	public function GetIconColor(Layer:Int = 0):FlxColor

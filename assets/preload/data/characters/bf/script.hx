@@ -36,7 +36,7 @@ function new(x,y,character,isActPlayer)
 
 	this.playAnim('idle');
 
-	this.flipX = true;
+	this.myChar.flipX = true;
 	
 	this.myChar.antialiasing = true;
 	

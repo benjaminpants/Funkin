@@ -671,7 +671,7 @@ class PlayState extends MusicBeatState
 		{
 			dad.dance();
 			gf.dance();
-			boyfriend.playAnim('idle');
+			boyfriend.dance(); //why didnt he dance before???
 
 			var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
 			introAssets.set('default', ['ready', "set", "go"]);
@@ -1915,7 +1915,7 @@ class PlayState extends MusicBeatState
 		{
 			if (boyfriend.currentAnim.startsWith('sing') && !boyfriend.currentAnim.endsWith('miss'))
 			{
-				boyfriend.playAnim('idle');
+				boyfriend.dance();
 			}
 		}
 
@@ -2089,7 +2089,7 @@ class PlayState extends MusicBeatState
 
 		if (!boyfriend.currentAnim.startsWith("sing"))
 		{
-			boyfriend.playAnim('idle');
+			boyfriend.dance();
 		}
 
 		CallFunction('beatHit');

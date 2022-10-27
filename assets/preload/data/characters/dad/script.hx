@@ -18,8 +18,6 @@ function new(x,y,character,isActPlayer)
 	this.playAnim('idle');
 	
 	this.singHoldTime = 6.1;
-
-	this.flipX = true;
 	
 	this.myChar.antialiasing = true;
 	

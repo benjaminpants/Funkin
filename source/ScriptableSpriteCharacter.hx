@@ -135,11 +135,6 @@ class ScriptableSpriteCharacter extends ScriptableCharacter
 				holdTimer += elapsed;
 			}
 
-			if (myMetadata.name == 'dad')
-			{
-				FlxG.watch.addQuick("HoldShits",holdTimer);
-				FlxG.watch.addQuick("ExpectedWait",Conductor.stepCrochet * singHoldTime * 0.001);
-			}
 			//if (curCharacter == 'dad')
 				//dadVar = 6.1;
 			if (holdTimer >= Conductor.stepCrochet * singHoldTime * 0.001)

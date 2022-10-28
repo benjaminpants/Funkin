@@ -128,9 +128,8 @@ class Note extends FlxSprite
 		script.CallFunction("create",[this]);
 	}
 
-	public function initializeVisuals()
+	public function initVisualsSprite(sheet:String)
 	{
-		if (script.CallFunction("initializeVisuals",[this]) != true) return; //placeholder
 		var swagWidth:Float = 160 * 0.7;
 		var daStyle:String = "not the school";
 
@@ -170,7 +169,7 @@ class Note extends FlxSprite
 				}
 
 			default:
-				frames = Paths.getSparrowAtlas('NOTE_assets');
+				frames = Paths.getSparrowAtlas(sheet);
 
 				animation.addByPrefix('greenScroll', 'green0');
 				animation.addByPrefix('redScroll', 'red0');
@@ -253,6 +252,12 @@ class Note extends FlxSprite
 				// prevNote.setGraphicSize();
 			}
 		}
+	}
+
+	public function initializeVisuals()
+	{
+		if (script.CallFunction("initializeVisuals",[this]) != true) return; //placeholder
+		initVisualsSprite("NOTE_assets");
     }
 
 	public function onHit():Bool

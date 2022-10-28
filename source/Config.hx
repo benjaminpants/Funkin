@@ -101,7 +101,6 @@ class Config
             var path:String = Paths.jsonMod('characters/' + initCharlist[i].toLowerCase() + '/character');
             if (FileSystem.exists(path))
             {
-                trace("character exists:" + initCharlist[i]);
                 var characterData:String = Assets.getText(path);
                 var swagCharacter:CharacterMetadata = Json.parse(characterData);
                 Characters.push(swagCharacter);
@@ -113,6 +112,7 @@ class Config
 
         for (i in 0...initNotes.length)
         {
+            trace("adding note types" + initNotes[i]);
             NoteTypes.push(initNotes[i]);
         }
     }

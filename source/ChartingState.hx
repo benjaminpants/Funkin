@@ -31,6 +31,7 @@ import openfl.events.IOErrorEvent;
 import openfl.media.Sound;
 import openfl.net.FileReference;
 import openfl.utils.ByteArray;
+import Script.ScriptType;
 
 using StringTools;
 
@@ -89,10 +90,22 @@ class ChartingState extends MusicBeatState
 
 	private var KeyAmount:Int = 4;
 
+	public var Scripts:Array<Script> = [];
+
+	private var noteTypesMap:Map<String,Script> = new Map<String,Script>(); //for quick access
+
 	override function create()
 	{
 		curSection = lastSection;
 
+		for (s in Config.NoteTypes)
+		{
+			var notescriptPath:String = Paths.extensionModText('notes/$s','hx');
+			var script:Script = new Script(Main.hscriptParser, Assets.getText(notescriptPath), ScriptType.NoteScript);
+			script.scriptIdentity = s;
+			Scripts.push(script);
+			noteTypesMap.set(s,script);
+		}
 		gridBG = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE, GRID_SIZE * 8, GRID_SIZE * 16);
 		add(gridBG);
 
@@ -926,7 +939,7 @@ class ChartingState extends MusicBeatState
 			var daStrumTime = i[0];
 			var daSus = i[2];
 
-			var note:Note = new Note(daStrumTime, daNoteInfo % KeyAmount,null,false,i[3]);
+			var note:Note = new Note(daStrumTime, daNoteInfo % KeyAmount,null,false,i[3],false,noteTypesMap[i[3] == null ? "n" : i[3]]);
 			note.sustainLength = daSus;
 			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
 			note.updateHitbox();
@@ -1013,7 +1026,7 @@ class ChartingState extends MusicBeatState
 		var noteStrum = getStrumTime(dummyArrow.y) + sectionStartTime();
 		var noteData = Math.floor(FlxG.mouse.x / GRID_SIZE);
 		var noteSus = 0;
-		var noteType = curnoteType;
+		var noteType:String = Config.NoteTypes[curnoteType];
 
 		_song.notes[curSection].sectionNotes.push([noteStrum, noteData, noteSus, noteType]);
 
@@ -1021,7 +1034,7 @@ class ChartingState extends MusicBeatState
 
 		if (FlxG.keys.pressed.CONTROL)
 		{
-			_song.notes[curSection].sectionNotes.push([noteStrum, (noteData + 4) % 8, noteSus,Config.NoteTypes[curnoteType]]);
+			_song.notes[curSection].sectionNotes.push([noteStrum, (noteData + 4) % 8, noteSus,noteType]);
 		}
 
 		trace(noteStrum);

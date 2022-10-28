@@ -18,6 +18,9 @@ function initializeVisuals(instance)
 
 function onHit(instance)
 {
+	CurState.health -= 0.2;
+	CurState.boyfriend.playAnim("singLEFTmiss",true);
+	CurState.hitNote(instance);
 	return false; //allow the original function to run
 }
 

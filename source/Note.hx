@@ -325,6 +325,9 @@ class Note extends FlxSprite
 				alpha = 0.3;
 		}
 
-		script.CallFunction("update",[this,elapsed]);
+		if (InPlayState)
+		{
+			script.CallFunction("update",[this,elapsed]);
+		}
 	}
 }

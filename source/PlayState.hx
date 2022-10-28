@@ -2042,6 +2042,21 @@ class PlayState extends MusicBeatState
 		}
 	}
 
+	public function hitNote(note:Note)
+	{
+		if (!note.wasGoodHit)
+		{
+			note.wasGoodHit = true;
+			vocals.volume = 1;
+			if (!note.isSustainNote)
+			{
+				note.kill();
+				notes.remove(note, true);
+				note.destroy();
+			}
+		}
+	}
+
 	public function goodNoteHit(note:Note):Void
 	{
 		if (!note.wasGoodHit)

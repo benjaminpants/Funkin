@@ -1,7 +1,15 @@
 function new(x,y,character,isActPlayer)
 {
 	// GIRLFRIEND CODE
-	var tex = Paths.getSparrowAtlas('GF_assets');
+	var path = "GF_assets";
+	switch (character)
+	{
+		default:
+			path = "GF_assets";
+		case "gf-christmas":
+			path = "christmas/gfChristmas";
+	}
+	var tex = Paths.getSparrowAtlas(path);
 	this.myChar.frames = tex;
 	this.myChar.animation.addByPrefix('cheer', 'GF Cheer', 24, false);
 	this.myChar.animation.addByPrefix('singLEFT', 'GF left note', 24, false);

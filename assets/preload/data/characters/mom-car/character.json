@@ -1,0 +1,7 @@
+{
+	"name":"mom-car",
+	"nativePlayer":false,
+	"inheritedClass":"SpriteBase",
+	"healthBarColors":["#D8558E"],
+	"alternateCharacterScript":"mom"
+}

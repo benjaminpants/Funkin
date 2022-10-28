@@ -1,0 +1,6 @@
+{
+	"name":"gf-car",
+	"nativePlayer":false,
+	"inheritedClass":"SpriteBase",
+	"healthBarColors":["#A5004D"]
+}

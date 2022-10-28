@@ -165,6 +165,11 @@ class PlayState extends MusicBeatState
 		{
 			default:
 				var metaData:CharacterMetadata = Config.Characters.filter(f -> f.name == character)[0];
+				if (metaData == null)
+				{
+					metaData = Config.Characters.filter(f -> f.name == "bf")[0]; //this is stupid but whatever
+					character = "bf";
+				}
 				switch (metaData.inheritedClass)
 				{
 					case "Base":

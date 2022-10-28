@@ -22,8 +22,6 @@ class ScriptableSpriteCharacter extends ScriptableCharacter
 
 	public var myChar:FlxSprite;
 
-	public var myMetadata:CharacterMetadata;
-
 	public var singHoldTime:Float = 4;
 
 	public override function get_currentAnim() 
@@ -52,10 +50,6 @@ class ScriptableSpriteCharacter extends ScriptableCharacter
 	{
 
 		animOffsets = new Map<String, Array<Dynamic>>();
-
-		myMetadata = Config.Characters.filter(f -> f.name == character)[0]; //its very bad to assume the man exists but we gotta
-
-		trace(myMetadata); //what the fuck.
 
 		myChar = new FlxSprite();
 

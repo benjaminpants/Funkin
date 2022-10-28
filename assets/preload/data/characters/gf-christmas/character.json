@@ -1,0 +1,7 @@
+{
+	"name":"gf-christmas",
+	"nativePlayer":false,
+	"inheritedClass":"SpriteBase",
+	"healthBarColors":["#A5004D"],
+	"alternateCharacterScript":"gf"
+}

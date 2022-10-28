@@ -1,0 +1,7 @@
+{
+	"name":"bf-car",
+	"nativePlayer":true,
+	"inheritedClass":"SpriteBase",
+	"healthBarColors":["#31B0D1"],
+	"alternateCharacterScript":"bf"
+}

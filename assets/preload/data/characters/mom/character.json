@@ -1,0 +1,6 @@
+{
+	"name":"mom",
+	"nativePlayer":false,
+	"inheritedClass":"SpriteBase",
+	"healthBarColors":["#D8558E"]
+}

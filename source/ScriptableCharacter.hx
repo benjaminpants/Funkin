@@ -1,3 +1,4 @@
+import Config.CharacterMetadata;
 import flixel.math.FlxPoint;
 import flixel.util.FlxColor;
 import flixel.FlxG;
@@ -15,6 +16,8 @@ class ScriptableCharacter extends Character
 {
 
     public var script:Script;
+
+    public var myMetadata:CharacterMetadata;
 
     public override function animationExists(animationToCheck:String):Bool 
     {
@@ -40,7 +43,11 @@ class ScriptableCharacter extends Character
     {
         super(x,y,character,isActPlayer);
 
-        var characterscriptpath:String = Paths.extensionModText('characters/$character/script','hx');
+        myMetadata = Config.Characters.filter(f -> f.name == character)[0]; //its very bad to assume the man exists but we gotta
+
+        var chartouse:String = myMetadata.alternateCharacterScript == null ? character : myMetadata.alternateCharacterScript;
+
+        var characterscriptpath:String = Paths.extensionModText('characters/$chartouse/script','hx');
 
         script = new Script(Main.hscriptParser,Assets.getText(characterscriptpath),Script.ScriptType.Character);
 

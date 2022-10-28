@@ -1,6 +1,16 @@
 function new(x,y,character,isActPlayer)
 {
-	var tex = Paths.getSparrowAtlas('BOYFRIEND');
+	var path = "BOYFRIEND";
+	switch (character)
+	{
+		default:
+			path = "BOYFRIEND";
+		case "bf-car":
+			path = "bfCar";
+		case "bf-christmas":
+			path = "christmas/bfChristmas";
+	}
+	var tex = Paths.getSparrowAtlas(path);
 	this.myChar.frames = tex;
 	this.myChar.animation.addByPrefix('idle', 'BF idle dance', 24, false);
 	this.myChar.animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);

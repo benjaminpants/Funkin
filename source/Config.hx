@@ -250,6 +250,7 @@ typedef CharacterMetadata =
     public var inheritedClass:String;
     public var nativePlayer:Bool;
     public var healthBarColors:Array<String>;
+    public var alternateCharacterScript:String;
 }
 
 class Difficulty

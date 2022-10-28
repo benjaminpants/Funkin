@@ -14,7 +14,8 @@ class Script //give every script its own interpreter so no variable conflicts!!!
 
     public static var functionBlacklist:Map<ScriptType,Array<String>> = [
         ScriptType.Basic => [],
-        ScriptType.Stage => []//['create']
+        ScriptType.Stage => [],//['create']
+        ScriptType.NoteScript => ['create','update','beatHit', 'stepHit', 'songStarted']
 
 
     ];
@@ -24,6 +25,8 @@ class Script //give every script its own interpreter so no variable conflicts!!!
     public var hscriptInterp:Interp = new Interp();
 	public var hscriptCurScript:Expr;
     public var type:ScriptType = ScriptType.Basic;
+
+    public var scriptIdentity:String = ""; //this will be blank for most things.
 
     public function new(parser:Parser, script:String, ?tp:ScriptType = ScriptType.Basic)
     {

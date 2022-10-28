@@ -14,7 +14,7 @@ using StringTools;
 
 
 
-
+/*
 class NoteTypeBase
 {
     public var name:String = "default";
@@ -193,3 +193,4 @@ class TIKYNOTE extends NoteTypeBase //example note type you probably shouldn't u
         state.boyfriend.playAnim("hey");
     }
 }
+*/

@@ -10,7 +10,6 @@ import hscript.Expr;
 import Config.Difficulty;
 import flixel.group.FlxGroup;
 import flixel.graphics.frames.FlxImageFrame;
-import NoteType.NoteTypeBase;
 #if desktop
 import Discord.DiscordClient;
 import sys.FileSystem;
@@ -117,6 +116,8 @@ class PlayState extends MusicBeatState
 
 	private var generatedMusic:Bool = false;
 	private var startingSong:Bool = false;
+
+	private var noteTypesMap:Map<String,Script> = new Map<String,Script>(); //for quick access
 
 	private var iconP1:HealthIcon;
 	private var iconP2:HealthIcon;
@@ -240,6 +241,15 @@ class PlayState extends MusicBeatState
 
 		}
 		#end
+
+		for (s in Config.NoteTypes)
+		{
+			var notescriptPath:String = Paths.extensionModText('notes/$s','hx');
+			var script:Script = new Script(Main.hscriptParser, Assets.getText(notescriptPath), ScriptType.NoteScript);
+			script.scriptIdentity = s;
+			Scripts.push(script);
+			noteTypesMap.set(s,script);
+		}
 
 		// fuck your html builds.
 		#if desktop
@@ -854,7 +864,14 @@ class PlayState extends MusicBeatState
 				else
 					oldNote = null;
 
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, false, songNotes[3], gottaHitNote);
+				var noteType:String = "n";
+				//noteTypesMap[songNotes[3]]
+				if (songNotes[3] != null)
+				{
+					noteType = songNotes[3];
+				}
+
+				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, false, noteType, gottaHitNote, noteTypesMap[noteType]);
 				swagNote.sustainLength = songNotes[2];
 				swagNote.scrollFactor.set(0, 0);
 
@@ -868,7 +885,7 @@ class PlayState extends MusicBeatState
 					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
 
 					var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + Conductor.stepCrochet, daNoteData, oldNote, true,
-						songNotes[3], gottaHitNote);
+						noteType, gottaHitNote, noteTypesMap[noteType]);
 					sustainNote.scrollFactor.set();
 					unspawnNotes.push(sustainNote);
 
@@ -908,9 +925,8 @@ class PlayState extends MusicBeatState
 
 	function strumTimeFromY(yPosition:Float, note:Note):Float
 	{
-		var curnotetype:NoteTypeBase = Config.NoteTypes[note.noteType];
 		return
-			yPosition * (yPosition / Conductor.stepCrochet) / (0.45 * FlxMath.roundDecimal((curnotetype.scrollspeedoverride == -1 ? SONG.speed : curnotetype.scrollspeedoverride),
+			yPosition * (yPosition / Conductor.stepCrochet) / (0.45 * FlxMath.roundDecimal((note.calculateScrollSpeed(SONG.speed)),
 				2));
 	}
 
@@ -1400,7 +1416,7 @@ class PlayState extends MusicBeatState
 
 		if (unspawnNotes[0] != null)
 		{
-			if (unspawnNotes[0].strumTime - Conductor.songPosition < (SONG.speed < 1 ? 15000 : 1500))
+			if (unspawnNotes[0].strumTime - Conductor.songPosition < (unspawnNotes[0].calculateScrollSpeed(SONG.speed) < 1 ? 15000 : 1500))
 			{
 				var dunceNote:Note = unspawnNotes[0];
 				notes.add(dunceNote);
@@ -1414,7 +1430,6 @@ class PlayState extends MusicBeatState
 		{
 			notes.forEachAlive(function(daNote:Note)
 			{
-				var curnotetype:NoteTypeBase = Config.NoteTypes[daNote.noteType];
 				if (daNote.y > FlxG.height)
 				{
 					daNote.active = false;
@@ -1433,7 +1448,7 @@ class PlayState extends MusicBeatState
 
 				var curStrum:StrumNote = daNote.MyStrum;
 
-				var dist:Float = (((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal((curnotetype.scrollspeedoverride == -1 ? SONG.speed : curnotetype.scrollspeedoverride), 2))));
+				var dist:Float = (((Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal((daNote.calculateScrollSpeed(SONG.speed)), 2))));
 
 
 				var rotateBase:FlxPoint = rotatePosition(dist,curStrum.noteAngle + 90, (downScroll ? 1 : -1));
@@ -1472,21 +1487,25 @@ class PlayState extends MusicBeatState
 					}
 				}
 
-				if (!daNote.mustPress && daNote.wasGoodHit && curnotetype.opponentshouldhit)
+				if (!daNote.mustPress && daNote.wasGoodHit && daNote.shouldOpponentHit())
 				{
-					if (SONG.song != 'Tutorial')
-						camZooming = true;
-
-					var altAnim:String = "";
-
-					if (SONG.notes[Math.floor(curStep / 16)] != null)
+					if (daNote.onOpponentHit())
 					{
-						if (SONG.notes[Math.floor(curStep / 16)].altAnim)
-							altAnim = '-alt';
-					}
+						if (SONG.song != 'Tutorial') //HARDCODED NONSENSE DELETE THIS AT SOME POINT!
+							camZooming = true;
 
-					dad.playAnim('sing' + NoteAnims[Math.round(Math.abs(daNote.noteData)) % NoteAnims.length] + altAnim,
-						true); // this is faster i think and allows for more then 4 notes
+						var altAnim:String = "";
+
+						if (SONG.notes[Math.floor(curStep / 16)] != null)
+						{
+							if (SONG.notes[Math.floor(curStep / 16)].altAnim)
+								altAnim = '-alt';
+						}
+
+						dad.playAnim('sing' + NoteAnims[Math.round(Math.abs(daNote.noteData)) % NoteAnims.length] + altAnim,
+							true); // this is faster i think and allows for more then 4 notes
+
+					}
 
 					dadStrums.forEach(function(sprite:FlxSprite)
 					{
@@ -1523,19 +1542,17 @@ class PlayState extends MusicBeatState
 
 				if ((daNote.tooLate && (!daNote.wasGoodHit) && daNote.mustPress) && !daNote.wasBadHit)
 				{
-					daNote.wasBadHit = true;
-					Config.NoteTypes[daNote.noteType].OnMiss(daNote, this);
+					onMissNote(daNote);
 				}
 
 				// WIP interpolation shit? Need to fix the pause issue
 				// daNote.y = (strumLine.y - (songTime - daNote.strumTime) * (0.45 * PlayState.SONG.speed));
 
-				if (Conductor.songPosition >= daNote.strumTime + strumTimeFromY(120, daNote))
+				if (Conductor.songPosition >= daNote.strumTime + strumTimeFromY(240, daNote))
 				{
 					if ((daNote.tooLate || !daNote.wasGoodHit) && daNote.mustPress && !daNote.wasBadHit)
 					{
-						daNote.wasBadHit = true;
-						Config.NoteTypes[daNote.noteType].OnMiss(daNote, this);
+						onMissNote(daNote);
 					}
 
 					daNote.active = false;
@@ -1810,6 +1827,23 @@ class PlayState extends MusicBeatState
 		curSection += 1;
 	}
 
+	function onHitNote(daNote:Note)
+	{
+		if (daNote.onHit())
+		{
+			this.goodNoteHit(daNote);
+		}
+	}
+
+	function onMissNote(daNote:Note)
+	{
+		if (daNote.onMiss())
+		{
+			daNote.wasBadHit = true;
+			this.noteMiss(daNote.noteData % KeyAmount,!daNote.isSustainNote,daNote.isSustainNote);
+		}
+	}
+
 	private function keyShit():Void
 	{
 		// HOLDING
@@ -1846,8 +1880,9 @@ class PlayState extends MusicBeatState
 				}
 			});
 
-			possibleNotes.sort((a, b) -> Std.int(a.noteType - b.noteType)); // sorting twice is necessary as far as i know
-			haxe.ds.ArraySort.sort(possibleNotes, function(a, b):Int
+			possibleNotes.sort((a, b) -> Std.int(a.noteData - b.noteData)); // sorting twice is necessary as far as i know
+			//disable note type sorting for now
+			/*haxe.ds.ArraySort.sort(possibleNotes, function(a, b):Int
 			{
 				var notetypecompare:Int = Std.int(a.noteType - b.noteType);
 
@@ -1856,7 +1891,7 @@ class PlayState extends MusicBeatState
 					return Std.int(a.strumTime - b.strumTime);
 				}
 				return notetypecompare;
-			});
+			});*/
 			// possibleNotes.sort((a, b) -> Std.int(a.noteType - b.noteType) || Std.int(a.strumTime - b.strumTime));
 
 			if (possibleNotes.length > 0) // left down up right
@@ -1874,13 +1909,13 @@ class PlayState extends MusicBeatState
 						{
 							if ((note.noteData % KeyAmount) == (lasthitnote % KeyAmount))
 							{
-								lasthitnotetime = -99999999;
+								lasthitnotetime = -9999999;
 								continue; // the jacks are too close together
 							}
 						}
 						lasthitnote = note.noteData;
 						lasthitnotetime = note.strumTime;
-						Config.NoteTypes[note.noteType].OnHit(note, this);
+						this.onHitNote(note);
 					}
 				}
 			}
@@ -1910,16 +1945,16 @@ class PlayState extends MusicBeatState
 						// NOTES YOU ARE HOLDING
 						case 0:
 							if (left)
-								Config.NoteTypes[daNote.noteType].OnHit(daNote, this);
+								onHitNote(daNote);
 						case 1:
 							if (down)
-								Config.NoteTypes[daNote.noteType].OnHit(daNote, this);
+								onHitNote(daNote);
 						case 2:
 							if (up)
-								Config.NoteTypes[daNote.noteType].OnHit(daNote, this);
+								onHitNote(daNote);
 						case 3:
 							if (right)
-								Config.NoteTypes[daNote.noteType].OnHit(daNote, this);
+								onHitNote(daNote);
 					}
 				}
 			});
@@ -1977,6 +2012,7 @@ class PlayState extends MusicBeatState
 			if (isSustain)
 			{
 				health -= 0.04;
+				songScore -= 5;
 			}
 			else
 			{

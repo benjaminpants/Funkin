@@ -35,9 +35,7 @@ class Config
         "invisible" => new DialogueCharacter("nonePortrait",'Senpai Portrait Enter instance 1',true,"pixel_",1,true),
     ];
 
-    public static var NoteTypes:Array<NoteTypeBase> = [
-        new NoteTypeBase()
-    ];
+    public static var NoteTypes:Array<String> = [];
 
 
 
@@ -108,6 +106,14 @@ class Config
                 var swagCharacter:CharacterMetadata = Json.parse(characterData);
                 Characters.push(swagCharacter);
             }
+        }
+
+        //note types(funnily enough this is the simplest one)
+        var initNotes = CoolUtil.coolTextFileWithMods(Paths.txt('noteTypes'));
+
+        for (i in 0...initNotes.length)
+        {
+            NoteTypes.push(initNotes[i]);
         }
     }
 

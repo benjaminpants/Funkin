@@ -526,7 +526,7 @@ class ChartingState extends MusicBeatState
 			curnoteType -= 1;
 		}
 
-		typeText.text = "Note Type: " + Config.NoteTypes[curnoteType].name + "\n(C to decrease, V to increase)\n";
+		typeText.text = "Note Type: " + (Config.NoteTypes[curnoteType] == "n" ? "Normal" : Config.NoteTypes[curnoteType]) + "\n(C to decrease, V to increase)\n";
 
 		Conductor.songPosition = FlxG.sound.music.time;
 		_song.song = typingShit.text;
@@ -1021,7 +1021,7 @@ class ChartingState extends MusicBeatState
 
 		if (FlxG.keys.pressed.CONTROL)
 		{
-			_song.notes[curSection].sectionNotes.push([noteStrum, (noteData + 4) % 8, noteSus,noteType]);
+			_song.notes[curSection].sectionNotes.push([noteStrum, (noteData + 4) % 8, noteSus,Config.NoteTypes[curnoteType]]);
 		}
 
 		trace(noteStrum);

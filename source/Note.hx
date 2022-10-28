@@ -320,6 +320,6 @@ class Note extends FlxSprite
 				alpha = 0.3;
 		}
 
-		script.CallFunction("update",[this]);
+		script.CallFunction("update",[this,elapsed]);
 	}
 }

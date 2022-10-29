@@ -133,6 +133,7 @@ class Paths
 
 	static public function firstModWithFile(path:String, assetType:AssetType, ?library:String, ?extensionIfVanilla:String = '')
 	{
+		#if mod_support
 		for (mpath in Paths.foundModsPath)
 		{
 			var pot_path:String = haxe.io.Path.join([mods(mpath),"assets",path]);
@@ -141,6 +142,7 @@ class Paths
 				return pot_path;
 			}
 		}
+		#end
 		return extensionIfVanilla + getPath(path, TEXT, library);
 	}
 

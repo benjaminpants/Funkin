@@ -109,8 +109,8 @@ class ChartingState extends MusicBeatState
 		gridBG = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE, GRID_SIZE * 8, GRID_SIZE * 16);
 		add(gridBG);
 
-		leftIcon = new HealthIcon('bf');
-		rightIcon = new HealthIcon('dad');
+		leftIcon = new HealthIcon('opp');
+		rightIcon = new HealthIcon('opp');
 		leftIcon.scrollFactor.set(1, 1);
 		rightIcon.scrollFactor.set(1, 1);
 
@@ -168,8 +168,8 @@ class ChartingState extends MusicBeatState
 
 		KeyAmount = (_song.keys > 0 ? _song.keys : 4);
 
-		leftIcon.animation.play(_song.player1);
-		rightIcon.animation.play(_song.player2);
+		leftIcon.animation.curAnim.curFrame = 0;
+		rightIcon.animation.curAnim.curFrame = 1;
 
 		bpmTxt = new FlxText(1000, 50, 0, "", 16);
 		bpmTxt.scrollFactor.set();
@@ -259,9 +259,9 @@ class ChartingState extends MusicBeatState
 		stepperBPM.value = Conductor.bpm;
 		stepperBPM.name = 'song_bpm';
 
-		var characters:Array<String> = CoolUtil.coolTextFile(Paths.txt('characterList'));
+		var characters:Array<String> = CoolUtil.coolTextFileWithMods(Paths.txt('characterList'));
 
-		var stages:Array<String> = CoolUtil.coolTextFile(Paths.txt('stageList'));
+		var stages:Array<String> = CoolUtil.coolTextFileWithMods(Paths.txt('stageList'));
 
 		var player1DropDown = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)
 		{
@@ -874,13 +874,13 @@ class ChartingState extends MusicBeatState
 	{
 		if (check_mustHitSection.checked)
 		{
-			leftIcon.animation.play(_song.player1);
-			rightIcon.animation.play(_song.player2);
+			leftIcon.animation.curAnim.curFrame = 0;
+			rightIcon.animation.curAnim.curFrame = 1;
 		}
 		else
 		{
-			leftIcon.animation.play(_song.player2);
-			rightIcon.animation.play(_song.player1);
+			leftIcon.animation.curAnim.curFrame = 1;
+			rightIcon.animation.curAnim.curFrame = 0;
 		}
 	}
 

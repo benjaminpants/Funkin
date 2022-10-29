@@ -16,6 +16,11 @@ class HealthIcon extends FlxSprite
 	public function new(char:String = 'bf', isPlayer:Bool = false)
 	{
 		super();
+		transformIntoCharacter(char,isPlayer);
+	}
+
+	public function transformIntoCharacter(char:String = 'bf', isPlayer:Bool = false)
+	{
 		loadGraphic(Paths.image('iconGrid/' + char), true, 150, 150);
 
 		antialiasing = !PixelCharacters.contains(char);

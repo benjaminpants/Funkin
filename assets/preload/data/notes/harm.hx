@@ -11,7 +11,7 @@ function update(instance, elapsed)
 
 function initializeVisuals(instance)
 {
-	//we dont override visuals.
+	//we do override visuals.
 	instance.initVisualsSprite("NOTE_assets_hurt");
 	return false;
 }

@@ -114,6 +114,8 @@ class Config
         {
             NoteTypes.push(initNotes[i]);
         }
+
+        NoteTypes.push("event");
     }
 
     public static function AllowInterpStuff(interp:Interp, ?me:Dynamic)

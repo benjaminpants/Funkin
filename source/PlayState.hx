@@ -870,10 +870,17 @@ class PlayState extends MusicBeatState
 				{
 					noteType = songNotes[3];
 				}
+				if (noteType == "event")
+				{
+					daNoteData = 0;
+					gottaHitNote = false;
+				}
 
 				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, false, noteType, gottaHitNote, noteTypesMap[noteType]);
 				swagNote.sustainLength = songNotes[2];
 				swagNote.scrollFactor.set(0, 0);
+				swagNote.eventName = songNotes[4];
+				swagNote.eventParam = songNotes[5];
 
 				var susLength:Float = swagNote.sustainLength;
 
@@ -1507,33 +1514,36 @@ class PlayState extends MusicBeatState
 
 					}
 
-					dadStrums.forEach(function(sprite:FlxSprite)
+					if (daNote.noteType != "event")
 					{
-						if (Math.abs(Math.round(Math.abs(daNote.noteData)) % KeyAmount) == sprite.ID)
+						dadStrums.forEach(function(sprite:FlxSprite)
 						{
-							sprite.animation.play('confirm', true);
-							if (sprite.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
+							if (Math.abs(Math.round(Math.abs(daNote.noteData)) % KeyAmount) == sprite.ID)
 							{
-								sprite.centerOffsets();
-								sprite.offset.x -= 13;
-								sprite.offset.y -= 13;
+								sprite.animation.play('confirm', true);
+								if (sprite.animation.curAnim.name == 'confirm' && !curStage.startsWith('school'))
+								{
+									sprite.centerOffsets();
+									sprite.offset.x -= 13;
+									sprite.offset.y -= 13;
+								}
+								else
+								{
+									sprite.centerOffsets();
+								}
+								sprite.animation.finishCallback = function(name:String)
+								{
+									sprite.animation.play('static', true);
+									sprite.centerOffsets();
+								}
 							}
-							else
-							{
-								sprite.centerOffsets();
-							}
-							sprite.animation.finishCallback = function(name:String)
-							{
-								sprite.animation.play('static', true);
-								sprite.centerOffsets();
-							}
-						}
-					});
+						});
 
-					dad.holdTimer = 0;
+						dad.holdTimer = 0;
 
-					if (SONG.needsVoices)
-						vocals.volume = 1;
+						if (SONG.needsVoices)
+							vocals.volume = 1;
+					}
 
 					daNote.kill();
 					notes.remove(daNote, true);

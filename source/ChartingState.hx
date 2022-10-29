@@ -106,7 +106,8 @@ class ChartingState extends MusicBeatState
 			Scripts.push(script);
 			noteTypesMap.set(s,script);
 		}
-		gridBG = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE, GRID_SIZE * 8, GRID_SIZE * 16);
+		gridBG = FlxGridOverlay.create(GRID_SIZE, GRID_SIZE, GRID_SIZE * 9, GRID_SIZE * 16);
+		gridBG.x -= GRID_SIZE;
 		add(gridBG);
 
 		leftIcon = new HealthIcon('opp');
@@ -123,7 +124,7 @@ class ChartingState extends MusicBeatState
 		leftIcon.setPosition(0, -100);
 		rightIcon.setPosition(gridBG.width / 2, -100);
 
-		var gridBlackLine:FlxSprite = new FlxSprite(gridBG.x + gridBG.width / 2).makeGraphic(2, Std.int(gridBG.height), FlxColor.BLACK);
+		var gridBlackLine:FlxSprite = new FlxSprite(gridBG.x + (GRID_SIZE * 10) / 2).makeGraphic(2, Std.int(gridBG.height), FlxColor.BLACK);
 		add(gridBlackLine);
 
 		curRenderedNotes = new FlxTypedGroup<Note>();
@@ -378,6 +379,10 @@ class ChartingState extends MusicBeatState
 
 	var stepperSusLength:FlxUINumericStepper;
 
+	var currentEventName:String;
+
+	var currentEventParam:FlxUIInputText;
+
 	function addNoteUI():Void
 	{
 		var tab_group_note = new FlxUI(null, UI_box);
@@ -391,6 +396,23 @@ class ChartingState extends MusicBeatState
 
 		tab_group_note.add(stepperSusLength);
 		tab_group_note.add(applyLength);
+
+		var events:Array<String> = CoolUtil.coolTextFileWithMods(Paths.txt('eventList'));
+
+		currentEventName = events[0];
+
+		var eventdrop = new FlxUIDropDownMenu(10, 100, FlxUIDropDownMenu.makeStrIdLabelArray(events, true), function(ev:String)
+		{
+			currentEventName = events[Std.parseInt(ev)];
+		});
+		eventdrop.selectedLabel = events[0];
+
+		tab_group_note.add(eventdrop);
+
+		var UI_spm = new FlxUIInputText(150, 100, 70, "", 8);
+		currentEventParam = UI_spm;
+
+		tab_group_note.add(UI_spm);
 
 		UI_box.addGroup(tab_group_note);
 	}
@@ -532,7 +554,7 @@ class ChartingState extends MusicBeatState
 		
 
 		
-		if (FlxG.keys.justPressed.V && curnoteType != Config.NoteTypes.length - 1) {
+		if (FlxG.keys.justPressed.V && curnoteType != Config.NoteTypes.length - 2) { //-2 instead of -1 since event notes are for internal use ONLY
 			curnoteType += 1;
 		}
 		if (FlxG.keys.justPressed.C && curnoteType != 0) {
@@ -945,6 +967,8 @@ class ChartingState extends MusicBeatState
 			note.updateHitbox();
 			note.x = Math.floor(daNoteInfo * GRID_SIZE);
 			note.y = Math.floor(getYfromStrum((daStrumTime - sectionStartTime()) % (Conductor.stepCrochet * _song.notes[curSection].lengthInSteps)));
+			note.eventName = i[4];
+			note.eventParam = i[5];
 
 			curRenderedNotes.add(note);
 
@@ -1027,8 +1051,15 @@ class ChartingState extends MusicBeatState
 		var noteData = Math.floor(FlxG.mouse.x / GRID_SIZE);
 		var noteSus = 0;
 		var noteType:String = Config.NoteTypes[curnoteType];
-
-		_song.notes[curSection].sectionNotes.push([noteStrum, noteData, noteSus, noteType]);
+		if (noteData == -1) //must be event note
+		{
+			noteType = "event";
+			_song.notes[curSection].sectionNotes.push([noteStrum, noteData, noteSus, noteType, currentEventName, currentEventParam.text]);
+		}
+		else
+		{
+			_song.notes[curSection].sectionNotes.push([noteStrum, noteData, noteSus, noteType]);
+		}
 
 		curSelectedNote = _song.notes[curSection].sectionNotes[_song.notes[curSection].sectionNotes.length - 1];
 

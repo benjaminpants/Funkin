@@ -1,5 +1,6 @@
 package;
 
+import openfl.utils.Assets;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMath;
@@ -24,6 +25,9 @@ class Note extends FlxSprite
 	public var wasGoodHit:Bool = false;
 	public var wasBadHit:Bool = false;
 	public var prevNote:Note;
+
+	public var eventName:String; //this should be null in 99% of cases.
+	public var eventParam:String = "";
 
 	public var sustainLength:Float = 0;
 	public var isSustainNote:Bool = false;
@@ -280,6 +284,13 @@ class Note extends FlxSprite
 	public function onOpponentHit()
 	{
 		return script.CallFunction("onOpponentHit",[this]);
+	}
+
+	public function runEvent()
+	{
+		if (eventName == null) return;
+		var scr:Script = new Script(Main.hscriptParser, Assets.getText(Paths.extensionModText('events/$eventName','hx'))); //todo: maybe cache this?
+		scr.CallFunction("onEventCalled",eventParam.split("|"));
 	}
 
 	override function update(elapsed:Float)

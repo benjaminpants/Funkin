@@ -42,7 +42,7 @@ class Script //give every script its own interpreter so no variable conflicts!!!
         }
         Config.AllowInterpStuff(hscriptInterp);
         hscriptInterp.errorHandler = Script.ErrorHandler;
-        hscriptInterp.execute(hscriptCurScript);
+        scriptIdentity = Std.string(hscriptInterp.execute(hscriptCurScript));
         type = tp;
     }
 

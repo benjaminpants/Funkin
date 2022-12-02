@@ -160,6 +160,18 @@ class PlayState extends MusicBeatState
 	var detailsPausedText:String = "";
 	#end
 
+	public function addScript(path:String):Script
+	{
+		var script:Script = new Script(Main.hscriptParser, Assets.getText(path));
+		Scripts.push(script);
+		return script;
+	}
+
+	public function getScriptViaIdentity(ident:String):Script
+	{
+		return Scripts.filter(f -> f.scriptIdentity == ident)[0];
+	}
+
 	public static function createCharacter(xx:Float, yy:Float, character:String, ?isPlayer:Bool = false):Character
 	{
 		switch (character)

@@ -6,9 +6,6 @@ import flixel.FlxSprite;
 
 class HealthIcon extends FlxSprite
 {
-	/**
-	 * Used for FreeplayState! If you use it elsewhere, prob gonna annoying
-	 */
 	public var sprTracker:FlxSprite;
 
 	private static var PixelCharacters:Array<String> = [ "bf-pixel", "senpai", "senpai-angry", "spirit" ];

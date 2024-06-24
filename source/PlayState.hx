@@ -2092,6 +2092,11 @@ class PlayState extends MusicBeatState
 					maxcombo += 1;
 				}
 			}
+			else
+			{
+				hitpercentages[hitpercentages.length] = 100;
+				ReCalcAccuracy();
+			}
 
 			if (note.noteData >= 0)
 				health += 0.023;
